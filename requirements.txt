@@ -42,7 +42,7 @@ pipreqs==0.4.11
 plotly==5.5.0
 plotly-express==0.4.1
 proto-plus==1.19.9
-protobuf==3.19.0
+protobuf==3.6.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycparser==2.21
