@@ -14,9 +14,7 @@ import dash
 from dash import dcc as file 
 from dash import State
 from dash import Dash, dcc, html, Input, Output, dash_table
-#import dash_core_components as dcc # from dash import dcc 
 from dash import dcc
-#import dash_html_components as html # from dash import html
 from dash import html
 from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
@@ -1695,7 +1693,7 @@ def render_content(tab):
             html.Br(),
             html.Hr(),
         ])
-#===TAB2 (Monthly Demand) xxx
+#===TAB2 (Monthly Demand) 
     elif tab == 'tab-2':
         return html.Div([            
             html.Hr(),
@@ -3309,7 +3307,7 @@ def update_dropdown(slct_grid_1_1):
             {"label": "2022", "value": "2022"},
             {"label": "2023", "value": "2023"}
         ]
-
+# revenue xxx 
 @app.callback(
     Output(component_id='my_graph_1', component_property='figure'),
     [Input(component_id='slct_year_1_1', component_property='value'),
@@ -3481,19 +3479,6 @@ def update_graph(option_slctd, bttn1, bttn2, site):
             for index in range(0,len(df2['timestamp'])):
                 nth_day = convert_nth_day(df2['timestamp'][index])
                 take_away_revenue[nth_day - 1 ]+=(df2['revenue'][index])
-      
-        # if(site == 1):
-        #     url31 = "https://api.steama.co/sites/26385/revenue/" + "?start_time=" + start_time + "&end_time=" + end_time
-        #     url32 = "https://api.steama.co/sites/26678/revenue/" + "?start_time=" + start_time + "&end_time=" + end_time
-        #     r31 = requests.get(url=url31, headers = header)                     
-        #     s31 = r31.content
-        #     df31 = pd.read_json(s31)
-
-        #     r32 = requests.get(url=url32, headers = header)                     
-        #     s32 = r32.content
-        #     df32 = pd.read_json(s32)
-
-        #     dfT = pd.concat([df31, df32])
            
         if(site == 2):
             url3 = "https://api.steama.co/sites/26385/revenue/" + "?start_time=" + start_time + "&end_time=" + end_time 
@@ -3517,8 +3502,8 @@ def update_graph(option_slctd, bttn1, bttn2, site):
                 daily_revenue[index]+=total_daily_revenue[index] - take_away_revenue[index]
             else:
                 daily_revenue[index]+=(total_daily_revenue[index] - take_away_revenue[index])/count
-                
-            
+
+
     elif (div==3):
         for index in range(0,len(cust_fnames_bus)):
             first_name=cust_fnames_bus[index]
@@ -3531,7 +3516,7 @@ def update_graph(option_slctd, bttn1, bttn2, site):
             s = r.content
             df = pd.read_json(s)
             holder = df['results'][0]
-            
+
             usage_url = holder['revenue_url']
             url2 = usage_url + "?start_time=" + start_time + "&end_time=" + end_time
             
@@ -3591,13 +3576,18 @@ def update_graph(option_slctd, bttn1, bttn2, site):
     for i in range(1,13):
         
         amount = 0
-        
-        for index in range(0,len(timestamp)):
-            temptime = timestamp[index]
-            if(i==int(temptime[5:7])):
-                amount += (float(daily_revenue[index])*ER)
-            else:
-                continue    
+
+        if site == 2 and date == "2020" and i<6:
+            amount = 0
+        elif site == 3 and date == "2022" and i<9:
+            amount = 0
+        else:
+            for index in range(0,len(timestamp)):
+                temptime = timestamp[index]
+                if(i==int(temptime[5:7])):
+                    amount += (float(daily_revenue[index])*ER)
+                else:
+                    continue    
         
         if(amount==0):
             monthly_revenue.append(0) 
@@ -4001,7 +3991,7 @@ def update_dropdown(slct_grid_2_1):
             {"label": "2022", "value": "2022"},
             {"label": "2023", "value": "2023"}
         ]
-#xxx
+#demand xxx
 @app.callback(
     Output(component_id='my_graph_4', component_property='figure'),
     [Input(component_id='slct_year', component_property='value'),
@@ -4014,8 +4004,15 @@ def update_output_2(date_value, bttn1, bttn2, site):
     #storing year selected by user - string
     date = date_value 
     #formatting date for get request
-    start_time = str(date) + "-01-01T00:00:00"
-    end_time = str(int(date)+1) + "-01-01T00:00:00"
+    if site == 1 and date == "2020":
+        start_time = "2020-06-05T00:00:00+00:00"
+        end_time = str(int(date)+1) + "-01-01T00:00:00"
+    elif site == 2 and date == "2022":
+        start_time = "2022-09-21T00:00:00"
+        end_time = str(int(date)+1) + "-01-01T00:00:00"
+    else:
+        start_time = str(date) + "-01-01T00:00:00"
+        end_time = str(int(date)+1) + "-01-01T00:00:00"
     
     div = bttn1
     div2 = bttn2
@@ -4067,9 +4064,6 @@ def update_output_2(date_value, bttn1, bttn2, site):
                     
     cust_fnames_bus_ins=cust_fnames_bus+cust_fnames_ins
     cust_snames_bus_ins=cust_snames_bus+cust_snames_ins
-
-    cust_fnames_res_ins=cust_fnames_res+cust_fnames_ins
-    cust_snames_res_ins=cust_snames_res+cust_snames_ins
     
     all_cust_fnames= cust_fnames_bus_ins+cust_fnames_res
     
@@ -4092,17 +4086,12 @@ def update_output_2(date_value, bttn1, bttn2, site):
     
     if (div==1):
         if(site == 1):
-            if date == "2020":
-                start_time = "2020-06-05T00:00:00+00:00"
             url = "https://api.steama.co/sites/26385/utilities/1/usage/?start_time=" + start_time + "&end_time=" + end_time
             site_name = "Mthembanji"
         elif(site == 2):
-            if date == "2022":
-                start_time = "2022-09-21T00:00:00"
             url = "https://api.steama.co/sites/26678/utilities/1/usage/?start_time=" + start_time + "&end_time=" + end_time
             site_name = "Kudembe"
             
-
         r = requests.get(url = url, headers = header)
         s = r.content
         df2 = pd.read_json(s)
@@ -4143,13 +4132,9 @@ def update_output_2(date_value, bttn1, bttn2, site):
                 take_away_usage[nth_day - 1]+=(df2['usage'][index])
         
         if(site == 1):
-            if date == "2020":
-                start_time = "2020-06-05T00:00:00+00:00"
             total_url = "https://api.steama.co/sites/26385/utilities/1/usage/?start_time=" + start_time + "&end_time=" + end_time
             site_name = "Mthembanji"
         elif(site == 2):
-            if date == "2022":
-                start_time = "2022-09-21T00:00:00"
             total_url = "https://api.steama.co/sites/26678/utilities/1/usage/?start_time=" + start_time + "&end_time=" + end_time
             site_name = "Kudembe"
 
@@ -4185,21 +4170,10 @@ def update_output_2(date_value, bttn1, bttn2, site):
             df = pd.read_json(s)
             holder = df['results'][0]
             
-            # usage_url = holder['utilities_url'] + "1/usage/"
-            # url2 = usage_url + "?start_time=" + start_time + "&end_time=" + end_time
- 
-            if(site == 1):
-                if date == "2020":
-                    start_time = "2020-06-05T00:00:00+00:00"
-                usage_url = holder['utilities_url'] + "1/usage/"
-                url2 = usage_url + "?start_time=" + start_time + "&end_time=" + end_time
-            elif(site == 2):
-                if date == "2022":
-                    start_time = "2022-09-21T00:00:00"
-                usage_url = holder['utilities_url'] + "1/usage/"
-                url2 = usage_url + "?start_time=" + start_time + "&end_time=" + end_time
+            usage_url = holder['utilities_url'] + "1/usage/"
+            url2 = usage_url + "?start_time=" + start_time + "&end_time=" + end_time
             
-            r2 = requests.get(url=url2, headers = header)
+            r2 = requests.get(url=url2, headers=header)
             s2 = r2.content
             df2 = pd.read_json(s2)
  
@@ -4234,16 +4208,8 @@ def update_output_2(date_value, bttn1, bttn2, site):
             df = pd.read_json(s)
             holder = df['results'][0]
             
-            if(site == 1):
-                if date == "2020":
-                    start_time = "2020-06-05T00:00:00+00:00"
-                usage_url = holder['utilities_url'] + "1/usage/"
-                url2 = usage_url + "?start_time=" + start_time + "&end_time=" + end_time
-            elif(site == 2):
-                if date == "2022":
-                    start_time = "2022-09-21T00:00:00"
-                usage_url = holder['utilities_url'] + "1/usage/"
-            url2 = usage_url + "?start_time=" + start_time + "&end_time=" + end_time            
+            usage_url = holder['utilities_url'] + "1/usage/"
+            url2 = usage_url + "?start_time=" + start_time + "&end_time=" + end_time          
             
             r2 = requests.get(url=url2, headers = header)
             s2 = r2.content
@@ -4265,17 +4231,21 @@ def update_output_2(date_value, bttn1, bttn2, site):
     for index in range(0,len(df2['timestamp'])):
                 timestamp.append(str(df2['timestamp'][index]))
 
-    
     for i in range(1,13):
         
         amount = 0
-        
-        for index in range(0,len(timestamp)):
-            temptime = timestamp[index]
-            if(i==int(temptime[5:7])):
-                amount += (float(daily_usage[index]))
-            else:
-                continue    
+
+        if site == 1 and date == "2020" and i<6:
+            amount = 0
+        elif site == 2 and date == "2022" and i<9:
+            amount = 0
+        else:
+            for index in range(0,len(timestamp)):
+                temptime = timestamp[index]
+                if(i==int(temptime[5:7])):
+                    amount += (float(daily_usage[index]))
+                else:
+                    continue    
 
         if(amount==0):
             monthly_usage.append(0) 
