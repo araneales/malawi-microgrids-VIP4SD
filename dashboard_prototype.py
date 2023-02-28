@@ -4004,15 +4004,17 @@ def update_output_2(date_value, bttn1, bttn2, site):
     #storing year selected by user - string
     date = date_value 
     #formatting date for get request
+    # start_time = str(date) + "-01-01T00:00:00"
+    # end_time = str(int(date)+1) + "-01-01T00:00:00"
+    start_time = str(date) + "-01-01T00:00:00"
+    end_time = str(int(date)+1) + "-01-01T00:00:00"
+    
     if site == 1 and date == "2020":
         start_time = "2020-06-05T00:00:00+00:00"
-        end_time = str(int(date)+1) + "-01-01T00:00:00"
+        end_time = "2021-01-01T00:00:00"
     elif site == 2 and date == "2022":
         start_time = "2022-09-21T00:00:00"
-        end_time = str(int(date)+1) + "-01-01T00:00:00"
-    else:
-        start_time = str(date) + "-01-01T00:00:00"
-        end_time = str(int(date)+1) + "-01-01T00:00:00"
+        end_time = "2023-01-01T00:00:00"
     
     div = bttn1
     div2 = bttn2
