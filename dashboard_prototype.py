@@ -3355,7 +3355,11 @@ def update_graph(option_slctd, bttn1, bttn2, site):
     end_time = str(int(date)+1) + "-01-01T00:00:00" 
    
     #request to customer list
-    url = "https://api.steama.co/customers/?fields=status,foo/?page=1&page_size=110"
+    #url = "https://api.steama.co/customers/?fields=status,foo/?page=1&page_size=110"
+    if site == 2:
+        url = "https://api.steama.co/customers/?fields=status,foo/?page=1&page_size=61&&site&site_id=26385"
+    elif site == 3:
+        url = "https://api.steama.co/customers/?fields=status,foo/?page=1&page_size=50&&site&site_id=26678"
             
     r = requests.get(url=url, headers = header)
     s = r.content
@@ -3365,33 +3369,31 @@ def update_graph(option_slctd, bttn1, bttn2, site):
     #declaring arrays to store names (for get requests later)
     cust_fnames_res=[]
     cust_fnames_bus=[]
-    cust_fnames_ins=[]
-    
+    cust_fnames_ins=[]   
     cust_snames_res=[]
     cust_snames_bus=[]
     cust_snames_ins=[]
     
     #seperating customer names based on user category
     for index in range(0,len(dfC)):
-                holder = dfC['results'][index]
-            #if the user type is res add 1
-                if(holder['user_type'] == "RES"):
-                    cust_fnames_res.append(holder['first_name'])
-                    cust_snames_res.append(holder['last_name'])
-                elif(holder['user_type'] == "BUS"):
-                    cust_fnames_bus.append(holder['first_name'])
-                    cust_snames_bus.append(holder['last_name'])
-                else:
-                    cust_fnames_ins.append(holder['first_name'])
-                    cust_snames_ins.append(holder['last_name'])
+        holder = dfC['results'][index]
+        #if the user type is res add 1
+        if(holder['user_type'] == "RES"):
+            cust_fnames_res.append(holder['first_name'])
+            cust_snames_res.append(holder['last_name'])
+        elif(holder['user_type'] == "BUS"):
+            cust_fnames_bus.append(holder['first_name'])
+            cust_snames_bus.append(holder['last_name'])
+        else:
+            cust_fnames_ins.append(holder['first_name'])
+            cust_snames_ins.append(holder['last_name'])
     
     #array storing business + institution 
     cust_fnames_bus_ins=cust_fnames_bus+cust_fnames_ins
-    cust_snames_bus_ins=cust_snames_bus+cust_snames_ins
+    cust_snames_bus_ins=cust_snames_bus+cust_snames_ins    
+    all_cust_fnames= cust_fnames_bus+cust_fnames_ins+cust_fnames_res
     
-    all_cust_fnames= cust_fnames_bus_ins+cust_fnames_res
-    
-    
+
     leap_year_check = int(date)
     
     if (leap_year_check % 4 == 0):
@@ -3446,7 +3448,7 @@ def update_graph(option_slctd, bttn1, bttn2, site):
             if (div2==1):
                 daily_revenue[index] += df['revenue'][index]
             else:
-                daily_revenue[index] += (df['revenue'][index])/len(all_cust_fnames)
+                daily_revenue[index] += (df['revenue'][index])/len(all_cust_fnames) #60 or 50
                 
             
     elif (div==2):
@@ -4009,13 +4011,6 @@ def update_output_2(date_value, bttn1, bttn2, site):
     start_time = str(date) + "-01-01T00:00:00"
     end_time = str(int(date)+1) + "-01-01T00:00:00"
     
-    if site == 1 and date == "2020":
-        start_time = "2020-06-05T00:00:00+00:00"
-        end_time = "2021-01-01T00:00:00"
-    elif site == 2 and date == "2022":
-        start_time = "2022-09-21T00:00:00"
-        end_time = "2023-01-01T00:00:00"
-    
     div = bttn1
     div2 = bttn2
     site = site
@@ -4035,7 +4030,11 @@ def update_output_2(date_value, bttn1, bttn2, site):
     else:
         Label="Average"
     
-    url = "https://api.steama.co/customers/?fields=status,foo/?page=1&page_size=110"
+
+    if site == 1:
+        url = "https://api.steama.co/customers/?fields=status,foo/?page=1&page_size=61&&site&site_id=26385"
+    elif site == 2:
+        url = "https://api.steama.co/customers/?fields=status,foo/?page=1&page_size=50&&site&site_id=26678"
             
     r = requests.get(url = url, headers = header)
     s = r.content
@@ -4087,6 +4086,12 @@ def update_output_2(date_value, bttn1, bttn2, site):
     count=0
     
     if (div==1):
+        if site == 1 and date == "2020":
+            start_time = "2020-06-05T00:00:00+00:00"
+            end_time = "2021-01-01T00:00:00"
+        elif site == 2 and date == "2022":
+            start_time = "2022-09-21T00:00:00"
+            end_time = "2023-01-01T00:00:00"
         if(site == 1):
             url = "https://api.steama.co/sites/26385/utilities/1/usage/?start_time=" + start_time + "&end_time=" + end_time
             site_name = "Mthembanji"
@@ -4105,7 +4110,12 @@ def update_output_2(date_value, bttn1, bttn2, site):
                 daily_usage[index]+=(df2['usage'][index])/len(all_cust_fnames)
     
     if (div==2):      
-        
+        if site == 1 and date == "2020":
+            start_time = "2020-06-05T00:00:00+00:00"
+            end_time = "2021-01-01T00:00:00"
+        elif site == 2 and date == "2022":
+            start_time = "2022-09-21T00:00:00"
+            end_time = "2023-01-01T00:00:00"
         for index in range(0,len(cust_fnames_bus_ins)):
             first_name=cust_fnames_bus_ins[index]
             surname=cust_snames_bus_ins[index]
@@ -4155,6 +4165,12 @@ def update_output_2(date_value, bttn1, bttn2, site):
             
                 
     if (div==3):
+        if site == 1 and date == "2020":
+            start_time = "2020-06-05T00:00:00+00:00"
+            end_time = "2021-01-01T00:00:00"
+        elif site == 2 and date == "2022":
+            start_time = "2022-09-21T00:00:00"
+            end_time = "2023-01-01T00:00:00"
 
         if(site == 1):
             site_name = "Mthembanji"
@@ -4193,6 +4209,12 @@ def update_output_2(date_value, bttn1, bttn2, site):
 
 
     else:
+        if site == 1 and date == "2020":
+            start_time = "2020-06-05T00:00:00+00:00"
+            end_time = "2021-01-01T00:00:00"
+        elif site == 2 and date == "2022":
+            start_time = "2022-09-21T00:00:00"
+            end_time = "2023-01-01T00:00:00"
 
         if(site == 1):
             site_name = "Mthembanji"
