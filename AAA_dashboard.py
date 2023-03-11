@@ -850,43 +850,22 @@ def render_page_content(pathname):
     if pathname == "/":
         return [
                 html.Div(
-                children = html.P("Malawi Microgrid Dashboard"),style={'backgroundColor': '#f2f2f2', 'textAlign': 'center','fontSize': 44}),
+                children = html.H1("Malawi Microgrid Dashboard"),style={'backgroundColor': '#f2f2f2', 'textAlign': 'center'}),
                 html.Div([
+                html.Hr(),
+                html.Br(),
+                html.Img(src='https://i.postimg.cc/fWxCPPXX/view-from-the-top-2.jpg',style={'width':'900px', 'height':'280px'}), 
                 ], style={'textAlign': 'center'}),
                 html.Hr(),
-                html.Br(),
-                html.Div([
-                html.Img(src='https://www.sma-sunny.com/wp-content/uploads/2020/09/kv-micro-grids-malawi.jpg',style={'height':'70%', 'width':'70%'}),
-                ], style={'textAlign': 'center'}),
-                html.Br(),
-                html.Hr(),
-                html.Div(
-                    html.H3("Background Information"),style={'backgroundColor': '#FFFFFF'}),
-                    html.P("Collecting and analysing data to understand microgrid performance is essential for informing effective maintenance schedules, business planning and technical designs for future microgrids. It can also inform policy interventions and help build a knowledgebase to accelerate the microgrid sector both nationally and globally. "),
-                    html.P(["Mthembanji solar microgrid installed as part of the ",
-                           html.A("EASE",href="https://ease.eee.strath.ac.uk/") ,
-                           (" Project has been collecting data through smart meters, remote monitoring devices and social impact surveys since installation in July 2020. An objective of EASE is to utilise project learning to inform the microgrid sector in Malawi, specifically through analysis and sharing of data.")]),
-                    html.H3("Why is Microgrid data important?"),
-                    html.P("Many solar microgrid projects have faced sustainability challenges due to insufficient  maintenance or inefficient business models due to a lack of quality data collection and analysis. Microgrids that implement innovative smart metering and remote monitoring address these challenges, allowing developers to make informed decisions to ensure systems are operating  at optimum economic and technical efficiency in order to remain financially and practically viable. Analysing data also helps to fine-tune existing business models, by informing tariffs to ensure access to electricity is affordable for microgrid customers, while still maintaining sufficient income to be financially viable, offering confidence for potential investors. Perhaps most importantly, data analysis can help inform the technical design of other microgrids and therefore has the potential for impact on multiple sites."),
-                    html.P("Data visualisation and sharing also enables funders, investors, researchers, and policymakers to monitor and understand microgrid performance, allowing use of the data to inform policy, investments, targeted research and other interventions in the microgrid enabling environment to accelerate their deployment.  In short, data analysis enables better informed and more efficient microgrid deployment, accelerating energy access and contributing to achieving SDG7."),
-                    html.H3("What data are we monitoring?"),
-                    html.P("Alongside information related to the wider EASE project monitoring and evaluation framework, data is being collected from the microgrid in themes of technical, economic, and social impact, summarised below:"),
-                    html.P("Techincal Data:  relating the to the functionality of the generation and distribution systems, a variety of data on technical performance is being collected through remote monitoring of the PV, batteries and inverters, along with measurements and observations of the system collected through scheduled maintenance visits on site."),
-                    html.P(""),
-                    html.P("Demand and Economic data:  relating the to the functionality of the generation and distribution systems, a variety of data on technical performance is being collected through remote monitoring of the PV, batteries and inverters, along with measurements and observations of the system collected through scheduled maintenance visits on site."),
-                    html.P(""),
-                    html.P("Social Impact data:  A Key Performance Indicator framework is being used to track data relating to the impact the microgrid is having on the community, in themes such as health and education, employment and finance, and female empowerment."),
-
-                html.Div(
-                    html.Dialog("This dashboard aims to provide information on a pilot microgrid project in Mthembanji in Malawi. The key data to be displayed through this dashboard is the demand, technical, and social impact data. All of these key parameters provide invaluable information about the functioning of the microgrid along with its long-term feasibility and the direct impact which it has on the inhabitants in Mthembanji."),
-                    style={'fontSize':16}),
-                html.Br(),
-                html.Div(         
-                    html.Dialog("The microgrid in Mthembanji was deployed in June of 2020 and is a pilot microgrid in Malawi and, hence, plays a critical role in providing insight and information for future deployments of microgrids in Malawi and other developing countries. This is critically important because, if successful, functionally and financially viable microgrid systems could offer a solution in the drive to provide clean and reliable energy for those in the most remote and underdeveloped areas and help to achieve the UN Sustainable Development Goal 7."),
-                    style={'fontSize':16}),
-                html.Hr(),
-                ]
-                
+            
+        html.Br(),
+        dcc.Tabs(id='home_tabs', value='tab-1', children=[
+        dcc.Tab(label='Background Information', value = 'tab-1'),
+        dcc.Tab(label='Mthembanji', value = 'tab-2'),
+        dcc.Tab(label='Kudembe', value='tab-3'),
+        ],),
+        html.Div(id='home_content'),]
+                 
     elif pathname == "/demand":
         return [
                 html.Div(
@@ -1598,6 +1577,144 @@ def render_social_tabs(tab):
 #                 dcc.Graph(id='holder_graph_1', figure=holder_fig),
 #                 html.Hr(),
 #                 ])
+
+#===========================HOME TABS==================================
+
+@app.callback(
+    Output('home_content', 'children'),
+    Input('home_tabs', 'value'))
+
+def render_home_tab(tab):
+    if tab == 'tab-1':
+        return html.Div([
+            html.Br(),
+            html.H3(("Background Information"),style={'backgroundColor': '#FFFFFF'}),
+                    html.P("Collecting and analysing data to understand microgrid performance is essential for informing effective maintenance schedules, business planning and technical designs for future microgrids. It can also inform policy interventions and help build a knowledgebase to accelerate the microgrid sector both nationally and globally. "),
+                    html.P(["Currently, two operational microgrids have been installed as a part of the ",
+                           html.A("EASE",href="https://ease.eee.strath.ac.uk/") ,
+                           (" Project; Mthembanji installed in July 2020 and Kudembe in September 2022. Since installation, both sites have been collecting data through smart meters, remote monitoring devices and social impact surveys. An objective of EASE is to utilise project learning to inform the microgrid sector in Malawi, specifically through analysis and sharing of data.")]),
+                    html.H3("Why is Microgrid data important?"),
+                    html.P("Many solar microgrid projects have faced sustainability challenges due to insufficient  maintenance or inefficient business models due to a lack of quality data collection and analysis. Microgrids that implement innovative smart metering and remote monitoring address these challenges, allowing developers to make informed decisions to ensure systems are operating  at optimum economic and technical efficiency in order to remain financially and practically viable. Analysing data also helps to fine-tune existing business models, by informing tariffs to ensure access to electricity is affordable for microgrid customers, while still maintaining sufficient income to be financially viable, offering confidence for potential investors. Perhaps most importantly, data analysis can help inform the technical design of other microgrids and therefore has the potential for impact on multiple sites."),
+                    html.P("Data visualisation and sharing also enables funders, investors, researchers, and policymakers to monitor and understand microgrid performance, allowing use of the data to inform policy, investments, targeted research and other interventions in the microgrid enabling environment to accelerate their deployment.  In short, data analysis enables better informed and more efficient microgrid deployment, accelerating energy access and contributing to achieving SDG7."),
+                
+                #SDG image
+                html.Div([
+                html.Br(),
+                html.Img(src='https://www.its.ac.id/sustainability/wp-content/uploads/sites/120/2020/08/SDG_7-1024x1024.png',style={'height': '15%', 'width': '15%','border-radius':'10%'}),
+                ], style={'textAlign': 'left'}),
+                html.Div([
+                html.P("SDG 7 is to 'Ensure access to affordable, reliable, sustainable and modern energy for all'"),
+                ], style={'backgroundColor': '#FFFFFF', 'textAlign':'left'}),
+                html.Br(),
+                
+                html.Div(),
+                    html.H3("What data are we monitoring?"),
+                    html.P("Alongside information related to the wider EASE project monitoring and evaluation framework, data is being collected from the microgrid in themes of technical, economic, and social impact, summarised below:"),
+                    html.B("Techincal Data:"),
+                    html.P("Relating the to the functionality of the generation and distribution systems, a variety of data on technical performance is being collected through remote monitoring of the PV, batteries and inverters, along with measurements and observations of the system collected through scheduled maintenance visits on site."),
+                    html.P(""),
+            
+                #inside image    
+                html.Div([
+                html.Img(src='https://www.sma-sunny.com/wp-content/uploads/2020/09/Inside-the-container-1024x767.jpeg',style={'height':'30%', 'width':'25%', 'border-radius':'0%'}),
+                ], style={'textAlign': 'left'}),
+                html.Div(
+                    html.P("Inside the container"), style={'textAlign':'left', 'color': '#616161','margin-left':'80px'}),
+                
+                
+                html.Div([
+                    html.B("Demand and Economic data:"),
+                    html.P("relating the to the functionality of the generation and distribution systems, a variety of data on technical performance is being collected through remote monitoring of the PV, batteries and inverters, along with measurements and observations of the system collected through scheduled maintenance visits on site."),
+                    html.P(""),
+                    html.B("Social Impact data:"),
+                    html.P("A Key Performance Indicator framework is being used to track data relating to the impact the microgrid is having on the community, in themes such as health and education, employment and finance, and female empowerment."),
+                ]),
+                
+                html.Div(
+                    html.P("This dashboard aims to provide information on the pilot microgrids in Mthembanji and Kudembe, Malawi. The key material to be displayed through this dashboard is the demand, technical, and social impact data. All these key parameters provide invaluable information about the functioning of the microgrid along with its long-term feasibility and the direct impact which it has on the inhabitants in Mthembanji and Kudembe."),
+                    style={'fontSize':16}),
+                
+                html.Div(         
+                    html.P("The two microgrids in Malawi play a critical role in providing insight and information for future deployments of microgrids in Malawi and other developing countries. This is critically important because, if successful, functionally, and financially viable microgrid systems could offer a solution in the drive to provide clean and reliable energy for those in the most remote and underdeveloped areas. Therefor, helping to achieve the UN Sustainable Development Goal 7."),
+                    style={'fontSize':16}),
+                    html.Hr()]),
+        
+#MTHEMBANJI TAB     
+    if tab == 'tab-2':
+        return html.Div([
+            html.Br(),
+                html.Div(
+                    html.H3("The Mthembanji Microgrid"),style={'backgroundColor': '#FFFFFF', 'textAlign': 'left'}),
+            html.Hr(),   
+            html.Div([
+                html.Img(src='https://www.sma-sunny.com/wp-content/uploads/2020/09/kv-micro-grids-malawi.jpg',style={'height':'70%', 'width':'70%',}),
+                ], style={'textAlign': 'center'}),
+
+            html.Hr(),
+            html.Div([
+                html.H3("Brief Overview"),
+                html.Ul([
+                    html.Li("Installed July 2020"),
+                    html.Li("60 Customers"),
+                    html.Li("11.5kW Pv generation"),
+                    html.Li("19.8kWh Battery capacity"),
+                    html.Li(html.P(["48V ",
+                            html.A("TESVOLT",href="https://www.tesvolt.com/en/") ,
+                            (" Lithium Ion Batteries")])),
+                    html.Br(),
+                    ]),  
+                ]),
+            
+            html.Div([
+                html.H3("About"),  
+                html.P("The Mthembanji microgrid consists of a large shipping container with 2 large solar PV panels mounted either side of the container. Inside consists of inverters, controls and ancillary components, with an insulated, air-conditioned room housing the lithium-ion batteries at a controlled temperature. Maintaining the ideal battery operating temperature is incredibly important to prolong battery lifetimes. Monitoring the temperature also helps with designing cooling systems adequate for current and future temperatures (expected to rise due to climate change) essential for technical design. "),
+                html.P("Depth of discharge levels are pre-programmed, with the batteries cutting out at 20% and automatically powering up when this is reached. Experiences of Tesvolt of Mthembanji have been positive, with few technical issues experienced. "),
+                html.P("Electricity from the generation hub is distributed through overhead wires on 9m wooden poles through 50mm2 aluminium cables to customer premises. The distribution grid is analogous to that of a 240V single phase Low Voltage feeder from a secondary substation on the Malawi ESCOM grid. The decision for low voltage single phase reduced capital costs but has limited the customer base to a 600m radius from the generation hub and prevented the use of 3 phase motors for agricultural use. Smart meters mounted on the distribution poles automatically disconnect customers when their balance runs low, as well as setting power limits to protect the system from misuse."),
+                html.Img(src='https://i.postimg.cc/503t9m3Y/a-ditribution-pole-copy-2.jpg', style = {'width': '20%'}),
+            html.Div(
+                    html.P("Distribution pole"), style={'textAlign':'left', 'color': '#616161','margin-left':'60px'}),
+                html.P(""),
+                html.P("The containerised  solution offers security from theft, easy access and additional space to store tools, equipment or products, while being easy to transport and locally available in Malawi. "),
+                html.Hr()]),
+            ]),
+        
+#KUDEMBE TAB     
+    elif tab == 'tab-3':
+        return html.Div([
+            html.Br(),
+                html.Div(
+                    html.H3("The Kudembe Microgrid"),style={'backgroundColor': '#FFFFFF'}),
+            
+            html.Hr(),
+             html.Div([
+                html.Img(src='https://i.postimg.cc/VLgDPPHC/Screenshot-2023-03-08-at-13-46-39.png',style={'height':'40%', 'width':'40%'}),
+                ], style={'textAlign': 'center'}),
+            
+            html.Hr(),
+            html.Div([
+                html.H3("Brief Overview"),
+                html.Ul([
+                    html.Li("Installed September 2022"),
+                    html.Li("50 Customers"),
+                    html.Li("10.92kW Pv generation"),
+                    html.Li("20kWh Battery capacity"),
+                    html.Li(html.P(["48V ",
+                            html.A("BYD",href="https://www.bydbatterybox.com") ,
+                            (" Lithium Ion Batteries")])),      
+                    html.Br(),
+                    ]),  
+                ]),
+            
+            html.Div(
+                html.H3("About")),  
+            html.Div([
+                html.P("Identical to Mthembanji, the Kudembe microgrid consists of a large shipping container with 2 large solar PV panels mounted either side of the container. Inside consists of inverters, controls and ancillary components, with an insulated, air-conditioned room housing the lithium-ion batteries at a controlled temperature. Maintaining the ideal battery operating temperature is incredibly important to prolong battery lifetimes. Monitoring the temperature also helps with designing cooling systems adequate for current and future temperatures (expected to rise due to climate change) essential for technical design"),
+                html.P("Depth of discharge levels are pre-programmed, with the batteries cutting out at 20% and automatically powering up when this is reached. Experiences of Tesvolt of Mthembanji have been positive, with few technical issues experienced."),
+                html.P("Electricity from the generation hub is distributed through overhead wires on 9m wooden poles through 50mm squared aluminium cables to customer premises. The distribution grid is analogous to that of a 240V single phase Low Voltage feeder from a secondary substation on the Malawi ESCOM grid. The decision for low voltage single phase reduced capital costs but has limited the customer base to a 600m radius from the generation hub and prevented the use of 3 phase motors for agricultural use. Smart meters mounted on the distribution poles automatically disconnect customers when their balance runs low, as well as setting power limits to protect the system from misuse."),
+                html.P("A single source justification route was chosen to allow BNG to supply and install both generation and distribution systems for Kudembe. While impressed with the workmanship and ability demonstrated in Mthembanji, there was also an impetus to build local capacity and extend the value chain closer to Malawi, while reducing transport and insurance costs from transportation from South Africa. Unfortunately, while the shipping container was available locally, all other materials were purchased from South Africa which caused delays in importation due to lack of foreign currency availability in Malawi."),
+                html.Hr()
+        ]),
+        ]),
 
 #============================DEMAND TABS================================
 
