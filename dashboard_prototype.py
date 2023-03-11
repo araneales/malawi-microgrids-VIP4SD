@@ -30,7 +30,7 @@ from firebase_admin import credentials
 from firebase_admin import db 
 import time
 import xlsxwriter
-#from io import BytesIO
+#from io import BytesIO (Use for Macs)
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.ZEPHYR, dbc.icons.BOOTSTRAP],suppress_callback_exceptions=True) 
@@ -1769,10 +1769,10 @@ def render_home_tab(tab):
                 html.Div([
                 html.Br(),
                 html.Img(src='https://www.its.ac.id/sustainability/wp-content/uploads/sites/120/2020/08/SDG_7-1024x1024.png',style={'height': '15%', 'width': '15%','border-radius':'10%'}),
-                ], style={'textAlign': 'left'}),
+                ], style={'textAlign': 'center'}),
                 html.Div([
                 html.P("SDG 7 is to 'Ensure access to affordable, reliable, sustainable and modern energy for all'"),
-                ], style={'backgroundColor': '#FFFFFF', 'textAlign':'left'}),
+                ], style={'backgroundColor': '#FFFFFF', 'textAlign':'center'}),
                 html.Br(),
                 
                 html.Div(),
@@ -1785,9 +1785,9 @@ def render_home_tab(tab):
                 #inside image    
                 html.Div([
                 html.Img(src='https://www.sma-sunny.com/wp-content/uploads/2020/09/Inside-the-container-1024x767.jpeg',style={'height':'30%', 'width':'25%', 'border-radius':'0%'}),
-                ], style={'textAlign': 'left'}),
+                ], style={'textAlign': 'center'}),
                 html.Div(
-                    html.P("Inside the container"), style={'textAlign':'left', 'color': '#616161','margin-left':'80px'}),
+                    html.P("Inside the container"), style={'textAlign':'center', 'color': '#616161'}),#'margin-left':'80px'}),
                 
                 
                 html.Div([
