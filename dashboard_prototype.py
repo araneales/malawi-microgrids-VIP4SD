@@ -769,9 +769,9 @@ sidebar = html.Div(
         dbc.Nav(
             [
                 dbc.NavLink("Home", href="/", active="exact", external_link=True),
-                dbc.NavLink("Demand", href="/demand", active="exact", external_link=True),
-                dbc.NavLink("Technical", href="/technical", active="exact", external_link=True),
-                dbc.NavLink("Social Impact", href="/social", active="exact", external_link=True),
+                dbc.NavLink("Demand and Revenue", href="/demand", active="exact", external_link=True),
+                dbc.NavLink("Generation and Storage", href="/technical", active="exact", external_link=True),
+                dbc.NavLink("Social & Environmental Impact", href="/social", active="exact", external_link=True),
                 dbc.NavLink("Maintenance", href="/maintenance", active="exact", external_link=True),
                 dbc.NavLink("Learn More", href = "/learnmore", active="exact", external_link=True)
             ],
