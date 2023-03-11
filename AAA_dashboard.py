@@ -30,6 +30,7 @@ from firebase_admin import credentials
 from firebase_admin import db 
 import time
 import xlsxwriter
+from io import BytesIO
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.COSMO, dbc.icons.BOOTSTRAP],suppress_callback_exceptions=True) 
