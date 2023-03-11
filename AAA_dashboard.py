@@ -30,7 +30,6 @@ from firebase_admin import credentials
 from firebase_admin import db 
 import time
 import xlsxwriter
-from io import BytesIO
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.COSMO, dbc.icons.BOOTSTRAP],suppress_callback_exceptions=True) 
@@ -855,7 +854,7 @@ def render_page_content(pathname):
                 html.Div([
                 html.Hr(),
                 html.Br(),
-                html.Img(src='https://i.postimg.cc/fWxCPPXX/view-from-the-top-2.jpg',style={'width':'900px', 'height':'280px'}), 
+                #html.Img(src='https://i.postimg.cc/fWxCPPXX/view-from-the-top-2.jpg',style={'width':'900px', 'height':'280px'}), 
                 ], style={'textAlign': 'center'}),
                 html.Hr(),
             
@@ -1671,7 +1670,7 @@ def render_home_tab(tab):
                 html.P("The Mthembanji microgrid consists of a large shipping container with 2 large solar PV panels mounted either side of the container. Inside consists of inverters, controls and ancillary components, with an insulated, air-conditioned room housing the lithium-ion batteries at a controlled temperature. Maintaining the ideal battery operating temperature is incredibly important to prolong battery lifetimes. Monitoring the temperature also helps with designing cooling systems adequate for current and future temperatures (expected to rise due to climate change) essential for technical design. "),
                 html.P("Depth of discharge levels are pre-programmed, with the batteries cutting out at 20% and automatically powering up when this is reached. Experiences of Tesvolt of Mthembanji have been positive, with few technical issues experienced. "),
                 html.P("Electricity from the generation hub is distributed through overhead wires on 9m wooden poles through 50mm2 aluminium cables to customer premises. The distribution grid is analogous to that of a 240V single phase Low Voltage feeder from a secondary substation on the Malawi ESCOM grid. The decision for low voltage single phase reduced capital costs but has limited the customer base to a 600m radius from the generation hub and prevented the use of 3 phase motors for agricultural use. Smart meters mounted on the distribution poles automatically disconnect customers when their balance runs low, as well as setting power limits to protect the system from misuse."),
-                html.Img(src='https://i.postimg.cc/503t9m3Y/a-ditribution-pole-copy-2.jpg', style = {'width': '20%'}),
+                #html.Img(src='https://i.postimg.cc/503t9m3Y/a-ditribution-pole-copy-2.jpg', style = {'width': '20%'}),
             html.Div(
                     html.P("Distribution pole"), style={'textAlign':'left', 'color': '#616161','margin-left':'60px'}),
                 html.P(""),
@@ -1688,7 +1687,7 @@ def render_home_tab(tab):
             
             html.Hr(),
              html.Div([
-                html.Img(src='https://i.postimg.cc/VLgDPPHC/Screenshot-2023-03-08-at-13-46-39.png',style={'height':'40%', 'width':'40%'}),
+                #html.Img(src='https://i.postimg.cc/VLgDPPHC/Screenshot-2023-03-08-at-13-46-39.png',style={'height':'40%', 'width':'40%'}),
                 ], style={'textAlign': 'center'}),
             
             html.Hr(),
