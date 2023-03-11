@@ -1000,17 +1000,30 @@ def render_page_content(pathname):
 
 def render_tech_tabs_1(tab): # ======================================================================================================================= WIP ======================================================= #
     if tab == 'tab-1':
-        return html.Div([
+         return html.Div([
                 html.Br(),
                 html.Hr(),
                 html.H2("Consumption"),
+                html.Hr(),
+                html.Br(),
+                html.H6("Please Select Microgrid Site:"),
+                dcc.RadioItems(id = 'slct_grid_01_01',
+                options=[
+                    {'label': 'Mthembanji', 'value': 1},
+                    {'label': 'Kudembe', 'value': 2},
+                ],
+                value = 1,
+                inputStyle={"margin-left": "15px", "margin-right":"5px"}
+                ),
+                html.Br(),
+                html.Hr(),
                 html.H6("Please Select a date (Do not select several months):"),
                 dcc.DatePickerRange(
                 id='my-date-picker-range-2',
                 min_date_allowed=date(2020, 6, 5),
                 max_date_allowed=date(C_year, C_month, C_day),
                 initial_visible_month=date(C_year, C_month, C_day),
-                start_date=date(C_year, C_month-1, 1), # Display previous month days as an example to get started
+                start_date=date(C_year, C_month-1, 12), # Display previous month days as an example to get started
                 end_date=date(C_year, C_month-1, 12) # Changed so it selects current day, previously it was set to June the 5th 2020
                 # more user friendly
                 ),
@@ -1021,9 +1034,24 @@ def render_tech_tabs_1(tab): # =================================================
                 dcc.Graph(id = 'my_graph_6', figure = {}),
                 html.P("This graph shows the total consumption of the solar microgrid more specifically over a certain range."),
                 html.P("This is another key data indicator to track as it shows when the system is being most consumed or when it is at its least used state. Typically trends indicate that the peak usage is around the evening presumably from cooking utilities being under load (social) and steady increase during the mornings. These trends & data can then be extrapolated into the future to allow for maximum efficient use of the solar microgrid as to when to prioritise output power during peak times or not."),
+            
+                html.Hr(),
+                html.Br(),
+                html.H6("Please Select Microgrid Site:"),
+                dcc.RadioItems(id = 'slct_grid_01_02',
+                options=[
+                    {'label': 'Mthembanji', 'value': 1},
+                    {'label': 'Kudembe', 'value': 2},
+                ],
+                value = 1,
+                inputStyle={"margin-left": "15px", "margin-right":"5px"}
+                ),
+                html.Br(),
+                
                 html.H6("Please Select a Year: "),# New quality of life improvements
                 dcc.RadioItems(id = 'slct_user_2',
                 options=[
+                    {'label': '2023', 'value': 2023},
                     {'label': '2022', 'value': 2022},
                     {'label': '2021', 'value': 2021},
                     {'label': '2020', 'value':2020},
@@ -1039,11 +1067,25 @@ def render_tech_tabs_1(tab): # =================================================
                 html.P("This is particularly useful as it allows conclusions to be drawn such as when the solar microgrid is under the most consumption, or when it is the least. Please note that there is no data available before July 2020 as that was when the microgrid was installed. "),
                 html.Hr(),
                 ])                
+             #xxx   
     elif tab == 'tab-2':
         return html.Div([
                 html.Br(),
                 html.Hr(),
                 html.H2("Total Generation of Microgrid"),
+                html.Hr(),
+                html.Br(),
+                html.H6("Please Select Microgrid Site:"),
+                dcc.RadioItems(id = 'slct_grid_02_01',
+                options=[
+                    {'label': 'Mthembanji', 'value': 1},
+                    {'label': 'Kudembe', 'value': 2},
+                ],
+                value = 1,
+                inputStyle={"margin-left": "15px", "margin-right":"5px"}
+                ),
+                html.Br(),
+                html.Hr(),
                 html.P("Please select a date:"),
                 dcc.DatePickerSingle(
                     id='my-date-picker-single-gen',
@@ -1058,13 +1100,27 @@ def render_tech_tabs_1(tab): # =================================================
                 dcc.Graph(id='graph_7', figure = {}),
                 html.P("This chart displays the total generation (energy balance)."),
                 html.P("This key data indicator shows when the system is generating most power, and the least power respectively. As indicitive of this graph, it would suggest the peak generation is around the early mornings of 9am, before levelling off during the day."),           
-                html.H6("Please Select a Year: "),# New quality of life improvements
-                dcc.RadioItems(id = 'slct_user_3_1',
+                
+                
+                html.Hr(),
+                html.Br(),
+                html.H6("Please Select Microgrid Site:"),
+                dcc.RadioItems(id = 'slct_grid_02_02',
                 options=[
-                    {'label': '2022', 'value': 2022},
-                    {'label': '2021', 'value': 2021},
-                    {'label': '2020', 'value':2020},
+                    {'label': 'Mthembanji', 'value': 1},
+                    {'label': 'Kudembe', 'value': 2},
                 ],
+                value = 1,
+                inputStyle={"margin-left": "15px", "margin-right":"5px"}
+                ),
+                html.Br(),
+                html.H6("Please Select a Year: "),# New quality of life improvements
+                dcc.RadioItems(id = 'slct_user_3',
+                options=[{"label": "2020", "value": "2020"},
+                         {"label": "2021", "value": "2021"},
+                         {"label": "2022", "value": "2022"},
+                         {"label": "2023", "value": "2023"},
+                         ],
                 value=2022,
                 inputStyle={"margin-left": "15px", "margin-right":"5px"}
                 ), 
@@ -1075,10 +1131,23 @@ def render_tech_tabs_1(tab): # =================================================
                 html.Hr(),
                 ])
     elif tab == 'tab-3':
-        return html.Div([ 
+         return html.Div([
                 html.Br(),
                 html.Hr(),
-                html.H2("State of Charge (energy balance)"), 
+                html.H2("State of Charge (energy balance)"),
+                html.Hr(),
+                html.Br(),
+                html.H6("Please Select Microgrid Site:"),
+                dcc.RadioItems(id = 'slct_grid_03_01',
+                options=[
+                    {'label': 'Mthembanji', 'value': 1},
+                    {'label': 'Kudembe', 'value': 2},
+                ],
+                value = 1,
+                inputStyle={"margin-left": "15px", "margin-right":"5px"}
+            ),
+            html.Br(),
+                html.Hr(),
                 html.H6("Please Select a Date (Do not select several months):"),
 
                 dcc.DatePickerRange(
@@ -1097,6 +1166,20 @@ def render_tech_tabs_1(tab): # =================================================
 
                 html.P("This chart displays the current state of charge of the batteries."),
                 html.P("This is another key data indicator to track as it allows for one to come to conclusions regarding when the charge of the batteries are charged, or depleted. Again, note the anomolous data display between 23rd to 25th of January. All data is being drawn in from the SMA Sunny Portal API."),
+               
+                
+                html.Hr(),
+                html.Br(),
+                html.H6("Please Select Microgrid Site:"),
+                dcc.RadioItems(id = 'slct_grid_03_02',
+                options=[
+                    {'label': 'Mthembanji', 'value': 1},
+                    {'label': 'Kudembe', 'value': 2},
+                ],
+                value = 1,
+                inputStyle={"margin-left": "15px", "margin-right":"5px"}
+            ),
+            html.Br(),
                 html.H6("Please Select a Date: "),
                 dcc.DatePickerSingle(
                 id='my-date-picker-single-charge',
@@ -1111,10 +1194,24 @@ def render_tech_tabs_1(tab): # =================================================
                 dcc.Graph(id='graph_6_1',figure={}),
                 html.P("This chart displays the battery state of charge over a given day in increments of 5 minutes (highest possible definition defined by Sunny Portal API)."),
                 html.P("This is a very useful graph as it indicates the state of charge of the battery throughout any given day and shows the depletion of the battery as the PV systems are off (during night) and when it is at its peak maximum charge (during afternoons when the solar microgrid is producing power)."),
-                html.Br(),
-                html.H6("Please Select a Year: "),# New quality of life improvements
+                
+
+            
+                html.Hr(),
+                html.H6("Please Select Microgrid Site:"),
+                dcc.RadioItems(id = 'slct_grid_03_03',
+                options=[
+                    {'label': 'Mthembanji', 'value': 1},
+                    {'label': 'Kudembe', 'value': 2},
+                ],
+                value = 1,
+                inputStyle={"margin-left": "15px", "margin-right":"5px"}
+            ),
+            html.Br(),
+                html.H6("Please Select a Year :"),
                 dcc.RadioItems(id = 'slct_user_5',
                 options=[
+                    {'label': '2023', 'value': 2023},
                     {'label': '2022', 'value': 2022},
                     {'label': '2021', 'value': 2021},
                     {'label': '2020', 'value':2020},
@@ -1129,12 +1226,25 @@ def render_tech_tabs_1(tab): # =================================================
                 dcc.Graph(id='my_graph_6_2',figure={}),
                 html.P("This side-by-side bar chart provides insight into the average state of the batteries charging and discharging per monthly basis, respectively. The data is according to the live reading of the battery counter"),
                 html.Hr(),
-                ])
+                ])        #xp
     elif tab == 'tab-4':
-        return html.Div([
+         return html.Div([
+                html.Br(),
+                html.Hr(),
+                html.H2("Average Battery Temperature Over Given Month"),
+                html.Hr(),
+                html.Br(),
+                html.H6("Please Select Microgrid Site:"),
+                dcc.RadioItems(id = 'slct_grid_04_01',
+                options=[
+                    {'label': 'Mthembanji', 'value': 1},
+                    {'label': 'Kudembe', 'value': 2},
+                ],
+                value = 1,
+                inputStyle={"margin-left": "15px", "margin-right":"5px"}
+            ),
             html.Br(),
             html.Hr(),
-            html.H2("Average Battery Temperature Over Given Month"),
             html.H6("Please Select a Month:"),
             dcc.Input(id='my-date-picker-single', type="text", value=currentYYMM, placeholder="YYYY-MM", debounce=True,style={'fontSize':16}),
             html.Br(),
@@ -1168,16 +1278,30 @@ def render_tech_tabs_1(tab): # =================================================
             html.P("This indicator allows for battery temperature to be viewed at a higher resolution than the one seen in the indicator above. This is impiortant as it allows us to see how battery temperature varies throughout the hours of the day and identify hourly trends in battery temperature. Identification of these trends could be useful in informing decisions concerning the battery cooling system. ")
             ])  
     elif tab == 'tab-5':
-        return html.Div([ 
+         return html.Div([
                 html.Br(),
                 html.Hr(),
-                html.H2("Daily Communications Uptime"), 
+                html.H2("Daily Communications Uptime"),
+                html.Hr(),
+                html.Br(),
+                html.H6("Please Select Microgrid Site:"),
+                dcc.RadioItems(id = 'slct_grid_05_01',
+                options=[
+                    {'label': 'Mthembanji', 'value': 1},
+                    {'label': 'Kudembe', 'value': 2},
+                ],
+                value = 1,
+                inputStyle={"margin-left": "15px", "margin-right":"5px"}
+            ),
+            html.Br(),
+                html.Hr(),
                 html.H6("Please Select a Year (This is the input for the 3 subsequent indicators) "),
                 dcc.Dropdown(id="slct_year",
                      options=[
                          {"label": "2020", "value": "2020"},
                          {"label": "2021", "value": "2021"},
                          {"label": "2022", "value": "2022"},
+                         {"label": "2023", "value": "2023"},
                          ],
                      placeholder="Select a year",
                      searchable = False,
@@ -1192,6 +1316,7 @@ def render_tech_tabs_1(tab): # =================================================
                 dcc.Graph(id='daily_communications_uptime', figure = {}),
                 html.P("This chart displays daily communications uptime over a given year."),
                 html.P("This is another key data indicator to track as it allows for both planned and unplanned outages to be easily identified. The highlighted region of the graph highlights the percentage at which outages are detected (<=50%). A value of 50% was chosen as when the uptime is below tjis value, the system has experienced downtime for the majority of the day and has therefore expereinced an outage. For more information about the duration and start day of outages please see the bar chart below."),
+                
                 html.Hr(),
                 html.H2("Number of Days an Outage was Detected"),
                 html.Br(),
@@ -1200,6 +1325,7 @@ def render_tech_tabs_1(tab): # =================================================
                 dcc.Graph(id = 'no_days_outages', figure={}),
                 html.P("The bar chart above is used to view the number of days throughout each month in which an outage was detected."),
                 html.Hr(),
+                
                 html.H2("Start Date & Length of Outages"),
                 html.Br(),
                 html.Button("Click to download spreadsheet", id="start-length-outages-file"),
@@ -1226,17 +1352,33 @@ def render_tech_tabs_1(tab): # =================================================
                 html.P("This chart displays the hourly communications uptime over a selected range."),
                 html.P("This is similar to the daily communications uptime indicator, but allows data to be viewed in a higher resolution. This is useful as it allows for data to be observed more closely after using the indicators shown previously on this page.")
                 ])
+    #zz
     elif tab == 'tab-6':
-        return html.Div([ 
+         return html.Div([
                 html.Br(),
                 html.Hr(),
-                html.H2("Energy Production Efficiency"), 
+                html.H2("Energy Production Efficiency"),
+                html.Hr(),
+                html.Br(),
+                html.H6("Please Select Microgrid Site:"),
+                dcc.RadioItems(id = 'slct_grid_06_01',
+                options=[
+                    {'label': 'Mthembanji', 'value': 1},
+                    {'label': 'Kudembe', 'value': 2},
+                ],
+                value = 1,
+                inputStyle={"margin-left": "15px", "margin-right":"5px"}
+            ),
+    
+                html.Br(),
+                html.Hr(),
                 html.H6("Please Select a Year : "),
                 dcc.Dropdown(id="slct_year",
                      options=[
                          {"label": "2020", "value": "2020"},
                          {"label": "2021", "value": "2021"},
                          {"label": "2022", "value": "2022"},
+                         {"label": "2023", "value": "2023"},
                          ],
                      placeholder="Select a year",
                      searchable = False,
@@ -1267,6 +1409,17 @@ def render_tech_tabs_1(tab): # =================================================
                      style={'width': "40%"}
                      ),
                 html.Br(),
+                html.H6("Please Select Microgrid Site:"),
+                dcc.RadioItems(id = 'slct_grid_06_02',
+                options=[
+                    {'label': 'Mthembanji', 'value': 1},
+                    {'label': 'Kudembe', 'value': 2},
+                ],
+                value = 1,
+                inputStyle={"margin-left": "15px", "margin-right":"5px"}
+            ),
+    
+                html.Br(),
                 html.Br(),
                 html.Button("Click to download spreadsheet", id="distribution-efficiency-file"),
                 dcc.Download(id="download-distribution-efficiency-file"),
@@ -1296,16 +1449,30 @@ def render_tech_tabs_1(tab): # =================================================
                 html.P("This chart displays the overall system efficiency as a percentage for each month over a given year. This is done by taking the amount of energy that reaches the end user which is measured using smart metres across the village. This is then divided by the total amount of energy that has been generated by the grid's solar panels."),                
                 ])
     elif tab == 'tab-7':
-        return html.Div([ 
+         return html.Div([
                 html.Br(),
                 html.Hr(),
-                html.H2("Potential Carbon Savings"), 
+                html.H2("Potential Carbon Savings"),
+                html.Hr(),
+                html.Br(),
+                html.H6("Please Select Microgrid Site:"),
+                dcc.RadioItems(id = 'slct_grid_07_01',
+                options=[
+                    {'label': 'Mthembanji', 'value': 1},
+                    {'label': 'Kudembe', 'value': 2},
+                ],
+                value = 1,
+                inputStyle={"margin-left": "15px", "margin-right":"5px"}
+                ),
+                html.Br(), 
+                html.Hr(), 
                 html.H6("Please Select a Year : "),
                 dcc.Dropdown(id="slct_year",
                      options=[
                          {"label": "2020", "value": "2020"},
                          {"label": "2021", "value": "2021"},
                          {"label": "2022", "value": "2022"},
+                         {"label": "2023", "value": "2023"},
                          ],
                      placeholder="Select a year",
                      searchable = False,
@@ -4417,70 +4584,115 @@ def update_output_2(date_value, bttn1, bttn2, site):
 @app.callback(
        Output(component_id='my_graph_5', component_property='figure'),
        Input(component_id='my-date-picker-range', component_property='start_date'),
-       Input(component_id='my-date-picker-range', component_property='end_date'))
+       Input(component_id='my-date-picker-range', component_property='end_date'),
+       Input('slct_grid_03_01', 'value'))
 
-def stateofCharge(start_date,end_date): 
+def stateofCharge(start_date,end_date,value):
        TOKEN = refreshtoken(r1)
 # GET DATA VIA LOOP
        stateOfCharge = []
-       
+       site=value
        # start = time.time()
        """ print("year: " + start_date[0:4]) # Access DD of YYYY-MM-DD
        print("month: " + start_date[5:7]) # Access DD of YYYY-MM-DD
        print("date: " + start_date[8:10]) # Access DD of YYYY-MM-DD """
-
-       for i in range(int(start_date[8:10]),int(end_date[8:10])):
-              if i < 10: # If date less than 10 to suit YYYY-MM-DD Format
-                     r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Day?Date={0}-{1}-0{2}&WithTotal=false".format(start_date[0:4],start_date[5:7],i)
-              else:
-                     r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Day?Date={0}-{1}-{2}&WithTotal=false".format(start_date[0:4],start_date[5:7],i)
-
-              headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
-              r = session.get(r,headers=headers2)
-              data = r.json()
-              stateOfCharge.append(data['set'][i]['batteryStateOfCharge'])
-              """ batteryDischarging.append(data['set'][i]['batteryDischarging'])
-              Totalconsumption.append(data['set'][i]['totalConsumption']) """
-              # print(data['set'][i]['batteryStateOfCharge'])
-       # end = time.time()
-
-       # print("\nIt took ",end-start, " seconds to do ", i, " API GET requests. (BATTERY STATE OF CHARGE)")
-       # print(stateOfCharge)
-       date = []
-       for i in range(int(start_date[8:10]),int(end_date[8:10])):
-           if i < 10:
-              date.append("{0}-{1}-{2}".format(start_date[0:4],start_date[5:7],i))
-           else:
-              date.append("{0}-{1}-{2}".format(start_date[0:4],start_date[5:7],i))
-              
-              
-       title =  'Battery State of Charge (Plant {0}):'.format(data_initial['plants'][0]['plantId'])
-       FillSpreadSheet(title, 'Date' ,'State of Charge (%)', date, stateOfCharge, "SOC_Range")
     
-       fig = go.Figure()
-       fig.add_trace(go.Scatter(
-                    x = date,
-                    y = stateOfCharge,
-                    mode = 'lines+markers', 
-                    name = 'State of Charge'
-                ))
+       if (site == 1):
+        for i in range(int(start_date[8:10]),int(end_date[8:10])):
+                if i < 10: # If date less than 10 to suit YYYY-MM-DD Format
+                        r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Day?Date={0}-{1}-0{2}&WithTotal=false".format(start_date[0:4],start_date[5:7],i)
+                else:
+                        r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Day?Date={0}-{1}-{2}&WithTotal=false".format(start_date[0:4],start_date[5:7],i)
 
-       fig.update_layout(
-                    title ='Battery State of Charge (Plant {0}):'.format(data_initial['plants'][0]['plantId']),
-                    xaxis_title='{0} days selected'.format((int(end_date[8:10])-int(start_date[8:10]))),
-                    yaxis_title='State of Charge (%)',
-                    autotypenumbers='convert types',
-                    )
+                headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
+                r = session.get(r,headers=headers2)
+                data = r.json()
+                stateOfCharge.append(data['set'][i]['batteryStateOfCharge'])
+                """ batteryDischarging.append(data['set'][i]['batteryDischarging'])
+                Totalconsumption.append(data['set'][i]['totalConsumption']) """
+                # print(data['set'][i]['batteryStateOfCharge'])
+        # end = time.time()
        
-       return fig 
+        date = []
+        for i in range(int(start_date[8:10]),int(end_date[8:10])):
+                if i < 10:
+                    date.append("{0}-{1}-{2}".format(start_date[0:4],start_date[5:7],i))
+                else:
+                    date.append("{0}-{1}-{2}".format(start_date[0:4],start_date[5:7],i))
+                    
+                
+        title =  'Battery State of Charge (Plant {0}):'.format(data_initial['plants'][0]['plantId'])
+        FillSpreadSheet(title, 'Date' ,'State of Charge (%)', date, stateOfCharge, "SOC_Range")
+            
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(
+                      x = date,
+                      y = stateOfCharge,
+                      mode = 'lines+markers', 
+                      name = 'State of Charge'
+                ))
+  
+        fig.update_layout(
+                title ='Battery State of Charge (Plant {0}):'.format(data_initial['plants'][0]['plantId']),
+                xaxis_title='{0} days selected'.format((int(end_date[8:10])-int(start_date[8:10]))),
+                yaxis_title='State of Charge (%)',
+                autotypenumbers='convert types',
+                )
+                                                            
+        return fig 
+       elif (site == 2):
+                for i in range(int(start_date[8:10]),int(end_date[8:10])):
+                        if i < 10: # If date less than 10 to suit YYYY-MM-DD Format
+                                r = "https://async-auth.smaapis.de/monitoring/v1/plants/9209949/measurements/sets/EnergyBalance/Day?Date={0}-{1}-0{2}&WithTotal=false".format(start_date[0:4],start_date[5:7],i)
+                        else:
+                                r = "https://async-auth.smaapis.de/monitoring/v1/plants/9209949/measurements/sets/EnergyBalance/Day?Date={0}-{1}-{2}&WithTotal=false".format(start_date[0:4],start_date[5:7],i)
+
+                        headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
+                        r = session.get(r,headers=headers2)
+                        data = r.json()
+                        stateOfCharge.append(data['set'][i]['batteryStateOfCharge'])
+                        """ batteryDischarging.append(data['set'][i]['batteryDischarging'])
+                        Totalconsumption.append(data['set'][i]['totalConsumption']) """
+                        # print(data['set'][i]['batteryStateOfCharge'])
+                # end = time.time()
+            
+                date = []
+                for i in range(int(start_date[8:10]),int(end_date[8:10])):
+                        if i < 10:
+                            date.append("{0}-{1}-{2}".format(start_date[0:4],start_date[5:7],i))
+                        else:
+                            date.append("{0}-{1}-{2}".format(start_date[0:4],start_date[5:7],i))
+                            
+                        
+                title =  'Battery State of Charge (Plant {0}):'.format(data_initial['plants'][0]['plantId'])
+                FillSpreadSheet(title, 'Date' ,'State of Charge (%)', date, stateOfCharge, "SOC_Range")
+                    
+                fig = go.Figure()
+                fig.add_trace(go.Scatter(
+                            x = date,
+                            y = stateOfCharge,
+                            mode = 'lines+markers', 
+                            name = 'State of Charge'
+                        ))
+        
+                fig.update_layout(
+                        title ='Battery State of Charge (Plant {0}):'.format(data_initial['plants'][0]['plantId']),
+                        xaxis_title='{0} days selected'.format((int(end_date[8:10])-int(start_date[8:10]))),
+                        yaxis_title='State of Charge (%)',
+                        autotypenumbers='convert types',
+                        )
+                                                                    
+                return fig 
 
 @app.callback(
        Output(component_id='my_graph_5_1', component_property='figure'),
-       Input('slct_user_2','value'))
-       
+       Input('slct_user_2','value'),
+       Input('slct_grid_01_02', 'value'))
+      
 
-def TotalConsumptionMonth(slct_user_2): 
+def TotalConsumptionMonth(slct_user_2,value): 
     TOKEN = refreshtoken(r1)
+    site=value
     #refreshtoken(r1) # Use refresh token as bearer token expires every 5 minutes (SMA sunny portal)  
     # GET DATA VIA LOOP
     TotalConsumption = [0,0,0,0,0,0,0,0,0,0,0,0]
@@ -4489,126 +4701,217 @@ def TotalConsumptionMonth(slct_user_2):
     print("month: " + start_date[5:7]) # Access DD of YYYY-MM-DD
     print("date: " + start_date[8:10]) # Access DD of YYYY-MM-DD """
     # Only single Get API request required for one year
+    #xk
+    if(site==1):
+        r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(slct_user_2)
 
-    r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(slct_user_2)
+        headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
+        r = session.get(r,headers=headers2)
+        data = r.json()
+        i = 0
+        for value in data['set']:
+            if slct_user_2 == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
+                TotalConsumption[6+i] = ((value['totalConsumption']/1000))
+            elif data is None:
+                TotalConsumption[i] = 0
+            else: 
+                TotalConsumption[i] = ((value['totalConsumption']/1000))
+            i = i+1
+        """ batteryDischarging.append(data['set'][i]['batteryDischarging'])
+        Totalconsumption.append(data['set'][i]['totalConsumption']) """
+        # print(data['set'][i]['batteryStateOfCharge'])
+        # end = time.time()
 
-    headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
-    r = session.get(r,headers=headers2)
-    data = r.json()
-    i = 0
-    for value in data['set']:
-        if slct_user_2 == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
-            TotalConsumption[6+i] = ((value['totalConsumption']/1000))
-        elif data is None:
-            TotalConsumption[i] = 0
-        else: 
-            TotalConsumption[i] = ((value['totalConsumption']/1000))
-        i = i+1
-    """ batteryDischarging.append(data['set'][i]['batteryDischarging'])
-    Totalconsumption.append(data['set'][i]['totalConsumption']) """
-    # print(data['set'][i]['batteryStateOfCharge'])
-    # end = time.time()
+        # print("\nIt took ",end-start, " seconds to do ", i, " API GET requests. (TOTAL CONSUMPTION)")
+        # print(stateOfCharge)
+        date = ["January","February","March","April","May","June","July","August","September","October","November","December"]
+        
+        
+        
+        title =  'Monthly Consumption (Plant {0}):'.format(data_initial['plants'][0]['plantId'])
+        FillSpreadSheet(title, 'Months' ,'Total Consumption (kWh)', date, TotalConsumption,"Consumpton_Year")    
+        
+        
+        fig = px.bar(
+            df,
+            x = date,
+            y = TotalConsumption)
+                
+        fig.update_layout(
+                        title ='Monthly Consumption (Plant {0}):'.format(data_initial['plants'][0]['plantId']),
+                        xaxis_title='Months',
+                        yaxis_title='Total Consumption (kWh)',
+                        autotypenumbers='convert types',
+                        )
+        
+        return fig
+    
+    if(site==2):
+        r = "https://async-auth.smaapis.de/monitoring/v1/plants/9209949/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(slct_user_2)
 
-    # print("\nIt took ",end-start, " seconds to do ", i, " API GET requests. (TOTAL CONSUMPTION)")
-    # print(stateOfCharge)
-    date = ["January","February","March","April","May","June","July","August","September","October","November","December"]
-    
-    
-    
-    title =  'Monthly Consumption (Plant {0}):'.format(data_initial['plants'][0]['plantId'])
-    FillSpreadSheet(title, 'Months' ,'Total Consumption (kWh)', date, TotalConsumption,"Consumpton_Year")    
-    
-    
-    fig = px.bar(
-        df,
-        x = date,
-        y = TotalConsumption)
-            
-    fig.update_layout(
-                    title ='Monthly Consumption (Plant {0}):'.format(data_initial['plants'][0]['plantId']),
-                    xaxis_title='Months',
-                    yaxis_title='Total Consumption (kWh)',
-                    autotypenumbers='convert types',
-                    )
-    
-    return fig
+        headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
+        r = session.get(r,headers=headers2)
+        data = r.json()
+        i = 0
+        for value in data['set']:
+            if slct_user_2 == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
+                TotalConsumption[6+i] = ((value['totalConsumption']/1000))
+            elif data is None:
+                TotalConsumption[i] = 0
+            else: 
+                TotalConsumption[i] = ((value['totalConsumption']/1000))
+            i = i+1
+        """ batteryDischarging.append(data['set'][i]['batteryDischarging'])
+        Totalconsumption.append(data['set'][i]['totalConsumption']) """
+        # print(data['set'][i]['batteryStateOfCharge'])
+        # end = time.time()
 
+        # print("\nIt took ",end-start, " seconds to do ", i, " API GET requests. (TOTAL CONSUMPTION)")
+        # print(stateOfCharge)
+        date = ["January","February","March","April","May","June","July","August","September","October","November","December"]
+        
+        
+        
+        title =  'Monthly Consumption (Plant {0}):'.format(data_initial['plants'][0]['plantId'])
+        FillSpreadSheet(title, 'Months' ,'Total Consumption (kWh)', date, TotalConsumption,"Consumpton_Year")    
+        
+        
+        fig = px.bar(
+            df,
+            x = date,
+            y = TotalConsumption)
+                
+        fig.update_layout(
+                        title ='Monthly Consumption (Plant {0}):'.format(data_initial['plants'][0]['plantId']),
+                        xaxis_title='Months',
+                        yaxis_title='Total Consumption (kWh)',
+                        autotypenumbers='convert types',
+                        )
+        
+        return fig
+#xxx
 @app.callback(
        Output(component_id='my_graph_6', component_property='figure'),
        Input(component_id='my-date-picker-range-2', component_property='start_date'),
-       Input(component_id='my-date-picker-range-2', component_property='end_date'))
+       Input(component_id='my-date-picker-range-2', component_property='end_date'),
+       Input('slct_grid_01_01', 'value'))
 
-def stateofCharge(start_date,end_date): 
+def stateofCharge(start_date,end_date,value): 
 # GET DATA VIA LOOP
        TOKEN = refreshtoken(r1)
        batteryDischarging = []
        Totalconsumption = []
-
+       site=value
        # start = time.time()
        """ print("year: " + start_date[0:4]) # Access DD of YYYY-MM-DD
        print("month: " + start_date[5:7]) # Access DD of YYYY-MM-DD
        print("date: " + start_date[8:10]) # Access DD of YYYY-MM-DD """
+       if(site==1):
+        for i in range(int(start_date[8:10]),int(end_date[8:10])):
+                if i < 10: # If date less than 10 to suit YYYY-MM-DD Format
+                        r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Day?Date={0}-{1}-0{2}&WithTotal=false".format(start_date[0:4],start_date[5:7],i)
+                else:
+                        r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Day?Date={0}-{1}-{2}&WithTotal=false".format(start_date[0:4],start_date[5:7],i)
 
-       for i in range(int(start_date[8:10]),int(end_date[8:10])):
-              if i < 10: # If date less than 10 to suit YYYY-MM-DD Format
-                     r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Day?Date={0}-{1}-0{2}&WithTotal=false".format(start_date[0:4],start_date[5:7],i)
-              else:
-                     r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Day?Date={0}-{1}-{2}&WithTotal=false".format(start_date[0:4],start_date[5:7],i)
+                headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
+                r = session.get(r,headers=headers2)
+                data = r.json()
+                #batteryDischarging.append(data['set'][i]['batteryDischarging'])
+                Totalconsumption.append(data['set'][i]['totalConsumption'])
+                # print(data['set'][i]['batteryStateOfCharge'])
+        # end = time.time()
 
-              headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
-              r = session.get(r,headers=headers2)
-              data = r.json()
-              #batteryDischarging.append(data['set'][i]['batteryDischarging'])
-              Totalconsumption.append(data['set'][i]['totalConsumption'])
-              # print(data['set'][i]['batteryStateOfCharge'])
-       # end = time.time()
+        # print("\nIt took ",end-start, " seconds to do ", i, " API GET requests. (TOTAL CONSUMPTION)")
+        # print(Totalconsumption)
+        date = []
+        for i in range(int(start_date[8:10]),int(end_date[8:10])):
+            if i < 10:
+                date.append("{0}-{1}-{2}".format(start_date[0:4],start_date[5:7],i))
+            else:
+                date.append("{0}-{1}-{2}".format(start_date[0:4],start_date[5:7],i))  
+                
+                
+        title =  'Consumption (Plant {0}):'.format(data_initial['plants'][0]['plantId'])
+        FillSpreadSheet(title, 'Date' ,'Total Consumption (kWh)', date, Totalconsumption, "Consumption_Range") 
+                
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(
+                        x = date,
+                        y = Totalconsumption,
+                        mode = 'lines+markers',
+                                        
+                    ))
+        fig.update_layout(
+                        title ='Consumption (Plant {0}):'.format(data_initial['plants'][0]['plantId']),
+                        xaxis_title='{0} days selected'.format((int(end_date[8:10])-int(start_date[8:10]))),
+                        yaxis_title='Total Consumption (kWh)',
+                        autotypenumbers='convert types',
+                        )
+        
+        return fig 
+       elif(site==2):
+                for i in range(int(start_date[8:10]),int(end_date[8:10])):
+                        if i < 10: # If date less than 10 to suit YYYY-MM-DD Format
+                                r = "https://async-auth.smaapis.de/monitoring/v1/plants/9209949/measurements/sets/EnergyBalance/Day?Date={0}-{1}-0{2}&WithTotal=false".format(start_date[0:4],start_date[5:7],i)
+                        else:
+                                r = "https://async-auth.smaapis.de/monitoring/v1/plants/9209949/measurements/sets/EnergyBalance/Day?Date={0}-{1}-{2}&WithTotal=false".format(start_date[0:4],start_date[5:7],i)
 
-       # print("\nIt took ",end-start, " seconds to do ", i, " API GET requests. (TOTAL CONSUMPTION)")
-       # print(Totalconsumption)
-       date = []
-       for i in range(int(start_date[8:10]),int(end_date[8:10])):
-           if i < 10:
-              date.append("{0}-{1}-{2}".format(start_date[0:4],start_date[5:7],i))
-           else:
-              date.append("{0}-{1}-{2}".format(start_date[0:4],start_date[5:7],i))  
-              
-              
-       title =  'Consumption (Plant {0}):'.format(data_initial['plants'][0]['plantId'])
-       FillSpreadSheet(title, 'Date' ,'Total Consumption (kWh)', date, Totalconsumption, "Consumption_Range") 
-               
-       fig = go.Figure()
-       fig.add_trace(go.Scatter(
-                    x = date,
-                    y = Totalconsumption,
-                    mode = 'lines+markers',
-                                    
-                ))
-       fig.update_layout(
-                    title ='Consumption (Plant {0}):'.format(data_initial['plants'][0]['plantId']),
-                    xaxis_title='{0} days selected'.format((int(end_date[8:10])-int(start_date[8:10]))),
-                    yaxis_title='Total Consumption (kWh)',
-                    autotypenumbers='convert types',
-                    )
-    
-       return fig 
+                        headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
+                        r = session.get(r,headers=headers2)
+                        data = r.json()
+                        #batteryDischarging.append(data['set'][i]['batteryDischarging'])
+                        Totalconsumption.append(data['set'][i]['totalConsumption'])
+                        # print(data['set'][i]['batteryStateOfCharge'])
+                # end = time.time()
 
+                # print("\nIt took ",end-start, " seconds to do ", i, " API GET requests. (TOTAL CONSUMPTION)")
+                # print(Totalconsumption)
+                date = []
+                for i in range(int(start_date[8:10]),int(end_date[8:10])):
+                    if i < 10:
+                        date.append("{0}-{1}-{2}".format(start_date[0:4],start_date[5:7],i))
+                    else:
+                        date.append("{0}-{1}-{2}".format(start_date[0:4],start_date[5:7],i))  
+                        
+                        
+                title =  'Consumption (Plant {0}):'.format(data_initial['plants'][0]['plantId'])
+                FillSpreadSheet(title, 'Date' ,'Total Consumption (kWh)', date, Totalconsumption, "Consumption_Range") 
+                        
+                fig = go.Figure()
+                fig.add_trace(go.Scatter(
+                                x = date,
+                                y = Totalconsumption,
+                                mode = 'lines+markers',
+                                                
+                            ))
+                fig.update_layout(
+                                title ='Consumption (Plant {0}):'.format(data_initial['plants'][0]['plantId']),
+                                xaxis_title='{0} days selected'.format((int(end_date[8:10])-int(start_date[8:10]))),
+                                yaxis_title='Total Consumption (kWh)',
+                                autotypenumbers='convert types',
+                                )
+                
+                return fig 
 @app.callback(
        Output(component_id='graph_6_1', component_property='figure'),
-       Input(component_id='my-date-picker-single-charge', component_property='date'))
+       Input(component_id='my-date-picker-single-charge', component_property='date'),
+       Input('slct_grid_03_02', 'value'))
 
-def stateofChargeByMin(date): 
+def stateofChargeByMin(date,value): 
        TOKEN = refreshtoken(r1)
 # GET DATA VIA LOOP
        stateOfCharge = []
-       
+       site=value
        #start = time.time()
        """ print("year: " + start_date[0:4]) # Access DD of YYYY-MM-DD
        print("month: " + start_date[5:7]) # Access DD of YYYY-MM-DD
        print("date: " + start_date[8:10]) # Access DD of YYYY-MM-DD """
-
-
-       r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Day?Date={0}-{1}-{2}&WithTotal=false".format(date[0:4],date[5:7],date[8:10]) 
-             
+ 
+       if (site == 1):
+         r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Day?Date={0}-{1}-{2}&WithTotal=false".format(date[0:4],date[5:7],date[8:10]) 
+   
+       elif(site == 2):
+         r = "https://async-auth.smaapis.de/monitoring/v1/plants/9209949/measurements/sets/EnergyBalance/Day?Date={0}-{1}-{2}&WithTotal=false".format(date[0:4],date[5:7],date[8:10])
 
        headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
        r = session.get(r,headers=headers2)
@@ -4655,35 +4958,43 @@ def stateofChargeByMin(date):
                     )
        
        return fig 
-
+#xo
 @app.callback(
        Output(component_id='graph_7', component_property='figure'),
-       Input(component_id='my-date-picker-single-gen', component_property='date'))
+       Input(component_id='my-date-picker-single-gen', component_property='date'),
+       Input('slct_grid_02_01', 'value'))
 
-def TotalGenerationDay(date):
-     
+def TotalGenerationDay(date,value):
+    
 # GET DATA VIA LOOP
        TOKEN = refreshtoken(r1)
        totalGen = []
+       site=value
        
        #start = time.time()
        """ print("year: " + start_date[0:4]) # Access DD of YYYY-MM-DD
        print("month: " + start_date[5:7]) # Access DD of YYYY-MM-DD
        print("date: " + start_date[8:10]) # Access DD of YYYY-MM-DD """
 
-
-       r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Day?Date={0}-{1}-{2}&WithTotal=false".format(date[0:4],date[5:7],date[8:10]) 
-             
+       if (site == 1):
+         r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Day?Date={0}-{1}-{2}&WithTotal=false".format(date[0:4],date[5:7],date[8:10]) 
+       elif(site == 2):
+         r = "https://async-auth.smaapis.de/monitoring/v1/plants/9209949/measurements/sets/EnergyBalance/Day?Date={0}-{1}-{2}&WithTotal=false".format(date[0:4],date[5:7],date[8:10])       
 
        headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
        r = session.get(r,headers=headers2)
        data = r.json()
-
-       #print(data)
-       #print(data['set'])
-       for value in data['set']:
+       if (site == 1):
+        #print(data)
+        #print(data['set'])
+        for value in data['set']:
               totalGen.append(value.get('totalGeneration',0))
-
+       elif(site == 2):
+       #print(data)
+        #print(data['set'])
+        for value in data['set']:
+              totalGen.append(value.get('pvGeneration',0))
+              
        """ batteryDischarging.append(data['set'][i]['batteryDischarging'])
        Totalconsumption.append(data['set'][i]['totalConsumption']) """
        # print(data['set'][i]['batteryStateOfCharge'])   
@@ -4718,8 +5029,8 @@ def TotalGenerationDay(date):
 @app.callback(
     Output('slct_year_3_1', 'options'),
     [Input('slct_grid_3_1', 'value')])
-def update_dropdown(slct_grid_3_1):
-    if slct_grid_3_1 == 1:
+def update_dropdown(slct_grid_2_1):
+    if slct_grid_2_1 == 1:
         return [
             {"label": "2020", "value": "2020"},
             {"label": "2021", "value": "2021"},
@@ -4731,16 +5042,16 @@ def update_dropdown(slct_grid_3_1):
             {"label": "2022", "value": "2022"},
             {"label": "2023", "value": "2023"}
         ]
-
+#xk
 @app.callback(
        Output(component_id='my_graph_7_1', component_property='figure'),
-       Input('slct_year_3_1','value'),
-       Input('slct_grid_3_1','value'))
+       Input('slct_user_3','value'),
+       Input('slct_grid_02_02','value'))
        
 
-def TotalGenerationMonth(slct_year_3_1, site): 
+def TotalGenerationMonth(slct_user_3,value): 
     TOKEN = refreshtoken(r1)
-    site = site
+    site=value
     #refreshtoken(r1) # Use refresh token as bearer token expires every 5 minutes (SMA sunny portal)  
     # GET DATA VIA LOOP
     TotalGeneration = [0,0,0,0,0,0,0,0,0,0,0,0]
@@ -4749,64 +5060,103 @@ def TotalGenerationMonth(slct_year_3_1, site):
     print("month: " + start_date[5:7]) # Access DD of YYYY-MM-DD
     print("date: " + start_date[8:10]) # Access DD of YYYY-MM-DD """
     # Only single Get API request required for one year
-
-    r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(slct_year_3_1)
-
-    headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
-    r = session.get(r,headers=headers2)
-    data = r.json()
-    i = 0
-    for value in data['set']:
-        if(site == 1):
-            if slct_year_3_1 == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
-                TotalGeneration[6+i] = ((value['totalGeneration']/1000))
-            elif data is None:
-                TotalGeneration[i] = 0
-            else: 
-                TotalGeneration[i] = ((value['totalGeneration']/1000))
-            i = i+1
-        elif(site == 2):
-            if slct_year_3_1 == 2022: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
-                TotalGeneration[6+i] = ((value['totalGeneration']/1000))
-            elif data is None:
-                TotalGeneration[i] = 0
-            else: 
-                TotalGeneration[i] = ((value['totalGeneration']/1000))
-            i = i+1
-    """ batteryDischarging.append(data['set'][i]['batteryDischarging'])
-    Totalconsumption.append(data['set'][i]['totalConsumption']) """
-    # print(data['set'][i]['batteryStateOfCharge'])
-    # end = time.time()
-
-    # print("\nIt took ",end-start, " seconds to do ", i, " API GET requests. (TOTAL CONSUMPTION)")
-    # print(stateOfCharge)
-    date = ["January","February","March","April","May","June","July","August","September","October","November","December"]
-
-
-    title =  'Monthly Generation (Plant {0}):'.format(data_initial['plants'][0]['plantId'])
-    FillSpreadSheet(title, 'Months' ,'Total Generation (kWh)', date, TotalGeneration, "Generation_Year")     
     
-    
-    fig = px.bar(
-        df,
-        x = date,
-        y = TotalGeneration)
+    if (site == 1): 
+            r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(slct_user_3)
             
-    fig.update_layout(
-                    title ='Monthly Generation (Plant {0}):'.format(data_initial['plants'][0]['plantId']),
-                    xaxis_title='Months',
-                    yaxis_title='Total Generation (kWh)',
-                    autotypenumbers='convert types',
-                    )
-    
-    return fig
+            headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
+            r = session.get(r,headers=headers2)
+            data = r.json()
+            i = 0
+            for value in data['set']:
+                    if slct_user_3 == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
+                        TotalGeneration[6+i] = ((value['totalGeneration']/1000))
+                    elif data is None:
+                        TotalGeneration[i] = 0
+                    else: 
+                        TotalGeneration[i] = ((value['totalGeneration']/1000))
+                    i = i+1
+            
+            """ batteryDischarging.append(data['set'][i]['batteryDischarging'])
+            Totalconsumption.append(data['set'][i]['totalConsumption']) """
+            # print(data['set'][i]['batteryStateOfCharge'])
+            # end = time.time()
 
+
+            # print("\nIt took ",end-start, " seconds to do ", i, " API GET requests. (TOTAL CONSUMPTION)")
+            # print(stateOfCharge)
+            date = ["January","February","March","April","May","June","July","August","September","October","November","December"]
+
+
+            title =  'Monthly Generation (Plant {0}):'.format(data_initial['plants'][0]['plantId'])
+            FillSpreadSheet(title, 'Months' ,'Total Generation (kWh)', date, TotalGeneration, "Generation_Year")     
+            
+            
+            fig = px.bar(
+                df,
+                x = date,
+                y = TotalGeneration)
+                    
+            fig.update_layout(
+                            title ='Monthly Generation (Plant {0}):'.format(data_initial['plants'][0]['plantId']),
+                            xaxis_title='Months',
+                            yaxis_title='Total Generation (kWh)',
+                            autotypenumbers='convert types',
+                            )
+            
+            return fig
+    
+    elif (site == 2): 
+        r = "https://async-auth.smaapis.de/monitoring/v1/plants/9209949/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(slct_user_3)
+        
+        headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
+        r = session.get(r,headers=headers2)
+        data = r.json()
+        i = 0
+        for value in data['set']:
+                if slct_user_3 == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
+                    TotalGeneration[6+i] = ((value['totalGeneration']/1000))
+                elif data is None:
+                    TotalGeneration[i] = 0
+                else: 
+                    TotalGeneration[i] = ((value['totalGeneration']/1000))
+                i = i+1
+        
+        """ batteryDischarging.append(data['set'][i]['batteryDischarging'])
+        Totalconsumption.append(data['set'][i]['totalConsumption']) """
+        # print(data['set'][i]['batteryStateOfCharge'])
+        # end = time.time()
+
+
+        # print("\nIt took ",end-start, " seconds to do ", i, " API GET requests. (TOTAL CONSUMPTION)")
+        # print(stateOfCharge)
+        date = ["January","February","March","April","May","June","July","August","September","October","November","December"]
+
+
+        title =  'Monthly Generation (Plant {0}):'.format(data_initial['plants'][0]['plantId'])
+        FillSpreadSheet(title, 'Months' ,'Total Generation (kWh)', date, TotalGeneration, "Generation_Year")     
+        
+        
+        fig = px.bar(
+            df,
+            x = date,
+            y = TotalGeneration)
+                
+        fig.update_layout(
+                        title ='Monthly Generation (Plant {0}):'.format(data_initial['plants'][0]['plantId']),
+                        xaxis_title='Months',
+                        yaxis_title='Total Generation (kWh)',
+                        autotypenumbers='convert types',
+                        )
+        
+        return fig
 @app.callback(
        Output(component_id='my_graph_6_2', component_property='figure'),
-       Input('slct_user_5','value'))
+       Input('slct_user_5','value'),
+       Input('slct_grid_03_03', 'value'))
        
-
-def BatStateofChargeMonth(slct_user_5): 
+#xo
+def BatStateofChargeMonth(slct_user_5,value): 
     TOKEN = refreshtoken(r1)
     #refreshtoken(r1) # Use refresh token as bearer token expires every 5 minutes (SMA sunny portal)  
     # GET DATA VIA LOOP
@@ -4817,9 +5167,13 @@ def BatStateofChargeMonth(slct_user_5):
     print("month: " + start_date[5:7]) # Access DD of YYYY-MM-DD
     print("date: " + start_date[8:10]) # Access DD of YYYY-MM-DD """
     # Only single Get API request required for one year
-
-    r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(slct_user_5)
-
+    site=value
+    if (site == 1): 
+     r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(slct_user_5)
+    
+    elif (site == 2):
+     r = "https://async-auth.smaapis.de/monitoring/v1/plants/9209949/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(slct_user_5)
+    
     headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
     r = session.get(r,headers=headers2)
     data = r.json()
@@ -5121,188 +5475,189 @@ def hourlyUptime(start_date_value, end_date_value):
                    yaxis_title='Uptime (%)')
     
     return fig                 
-
+#xp
 @app.callback(
     Output(component_id='batt_temp_month', component_property='figure'),
-    Input(component_id='my-date-picker-single', component_property='value'))
-
-def batt_temp_month (date_value):
+    Input(component_id='my-date-picker-single', component_property='value'),
+    Input('slct_grid_04_01', 'value'))
+def batt_temp_month (date_value,value):
  
     date = str(date_value)
     month = date[5:7]
     year = date[0:4]
-
-    if(int(date[5:7])==12):
-        end_time = str(int(date[0:4])+1) + "-01-01T00:00:00"
-    else:
-        if(int(date[5:7])<9):
-            end_time = str(date[0:6]) + str(int(date[6])+1) + "-01T00:00:00"
+    site=value
+    if(site==1):
+        if(int(date[5:7])==12):
+            end_time = str(int(date[0:4])+1) + "-01-01T00:00:00"
         else:
-            end_time = str(date[0:5]) + str(int(date[5:7])+1) + "-01T00:00:00"
-    
-    #Changing the start time so that only month and year included so that start time is the start of the month
-    start_time = str(date[0:7]) + "-01T00:00:00"   
-    
-    if(month == "01"):
-        M = "January"
-    elif(month == "02"):
-        M = "February"
-    elif(month == "03"):
-        M = "March"
-    elif(month == "04"):
-        M = "April"
-    elif(month == "05"):
-        M = "May"
-    elif(month == "06"):
-        M = "June"
-    elif(month == "07"):
-        M = "July"
-    elif(month == "08"):
-        M = "August"
-    elif(month == "09"):
-        M = "September"
-    elif(month == "10"):
-        M = "October"
-    elif(month == "11"):
-        M = "November"
-    else:
-        M = "December"
-            
-    if(month == "04" or month == "06" or month == "09" or month == "11"):
-        num = 30
-    elif(month == "02" and int(date[0:4])%4==0):
-        num = 29
-    elif(month == "02" and int(date[0:4])%4!=0):
-        num = 28
-    else:
-        num = 31    
+            if(int(date[5:7])<9):
+                end_time = str(date[0:6]) + str(int(date[6])+1) + "-01T00:00:00"
+            else:
+                end_time = str(date[0:5]) + str(int(date[5:7])+1) + "-01T00:00:00"
         
-    if(len(date)!=7):   #These lines of code are just used in case of an invalid date input from the user
-        y_dont_care = [] #If the date input size is not 7, it is in valid as YYYY-MM has 7 characters
-        x_dont_care = []
-        for index in range(1,24):
-            y_dont_care.append(0)
-            x_dont_care.append(index)
+        #Changing the start time so that only month and year included so that start time is the start of the month
+        start_time = str(date[0:7]) + "-01T00:00:00"   
+        
+        if(month == "01"):
+            M = "January"
+        elif(month == "02"):
+            M = "February"
+        elif(month == "03"):
+            M = "March"
+        elif(month == "04"):
+            M = "April"
+        elif(month == "05"):
+            M = "May"
+        elif(month == "06"):
+            M = "June"
+        elif(month == "07"):
+            M = "July"
+        elif(month == "08"):
+            M = "August"
+        elif(month == "09"):
+            M = "September"
+        elif(month == "10"):
+            M = "October"
+        elif(month == "11"):
+            M = "November"
+        else:
+            M = "December"
+                
+        if(month == "04" or month == "06" or month == "09" or month == "11"):
+            num = 30
+        elif(month == "02" and int(date[0:4])%4==0):
+            num = 29
+        elif(month == "02" and int(date[0:4])%4!=0):
+            num = 28
+        else:
+            num = 31    
             
+        if(len(date)!=7):   #These lines of code are just used in case of an invalid date input from the user
+            y_dont_care = [] #If the date input size is not 7, it is in valid as YYYY-MM has 7 characters
+            x_dont_care = []
+            for index in range(1,24):
+                y_dont_care.append(0)
+                x_dont_care.append(index)
+                
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(x=x_dont_care, y=y_dont_care,
+                                mode='lines+markers',
+                                ))
+            
+            fig.update_layout(title = "Invalid Input",
+                        xaxis_title='Time',
+                        yaxis_title='Temperature (°C)')  
+            return fig
+
+
+        readings = db.reference('UsersData/mRxIA4XvqYTmhIEjqfk8ycC02vq1/readings')
+        part_readings = readings.order_by_child('timestamp').start_at(start_time).end_at(end_time).get()
+
+        
+        timestamp=[]
+        temp_batt=[]
+        temp_ext=[]
+        temp_int=[]
+        temp_pcb=[]
+        
+
+        for key,value in part_readings.items():
+            if (float(value['temp_PCB']) > 100): ##some fake values detected in pcb temp (temp being recorded at 500000)
+                temp_batt.append(value['temp_Batt1']) #if detected append all other temps as normal
+                temp_ext.append(value['temp_ext'])
+                temp_int.append(value['temp_int'])
+                temp_pcb.append(28) ##append pcb to 28 - rough avg temp that will have minimal effect on daily average
+                timestamp.append(key)
+            else:
+                temp_batt.append(value['temp_Batt1'])
+                temp_ext.append(value['temp_ext'])
+                temp_int.append(value['temp_int'])
+                temp_pcb.append(value['temp_PCB'])
+                timestamp.append(key)
+            
+        total_temp_batt=[0]*num
+        total_temp_ext=[0]*num
+        total_temp_int=[0]*num
+        total_temp_pcb=[0]*num
+        no_of_data_points=[0]*num
+        #0 1 2 3 4 5 6 7 8 9  10
+        #1 2 3 4 5 6 7 8 9 10 11
+        
+        days=[]
+        
+        for index in range(0,num):
+            days.append(str(index+1))
+            
+        
+        for index in range (0,num):
+            if (index<9):
+                current_day = year + "-" + month + "-0" + str(index+1)
+            else:
+                current_day = year + "-" + month + "-" + str(index+1)
+            
+            temp_batt_running_total = 0
+            temp_ext_running_total = 0
+            temp_int_running_total = 0
+            temp_pcb_running_total = 0
+            data_points_count = 0
+            
+            for index2 in range(0, len(timestamp)):
+                if (current_day == timestamp[index2][0:10]):
+                    temp_batt_running_total += float(temp_batt[index2])
+                    temp_ext_running_total += float(temp_ext[index2])
+                    temp_int_running_total += float(temp_int[index2])
+                    temp_pcb_running_total += float(temp_pcb[index2])
+                    data_points_count+=1
+            total_temp_batt[index] += temp_batt_running_total
+            total_temp_ext[index] += temp_ext_running_total
+            total_temp_int[index] += temp_int_running_total
+            total_temp_pcb[index] += temp_pcb_running_total
+            no_of_data_points[index] += data_points_count
+
+        daily_temp_batt=[]
+        daily_temp_ext=[]
+        daily_temp_int=[]
+        daily_temp_pcb=[]
+        
+        for index in range(0,len(total_temp_batt)):
+            if (no_of_data_points[index]==0):
+                daily_temp_batt.append(0)
+                daily_temp_ext.append(0)
+                daily_temp_int.append(0)
+                daily_temp_pcb.append(0)
+            else:
+                daily_temp_batt.append(total_temp_batt[index]/no_of_data_points[index])
+                daily_temp_ext.append(total_temp_ext[index]/no_of_data_points[index])
+                daily_temp_int.append(total_temp_int[index]/no_of_data_points[index])
+                daily_temp_pcb.append(total_temp_pcb[index]/no_of_data_points[index])
+
+
+        title =  "Average Battery Temperature for " + M + " " + year
+        FillSpreadSheet1(title, 'Days' ,'Batt Temp', 'Ext Temp','Int Temp', 'PCB Temp',  days , daily_temp_batt, daily_temp_ext, daily_temp_ext, daily_temp_pcb, "Batt_Temp_Month")   
+        
+        
         fig = go.Figure()
-        fig.add_trace(go.Scatter(x=x_dont_care, y=y_dont_care,
-                            mode='lines+markers',
+
+        fig.add_trace(go.Scatter(x=days, y=daily_temp_batt,
+                            mode='lines+markers', name = 'Battery'
+                            ))
+        fig.add_trace(go.Scatter(x=days, y=daily_temp_ext,
+                            mode='lines+markers', name = 'External'
+                            ))
+
+        fig.add_trace(go.Scatter(x=days, y=daily_temp_int,
+                            mode='lines+markers', name = 'Internal'
+                            ))
+
+        fig.add_trace(go.Scatter(x=days, y=daily_temp_pcb,
+                            mode='lines+markers', name = 'PCB'
                             ))
         
-        fig.update_layout(title = "Invalid Input",
-                       xaxis_title='Time',
-                       yaxis_title='Temperature (°C)')  
-        return fig
-
-
-    readings = db.reference('UsersData/mRxIA4XvqYTmhIEjqfk8ycC02vq1/readings')
-    part_readings = readings.order_by_child('timestamp').start_at(start_time).end_at(end_time).get()
-
-    
-    timestamp=[]
-    temp_batt=[]
-    temp_ext=[]
-    temp_int=[]
-    temp_pcb=[]
-    
-
-    for key,value in part_readings.items():
-        if (float(value['temp_PCB']) > 100): ##some fake values detected in pcb temp (temp being recorded at 500000)
-            temp_batt.append(value['temp_Batt1']) #if detected append all other temps as normal
-            temp_ext.append(value['temp_ext'])
-            temp_int.append(value['temp_int'])
-            temp_pcb.append(28) ##append pcb to 28 - rough avg temp that will have minimal effect on daily average
-            timestamp.append(key)
-        else:
-            temp_batt.append(value['temp_Batt1'])
-            temp_ext.append(value['temp_ext'])
-            temp_int.append(value['temp_int'])
-            temp_pcb.append(value['temp_PCB'])
-            timestamp.append(key)
+        fig.update_layout(title = "Average Battery Temperature for " + M + " " + year,
+                    xaxis_title='Days of The Month',
+                    yaxis_title='Temperature (°C)')
         
-    total_temp_batt=[0]*num
-    total_temp_ext=[0]*num
-    total_temp_int=[0]*num
-    total_temp_pcb=[0]*num
-    no_of_data_points=[0]*num
-    #0 1 2 3 4 5 6 7 8 9  10
-    #1 2 3 4 5 6 7 8 9 10 11
-    
-    days=[]
-    
-    for index in range(0,num):
-        days.append(str(index+1))
-        
-    
-    for index in range (0,num):
-        if (index<9):
-            current_day = year + "-" + month + "-0" + str(index+1)
-        else:
-            current_day = year + "-" + month + "-" + str(index+1)
-        
-        temp_batt_running_total = 0
-        temp_ext_running_total = 0
-        temp_int_running_total = 0
-        temp_pcb_running_total = 0
-        data_points_count = 0
-        
-        for index2 in range(0, len(timestamp)):
-            if (current_day == timestamp[index2][0:10]):
-                temp_batt_running_total += float(temp_batt[index2])
-                temp_ext_running_total += float(temp_ext[index2])
-                temp_int_running_total += float(temp_int[index2])
-                temp_pcb_running_total += float(temp_pcb[index2])
-                data_points_count+=1
-        total_temp_batt[index] += temp_batt_running_total
-        total_temp_ext[index] += temp_ext_running_total
-        total_temp_int[index] += temp_int_running_total
-        total_temp_pcb[index] += temp_pcb_running_total
-        no_of_data_points[index] += data_points_count
-
-    daily_temp_batt=[]
-    daily_temp_ext=[]
-    daily_temp_int=[]
-    daily_temp_pcb=[]
-    
-    for index in range(0,len(total_temp_batt)):
-        if (no_of_data_points[index]==0):
-            daily_temp_batt.append(0)
-            daily_temp_ext.append(0)
-            daily_temp_int.append(0)
-            daily_temp_pcb.append(0)
-        else:
-            daily_temp_batt.append(total_temp_batt[index]/no_of_data_points[index])
-            daily_temp_ext.append(total_temp_ext[index]/no_of_data_points[index])
-            daily_temp_int.append(total_temp_int[index]/no_of_data_points[index])
-            daily_temp_pcb.append(total_temp_pcb[index]/no_of_data_points[index])
-
-
-    title =  "Average Battery Temperature for " + M + " " + year
-    FillSpreadSheet1(title, 'Days' ,'Batt Temp', 'Ext Temp','Int Temp', 'PCB Temp',  days , daily_temp_batt, daily_temp_ext, daily_temp_ext, daily_temp_pcb, "Batt_Temp_Month")   
-    
-    
-    fig = go.Figure()
-
-    fig.add_trace(go.Scatter(x=days, y=daily_temp_batt,
-                        mode='lines+markers', name = 'Battery'
-                        ))
-    fig.add_trace(go.Scatter(x=days, y=daily_temp_ext,
-                        mode='lines+markers', name = 'External'
-                        ))
-
-    fig.add_trace(go.Scatter(x=days, y=daily_temp_int,
-                        mode='lines+markers', name = 'Internal'
-                        ))
-
-    fig.add_trace(go.Scatter(x=days, y=daily_temp_pcb,
-                        mode='lines+markers', name = 'PCB'
-                        ))
-    
-    fig.update_layout(title = "Average Battery Temperature for " + M + " " + year,
-                   xaxis_title='Days of The Month',
-                   yaxis_title='Temperature (°C)')
-    
-    return fig   
+        return fig   
     
 @app.callback(
     Output(component_id='batt_temp_day', component_property='figure'),
@@ -5443,86 +5798,147 @@ def batt_temp_day(date_value):
                    xaxis_title='Hours of The Day',
                    yaxis_title='Temperature (°C)')
     return fig
-
+#zz
 @app.callback(
     Output(component_id='technical_efficiency', component_property='figure'),
-    [Input(component_id='slct_year', component_property='value')])
+    Input(component_id='slct_year', component_property='value'),
+    Input('slct_grid_06_01','value'))
 
-def TechnicalEfficiency(date_value):
+def TechnicalEfficiency(date_value,value):
     date=date_value 
-    
+    site=value
     
     TOKEN = refreshtoken(r1)
 
     TotalConsumption = [0,0,0,0,0,0,0,0,0,0,0,0]
 
+    if(site==1):
+        r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(date_value)
 
-    r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(date_value)
-
-    headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
-    r = session.get(r,headers=headers2)
-    data = r.json()
-    i = 0
-    for value in data['set']:
-        if int(date_value) == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
-            TotalConsumption[6+i] = ((value['totalConsumption']/1000))
-        elif data is None:
-            TotalConsumption[i] = 0
-        else: 
-            TotalConsumption[i] = ((value['totalConsumption']/1000))
-        i = i+1 
-
-
-    TotalGeneration = [0,0,0,0,0,0,0,0,0,0,0,0]
+        headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
+        r = session.get(r,headers=headers2)
+        data = r.json()
+        i = 0
+        for value in data['set']:
+            if int(date_value) == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
+                TotalConsumption[6+i] = ((value['totalConsumption']/1000))
+            elif data is None:
+                TotalConsumption[i] = 0
+            else: 
+                TotalConsumption[i] = ((value['totalConsumption']/1000))
+            i = i+1 
 
 
-    r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(date_value)
+        TotalGeneration = [0,0,0,0,0,0,0,0,0,0,0,0]
 
-    headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
-    r = session.get(r,headers=headers2)
-    data = r.json()
-    i = 0
-    for value in data['set']:
-        if int(date_value) == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
-            TotalGeneration[6+i] = ((value['totalGeneration']/1000))
-        elif data is None:
-            TotalGeneration[i] = 0
-        else: 
-            TotalGeneration[i] = ((value['totalGeneration']/1000))
-        i = i+1
+
+        r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(date_value)
+
+        headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
+        r = session.get(r,headers=headers2)
+        data = r.json()
+        i = 0
+        for value in data['set']:
+            if int(date_value) == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
+                TotalGeneration[6+i] = ((value['totalGeneration']/1000))
+            elif data is None:
+                TotalGeneration[i] = 0
+            else: 
+                TotalGeneration[i] = ((value['totalGeneration']/1000))
+            i = i+1
+            
+        monthly_tech_efficiency = []
         
-    monthly_tech_efficiency = []
-    
-    for index in range(0,len(TotalConsumption)):
-        if (TotalGeneration[index] == 0 or TotalConsumption[index]==0):
-            monthly_tech_efficiency.append(0)
-        else:
-            monthly_tech_efficiency.append((TotalConsumption[index]/TotalGeneration[index])*100)
-    
-    time = ["January","February","March","April","May","June","July","August","September","October","November","December"]
-    
-    title =  "Energy Production Efficiency for  " + str(date_value)
-    FillSpreadSheet(title, 'Month' ,'Efficiency (%)', time , monthly_tech_efficiency, "Generation_Efficiency")    
-    
-    fig = go.Figure()
+        for index in range(0,len(TotalConsumption)):
+            if (TotalGeneration[index] == 0 or TotalConsumption[index]==0):
+                monthly_tech_efficiency.append(0)
+            else:
+                monthly_tech_efficiency.append((TotalConsumption[index]/TotalGeneration[index])*100)
+        
+        time = ["January","February","March","April","May","June","July","August","September","October","November","December"]
+        
+        title =  "Energy Production Efficiency for  " + str(date_value)
+        FillSpreadSheet(title, 'Month' ,'Efficiency (%)', time , monthly_tech_efficiency, "Generation_Efficiency")    
+        
+        fig = go.Figure()
 
-    fig.add_trace(go.Scatter(x=time, y=monthly_tech_efficiency,
-                        mode='lines+markers'
-                        )) 
+        fig.add_trace(go.Scatter(x=time, y=monthly_tech_efficiency,
+                            mode='lines+markers'
+                            )) 
+        
+        fig.update_layout(title = "Energy Production Efficiency for  " + str(date_value),
+                    xaxis_title='Month',
+                    yaxis_title='Efficiency (%)')
+        return fig   
     
-    fig.update_layout(title = "Energy Production Efficiency for  " + str(date_value),
-                   xaxis_title='Month',
-                   yaxis_title='Efficiency (%)')
-    return fig   
+    elif(site==2):
+        r = "https://async-auth.smaapis.de/monitoring/v1/plants/9209949/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(date_value)
+
+        headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
+        r = session.get(r,headers=headers2)
+        data = r.json()
+        i = 0
+        for value in data['set']:
+            if int(date_value) == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
+                TotalConsumption[6+i] = ((value['totalConsumption']/1000))
+            elif data is None:
+                TotalConsumption[i] = 0
+            else: 
+                TotalConsumption[i] = ((value['totalConsumption']/1000))
+            i = i+1 
+
+
+        TotalGeneration = [0,0,0,0,0,0,0,0,0,0,0,0]
+
+
+        r = "https://async-auth.smaapis.de/monitoring/v1/plants/9209949/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(date_value)
+
+        headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
+        r = session.get(r,headers=headers2)
+        data = r.json()
+        i = 0
+        for value in data['set']:
+            if int(date_value) == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
+                TotalGeneration[6+i] = ((value['totalGeneration']/1000))
+            elif data is None:
+                TotalGeneration[i] = 0
+            else: 
+                TotalGeneration[i] = ((value['totalGeneration']/1000))
+            i = i+1
+            
+        monthly_tech_efficiency = []
+        
+        for index in range(0,len(TotalConsumption)):
+            if (TotalGeneration[index] == 0 or TotalConsumption[index]==0):
+                monthly_tech_efficiency.append(0)
+            else:
+                monthly_tech_efficiency.append((TotalConsumption[index]/TotalGeneration[index])*100)
+        
+        time = ["January","February","March","April","May","June","July","August","September","October","November","December"]
+        
+        title =  "Energy Production Efficiency for  " + str(date_value)
+        FillSpreadSheet(title, 'Month' ,'Efficiency (%)', time , monthly_tech_efficiency, "Generation_Efficiency")    
+        
+        fig = go.Figure()
+
+        fig.add_trace(go.Scatter(x=time, y=monthly_tech_efficiency,
+                            mode='lines+markers'
+                            )) 
+        
+        fig.update_layout(title = "Energy Production Efficiency for  " + str(date_value),
+                    xaxis_title='Month',
+                    yaxis_title='Efficiency (%)')
+        return fig   
 
         
 @app.callback(
     Output(component_id='distribution_efficiency', component_property='figure'),
-    [Input(component_id='slct_year2', component_property='value')])
+    [Input(component_id='slct_year2', component_property='value')],
+    Input('slct_grid_06_02','value'))
 
-def DistributionEfficiency(date_value):
+def DistributionEfficiency(date_value,value):
     date=date_value 
-    
+    site=value
     start_time = str(date) + "-01-01T00:00:00"
     end_time = str(int(date)+1) + "-01-01T00:00:00"
       
@@ -5684,14 +6100,15 @@ def OverallEfficiency(date_value):
                    xaxis_title='Month',
                    yaxis_title='Efficiency (%)')
     return fig  
-
+#zzz
 @app.callback(
     Output(component_id='carbon_savings', component_property='figure'),
-    [Input(component_id='slct_year', component_property='value')])
+    [Input(component_id='slct_year', component_property='value')],
+    Input('slct_grid_07_01','value'))
 
-def CarbonSavings(date_value):
+def CarbonSavings(date_value,value):
     date=date_value 
-    
+    site=value
     start_time = str(date) + "-01-01T00:00:00"
     end_time = str(int(date)+1) + "-01-01T00:00:00"
       
@@ -5704,44 +6121,83 @@ def CarbonSavings(date_value):
 
     TotalGeneration = [0,0,0,0,0,0,0,0,0,0,0,0]
 
+    if(site==1):
+        r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(date_value)
 
-    r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(date_value)
-
-    headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
-    r = session.get(r,headers=headers2)
-    data = r.json()
-    i = 0
-    for value in data['set']:
-        if int(date_value) == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
-            TotalGeneration[6+i] = ((value['totalGeneration']/1000000)) #in MWh
-        elif data is None:
-            TotalGeneration[i] = 0
-        else: 
-            TotalGeneration[i] = ((value['totalGeneration']/1000000))
-        i = i+1
+        headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
+        r = session.get(r,headers=headers2)
+        data = r.json()
+        i = 0
+        for value in data['set']:
+            if int(date_value) == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
+                TotalGeneration[6+i] = ((value['totalGeneration']/1000000)) #in MWh
+            elif data is None:
+                TotalGeneration[i] = 0
+            else: 
+                TotalGeneration[i] = ((value['totalGeneration']/1000000))
+            i = i+1
+            
+            
+        Emission_Reductions=[]
+        EF = 2.4 #emission factor
         
+        for index in range(0,len(TotalGeneration)):
+            Emission_Reductions.append(TotalGeneration[index] * EF)
         
-    Emission_Reductions=[]
-    EF = 2.4 #emission factor
-    
-    for index in range(0,len(TotalGeneration)):
-        Emission_Reductions.append(TotalGeneration[index] * EF)
-    
-    title =  "Emission Reductions for  " + str(date_value)
-    FillSpreadSheet(title, 'Month' ,'Emission Reductions (t CO2e/m)', time , Emission_Reductions, "Carbon_Savings") 
+        title =  "Emission Reductions for  " + str(date_value)
+        FillSpreadSheet(title, 'Month' ,'Emission Reductions (t CO2e/m)', time , Emission_Reductions, "Carbon_Savings") 
 
-    
-    fig = go.Figure()
+        
+        fig = go.Figure()
 
-    fig.add_trace(go.Scatter(x=time, y=Emission_Reductions,
-                        mode='lines+markers'
-                        )) 
+        fig.add_trace(go.Scatter(x=time, y=Emission_Reductions,
+                            mode='lines+markers'
+                            )) 
+        
+        fig.update_layout(title = "Emission Reductions for  " + str(date_value),
+                    xaxis_title='Month',
+                    yaxis_title='Emission Reductions (t CO2e/m)')
+        
+        return fig  
     
-    fig.update_layout(title = "Emission Reductions for  " + str(date_value),
-                   xaxis_title='Month',
-                   yaxis_title='Emission Reductions (t CO2e/m)')
-    
-    return fig  
+    elif(site==2):
+        r = "https://async-auth.smaapis.de/monitoring/v1/plants/9209949/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(date_value)
+
+        headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
+        r = session.get(r,headers=headers2)
+        data = r.json()
+        i = 0
+        for value in data['set']:
+            if int(date_value) == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
+                TotalGeneration[6+i] = ((value['totalGeneration']/1000000)) #in MWh
+            elif data is None:
+                TotalGeneration[i] = 0
+            else: 
+                TotalGeneration[i] = ((value['totalGeneration']/1000000))
+            i = i+1
+            
+            
+        Emission_Reductions=[]
+        EF = 2.4 #emission factor
+        
+        for index in range(0,len(TotalGeneration)):
+            Emission_Reductions.append(TotalGeneration[index] * EF)
+        
+        title =  "Emission Reductions for  " + str(date_value)
+        FillSpreadSheet(title, 'Month' ,'Emission Reductions (t CO2e/m)', time , Emission_Reductions, "Carbon_Savings") 
+
+        
+        fig = go.Figure()
+
+        fig.add_trace(go.Scatter(x=time, y=Emission_Reductions,
+                            mode='lines+markers'
+                            )) 
+        
+        fig.update_layout(title = "Emission Reductions for  " + str(date_value),
+                    xaxis_title='Month',
+                    yaxis_title='Emission Reductions (t CO2e/m)')
+        
+        return fig  
      
 @app.callback(
     Output("download-maintenance-file", "data"),
