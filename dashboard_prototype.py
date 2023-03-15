@@ -129,6 +129,17 @@ firebase_admin.initialize_app(cred, {
         'databaseURL': 'https://openrmu-default-rtdb.europe-west1.firebasedatabase.app'
        })
 
+cred_kud = credentials.Certificate({"type": "service_account",
+  "project_id": "openrmu",
+  "private_key_id": "0df42dfd548fea43869cd10331f8280ff8c9dfef",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDZzabBUqJsCI9I\nC86u762NNSNAWkcA3cMGUE0xS8nwW9SyTwGv9WiT9hoHi3VgIDyRNXIqF56upYd0\nPzo3i3W1aKFyw4DWjS2D8JebUwAaH8K6ESiScONkZThz3VEoDylnO/qtmNq9e5qd\ndGbo+/SFyR3Dr1CaRBwoRzcdtdaOHNcah4ALy4KnZh18SkEAKeacZHsS9HN418yN\nCcy9bVkexB/XeHT+60hrw4qKzonlrX1pT2v9Han+Yy3tdLQ+SqmLBcpJFvbaDqdZ\nEvKkC104Bs+YTycDwQ7YrM39bylNC6uB2EGtEvexLq0uSBMHBAVJwvWkA5NknsbR\ntDi22g3VAgMBAAECggEAWwgsw81lbHDxbePdeVlcuNG2T53L4m1Np3Rlpw5tsyO2\nlOYXpvMTyA/K1k9v+gLPPcPQWQ5xOL6fjDMnAnMr+evm2sAit8ne9a/XtcgtmT2g\nFkO4qOg86keyHh8o3ezkWa0Ee40RE7Q3LcsqfgNcspQZ+CFst2VzPVRykVzgdZmL\n0FA6SUQulJGDE7EU79eQte4CKUpBbUzLe/SNOUjB02e2UEdcXNfLWS9OyChezToH\ndRJtwAydwrAhO1JSc9Kmc89SGF4hFKkmAsFwoTNw8Xhe7OTqo0s2wl8fiL9TAeMP\nTPSdi8dItgLVCKDHaNnHI9r6CGRL0j11pOhH+ZFEWwKBgQDxgLdH1MRoIjy85gdp\nPmNiegmxTZdmHNrj/Z2Sq0sXcXMVMKpL9tMI1sg4JQxc2DYCy6LxpknyQcwkxjMP\nhqhXHTxvRhmuxJuV+HPSBSgD29Br8UWmZ0Iat2Zi44eiycbsmvEp77iaUtysE8LZ\niTzmSZgmvAuQz7o2yVKnacBw0wKBgQDm4LwdkKMcz/AVzaYC+mJKHoG4/MuQ8gCq\n43h/FT3Urs/C8dtArf+GyM27iQYp4PVIhUXCD3Bp+IILo8uqsCM81w1hib8rNOt9\nMYEeXL77iXGpkAAz7i0l3R21TgAIaQ1vPdIqx0QWtc64m3kd1KpeSk/1oLBPfm+/\nnUIkk4idtwKBgQCt5toTx4qG0eCaxamgh2RZjTddjVnwFecpNX86Fk7EWtVb9Ocs\nPFhKjR8wDr2QPcDm0mxLRksJP4gZEv/Btl2SHWNfXUMxLjI7E+WS3lOqM6cpk1ts\nL/7R7i60FtOczV+JESmH4S81MWXmI3Sz4LcRvPzrJ43MgUi+GsqB8wy4MQKBgH3d\nZrB3eXTrp2c7hZV6Crt9hhrjNdb/F34SJE6jteGMq5cLYwwPz44bSo1CVineidnP\nTghNgmtDHyJZWV7kR1GTq6fRAHb9kqPdqRZ0WWmntF9MMdAduF87/EYrD7mGC9zp\nRvorR+NZmijqGU058ucUfCLcR0IPG7zKbpSiGYhhAoGBANGDW5EotF8aEvtSKyXq\nODmaZdNu8C1LPp8b8e9yZZtjJr+bOa5GzVcycb+Uy+kKuyf+teLMdkPsaGks7SW8\nTg/Hp4hIQO2RansYQcSlmMknHb3GEhQ224P12ybS1KyQF8YbtENd5PmnldmLsmnB\nq/QETElvwzJnSw6Hh7NEirTl\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-q13qo@openrmu.iam.gserviceaccount.com",
+  "client_id": "100792905573479873385",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-q13qo%40openrmu.iam.gserviceaccount.com" })
+
 
 def FillSpreadSheet(title, header1, header2, array1, array2,filename): ##Function used to fill downloadable spreadsheets
     
@@ -870,7 +881,7 @@ def render_page_content(pathname):
     elif pathname == "/demand":
         return [
                 html.Div(
-                children = html.H1("Demand Data"),style={'backgroundColor': '#f2f2f2', 'textAlign': 'center'}),
+                children = html.H1("Demand and Revenue Data"),style={'backgroundColor': '#f2f2f2', 'textAlign': 'center'}),
                 html.Hr(),
                 html.H3("The total revenue generated for the last 30 days is $" + str(round(amountUSD,2))),
                 html.Br(),
@@ -887,7 +898,7 @@ def render_page_content(pathname):
     elif pathname == "/technical":
         return [
                 html.Div(
-                children = html.H1("Technical Data"),style={'backgroundColor': '#f2f2f2', 'textAlign': 'center'}),                          
+                children = html.H1("Generation and Storage Data"),style={'backgroundColor': '#f2f2f2', 'textAlign': 'center'}),                          
                 html.Hr(),
                 html.H3("The total power generated so far is {0} MWh, total consumption is {1} Mwh, and total potential carbon savings is {2} t CO2".format(displayTotalGeneration(),displayTotalConsumption(),displayTotalSavings())),
                 html.P("Techincal data relating the to the functionality of the generation and distribution systems, a variety of data on technical performance is being collected through remote monitoring of the PV, batteries and inverters, along with measurements and observations of the system collected through scheduled maintenance visits on site."),
@@ -907,7 +918,7 @@ def render_page_content(pathname):
     elif pathname == "/social":
         return [
                 html.Div(
-                children = html.H1("Social Impact Data"),style={'backgroundColor': '#f2f2f2', 'textAlign': 'center'}),
+                children = html.H1("Social and Environmental Impact Data"),style={'backgroundColor': '#f2f2f2', 'textAlign': 'center'}),
                 html.Hr(),
                 html.P("Social Impact data is the measure of how a product or service changes the lives of the people and community that uses it. The social impact data of the microgrid has been broken down into five categories shown by the tabs below. "),
                 html.P("As of February 2022, three Social Impact surveys have been conducted. "),
@@ -1067,7 +1078,7 @@ def render_tech_tabs_1(tab): # =================================================
                 html.P("This is particularly useful as it allows conclusions to be drawn such as when the solar microgrid is under the most consumption, or when it is the least. Please note that there is no data available before July 2020 as that was when the microgrid was installed. "),
                 html.Hr(),
                 ])                
-             #xxx   
+             
     elif tab == 'tab-2':
         return html.Div([
                 html.Br(),
@@ -1226,7 +1237,7 @@ def render_tech_tabs_1(tab): # =================================================
                 dcc.Graph(id='my_graph_6_2',figure={}),
                 html.P("This side-by-side bar chart provides insight into the average state of the batteries charging and discharging per monthly basis, respectively. The data is according to the live reading of the battery counter"),
                 html.Hr(),
-                ])        #xp
+                ])        
     elif tab == 'tab-4':
          return html.Div([
                 html.Br(),
@@ -1261,6 +1272,17 @@ def render_tech_tabs_1(tab): # =================================================
             html.Br(),
             html.Hr(),
             html.H2("Average Battery Temperature Over Given Day"),
+
+            html.H6("Please Select Microgrid Site:"),
+                dcc.RadioItems(id = 'slct_grid_04_02',
+                options=[
+                    {'label': 'Mthembanji', 'value': 1},
+                    {'label': 'Kudembe', 'value': 2},
+                ],
+                value = 1,
+                inputStyle={"margin-left": "15px", "margin-right":"5px"}
+            ),
+            html.Br(),
             html.H6("Please Select a Date:"),
             dcc.DatePickerSingle(
                 id='my-date-picker-single-2',
@@ -1333,7 +1355,18 @@ def render_tech_tabs_1(tab): # =================================================
                 dcc.Graph(id='daily_outages_bar', figure = {}),
                 html.P("The bar chart above builds on the daily communications uptime indicator and can be used to view both the start date as well as the duration of each outage for the year selected. The purple line that has been plotted onto the chart represents the average outage duration for the given year. This is the final indicator which builds on daily communication uptime." ),               
                 html.Hr(),
+                
                 html.H2("Hourly Communications Uptime"),
+                html.H6("Please Select Microgrid Site:"),
+                dcc.RadioItems(id = 'slct_grid_05_02',
+                options=[
+                    {'label': 'Mthembanji', 'value': 1},
+                    {'label': 'Kudembe', 'value': 2},
+                ],
+                value = 1,
+                inputStyle={"margin-left": "15px", "margin-right":"5px"}
+            ),
+                html.Br(),
                 html.H6("Please select start (left) and end (right) date: "),
                 dcc.DatePickerRange(
                     id='my-date-picker-range',
@@ -1352,7 +1385,7 @@ def render_tech_tabs_1(tab): # =================================================
                 html.P("This chart displays the hourly communications uptime over a selected range."),
                 html.P("This is similar to the daily communications uptime indicator, but allows data to be viewed in a higher resolution. This is useful as it allows for data to be observed more closely after using the indicators shown previously on this page.")
                 ])
-    #zz
+    
     elif tab == 'tab-6':
          return html.Div([
                 html.Br(),
@@ -1401,6 +1434,7 @@ def render_tech_tabs_1(tab): # =================================================
                          {"label": "2020", "value": "2020"},
                          {"label": "2021", "value": "2021"},
                          {"label": "2022", "value": "2022"},
+                         {"label": "2023", "value": "2023"},
                          ],
                      placeholder="Select a year",
                      searchable = False,
@@ -1434,6 +1468,7 @@ def render_tech_tabs_1(tab): # =================================================
                          {"label": "2020", "value": "2020"},
                          {"label": "2021", "value": "2021"},
                          {"label": "2022", "value": "2022"},
+                         {"label": "2023", "value": "2023"},
                          ],
                      placeholder="Select a year",
                      searchable = False,
@@ -1441,6 +1476,17 @@ def render_tech_tabs_1(tab): # =================================================
                      value=str(C_year),
                      style={'width': "40%"}
                      ),
+                html.Br(),
+                html.H6("Please Select Microgrid Site:"),
+                dcc.RadioItems(id = 'slct_grid_06_03',
+                options=[
+                    {'label': 'Mthembanji', 'value': 1},
+                    {'label': 'Kudembe', 'value': 2},
+                ],
+                value = 1,
+                inputStyle={"margin-left": "15px", "margin-right":"5px"}
+            ),
+    
                 html.Br(),
                 html.Br(),
                 html.Button("Click to download spreadsheet", id="overall-efficiency-file"),
@@ -1791,10 +1837,10 @@ def render_home_tab(tab):
                 
                 
                 html.Div([
-                    html.B("Demand and Economic data:"),
+                    html.B("Demand and Revenue data:"),
                     html.P("relating the to the functionality of the generation and distribution systems, a variety of data on technical performance is being collected through remote monitoring of the PV, batteries and inverters, along with measurements and observations of the system collected through scheduled maintenance visits on site."),
                     html.P(""),
-                    html.B("Social Impact data:"),
+                    html.B("Social and Environmental Impact data:"),
                     html.P("A Key Performance Indicator framework is being used to track data relating to the impact the microgrid is having on the community, in themes such as health and education, employment and finance, and female empowerment."),
                 ]),
                 
@@ -4429,7 +4475,7 @@ def update_output_2(date_value, bttn1, bttn2, site):
             for index in range(0,len(df2['timestamp'])):
                 nth_day = convert_nth_day(df2['timestamp'][index])
                 take_away_usage[nth_day - 1]+=(df2['usage'][index])
-        
+        #xxx
         if(site == 1):
             total_url = "https://api.steama.co/sites/26385/utilities/1/usage/?start_time=" + start_time + "&end_time=" + end_time
             site_name = "Mthembanji"
@@ -4701,7 +4747,7 @@ def TotalConsumptionMonth(slct_user_2,value):
     print("month: " + start_date[5:7]) # Access DD of YYYY-MM-DD
     print("date: " + start_date[8:10]) # Access DD of YYYY-MM-DD """
     # Only single Get API request required for one year
-    #xk
+    
     if(site==1):
         r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(slct_user_2)
 
@@ -4789,7 +4835,7 @@ def TotalConsumptionMonth(slct_user_2,value):
                         )
         
         return fig
-#xxx
+
 @app.callback(
        Output(component_id='my_graph_6', component_property='figure'),
        Input(component_id='my-date-picker-range-2', component_property='start_date'),
@@ -4958,7 +5004,7 @@ def stateofChargeByMin(date,value):
                     )
        
        return fig 
-#xo
+
 @app.callback(
        Output(component_id='graph_7', component_property='figure'),
        Input(component_id='my-date-picker-single-gen', component_property='date'),
@@ -5042,7 +5088,7 @@ def update_dropdown(slct_grid_2_1):
             {"label": "2022", "value": "2022"},
             {"label": "2023", "value": "2023"}
         ]
-#xk
+
 @app.callback(
        Output(component_id='my_graph_7_1', component_property='figure'),
        Input('slct_user_3','value'),
@@ -5155,7 +5201,7 @@ def TotalGenerationMonth(slct_user_3,value):
        Input('slct_user_5','value'),
        Input('slct_grid_03_03', 'value'))
        
-#xo
+
 def BatStateofChargeMonth(slct_user_5,value): 
     TOKEN = refreshtoken(r1)
     #refreshtoken(r1) # Use refresh token as bearer token expires every 5 minutes (SMA sunny portal)  
@@ -5224,15 +5270,16 @@ def BatStateofChargeMonth(slct_user_5,value):
  
     return fig
 
-
+#xxx
 @app.callback(
     Output(component_id='daily_communications_uptime', component_property='figure'),
     Output(component_id='daily_outages_bar', component_property='figure'),
     Output(component_id='no_days_outages', component_property='figure'),
+    Input('slct_grid_05_01','value'),
     [Input(component_id='slct_year', component_property='value')])
 
-def dailyUptime(date_value):
-    
+def dailyUptime(value,date_value):
+    site=value
     date=date_value 
 
     start_time = str(date) + "-01-01T00:00:00"
@@ -5241,145 +5288,277 @@ def dailyUptime(date_value):
     timestamp=[]
     uptime=[]
     
+    if(site==1):
+            url= "https://api.steama.co/bitharvesters/100144/comms_uptime/" + "?start_time=" + start_time + "&end_time=" + end_time
+            site_name = "Mthembanji"
     
-    url= "https://api.steama.co/bitharvesters/100144/comms_uptime/" + "?start_time=" + start_time + "&end_time=" + end_time
-
-    r = requests.get(url, headers = header)
-    s = r.content
-    df = pd.read_json(s)
-    
-    #filling arrays for all uptime data points
-    for index in range(0,len(df['timestamp'])):
-                            uptime.append(df['uptime'][index]*100) #convert to %
-                            timestamp.append(str(df['timestamp'][index]))
-    
-    
-    #arrays for data points which are considered as outages                   
-    timestamp_outages=[]
-    uptime_outages=[]
-    for index in range(0,len(df['timestamp'])):
-                        if (df['uptime'][index]<=0.5): #if less than 0.5
-                            uptime_outages.append(df['uptime'][index])
-                            timestamp_outages.append(str(df['timestamp'][index])[0:10])
-                            
-    #Used to calculate the length of each outage - outages that occur on consecutive days are grouped                    
-    length_array=[]
-    index=0
-    limit = 1
-    length=1
-
-    for index2 in range (0, len(uptime_outages)-1):
-
-        temp=calc_difference_in_days(timestamp_outages[index],timestamp_outages[index2 + 1])
-        if (temp <= limit):
-            length+=1
-            index2+=1
-            limit +=1              
-        else:
-            length_array.append(length)
-            index+=length
-            index2+=1
+            r = requests.get(url, headers = header)
+            s = r.content
+            df = pd.read_json(s)
+            
+            #filling arrays for all uptime data points
+            for index in range(0,len(df['timestamp'])):
+                                    uptime.append(df['uptime'][index]*100) #convert to %
+                                    timestamp.append(str(df['timestamp'][index]))
+            
+            
+            #arrays for data points which are considered as outages                   
+            timestamp_outages=[]
+            uptime_outages=[]
+            for index in range(0,len(df['timestamp'])):
+                                if (df['uptime'][index]<=0.5): #if less than 0.5
+                                    uptime_outages.append(df['uptime'][index])
+                                    timestamp_outages.append(str(df['timestamp'][index])[0:10])
+                                    
+            #Used to calculate the length of each outage - outages that occur on consecutive days are grouped                    
+            length_array=[]
+            index=0
             limit = 1
             length=1
-  
-    length_array.append(length)   
-    
-    total_length=0
-    for index in range(0,len(length_array)):
-        total_length+=length_array[index]
-    
-    average_length = round(float(total_length/len(length_array)),2)
+
+            for index2 in range (0, len(uptime_outages)-1):
+
+                temp=calc_difference_in_days(timestamp_outages[index],timestamp_outages[index2 + 1])
+                if (temp <= limit):
+                    length+=1
+                    index2+=1
+                    limit +=1              
+                else:
+                    length_array.append(length)
+                    index+=length
+                    index2+=1
+                    limit = 1
+                    length=1
         
-    
-    #used to extract the start time of each power outage
-    start_times=[]
-    
-    point=0
-    for index in range(0,len(length_array)):  
-        if (index==0):
-            temp = timestamp_outages[index]
-            year = str(temp[0:4])
-            month = str(temp[5:7])
-            day = str(temp[8:10])
-            start_times.append(day + "/" + month + "/" + year)
-        else:
-            point+=length_array[index - 1]
-            temp = timestamp_outages[point]
-            year = str(temp[0:4])
-            month = str(temp[5:7])
-            day = str(temp[8:10])
-            start_times.append(day + "/" + month + "/" + year)
+            length_array.append(length)   
             
-    months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+            total_length=0
+            for index in range(0,len(length_array)):
+                total_length+=length_array[index]
+            
+            average_length = round(float(total_length/len(length_array)),2)
+                
+            
+            #used to extract the start time of each power outage
+            start_times=[]
+            
+            point=0
+            for index in range(0,len(length_array)):  
+                if (index==0):
+                    temp = timestamp_outages[index]
+                    year = str(temp[0:4])
+                    month = str(temp[5:7])
+                    day = str(temp[8:10])
+                    start_times.append(day + "/" + month + "/" + year)
+                else:
+                    point+=length_array[index - 1]
+                    temp = timestamp_outages[point]
+                    year = str(temp[0:4])
+                    month = str(temp[5:7])
+                    day = str(temp[8:10])
+                    start_times.append(day + "/" + month + "/" + year)
+                    
+            months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
-    no_of_days=[]
+            no_of_days=[]
+                
+            for i in range(1,13):
+                count=0
+                for index in range (0, len(timestamp_outages)):
+                    temptime = str(timestamp_outages[index])
+                    if(i==int(temptime[5:7])):
+                        count+=1
+                no_of_days.append(count)  
+
+                
+            title =  "Start Dates and Duration of Outages for " + str(date)
+            FillSpreadSheet(title, "Outage Start Date","Duration (days)", start_times , length_array, "Start_Length_Outages")            
+            bar = go.Figure()
+                            
+            dff = pd.DataFrame(
+                {"Outage Start Date" : start_times,
+                "Duration (days)" : length_array,
+                })    
+            
+            bar = px.bar(dff, x="Outage Start Date", y="Duration (days)", title = "Start Dates and Duration of Outages for " + str(date), text=length_array)                                
+            bar.add_hline(y=average_length, line_dash= "dot", line_color = "purple", line_width=4, annotation_text = "average = " + str(average_length) , annotation_font_size=16, annotation_font_color="purple")
+
+
+            title =  "Number of Days of Outages throughout " + str(date)
+            FillSpreadSheet(title, 'Month' ,"Number of Days", months, no_of_days, "No_Days_Outages")  
+            
+            bar_2 = go.Figure()
+                            
+            dff = pd.DataFrame(
+                {"Month" : months,
+                "Number of Days" : no_of_days,
+                })    
+            
+            bar_2 = px.bar(dff, x="Month", y="Number of Days", title = "Number of Days of Outages throughout " + str(date), text=no_of_days)     
+
+
+            title =  "Communications Uptime for " + str(date)
+            FillSpreadSheet(title, 'Days' ,'Uptime (%)', timestamp , uptime, "Daily_Uptime")   
+            
+            
+            fig = go.Figure()
+
+            fig.add_trace(go.Scatter(x=timestamp, y=uptime,
+                                mode='lines+markers',
+                                ))
+            fig.add_hrect(
+            y0="50", y1="0",
+            fillcolor="LightSalmon", opacity=0.5,
+            layer="below", line_width=0,
+            )
+            
+            fig.update_layout(title = "Communications Uptime for " + str(date),
+                        xaxis_title='Month',
+                        yaxis_title='Uptime (%)')
+            
+            return fig, bar, bar_2 
+
+    elif(site==2):
+            url= "https://api.steama.co/bitharvesters/100575/comms_uptime/" + "?start_time=" + start_time + "&end_time=" + end_time
+            site_name = "Kudembe"   
+            r = requests.get(url, headers = header)
+            s = r.content
+            df = pd.read_json(s)
+            
+            #filling arrays for all uptime data points
+            for index in range(0,len(df['timestamp'])):
+                                    uptime.append(df['uptime'][index]*100) #convert to %
+                                    timestamp.append(str(df['timestamp'][index]))
+            
+            
+            #arrays for data points which are considered as outages                   
+            timestamp_outages=[]
+            uptime_outages=[]
+            for index in range(0,len(df['timestamp'])):
+                                if (df['uptime'][index]<=0.5): #if less than 0.5
+                                    uptime_outages.append(df['uptime'][index])
+                                    timestamp_outages.append(str(df['timestamp'][index])[0:10])
+                                    
+            #Used to calculate the length of each outage - outages that occur on consecutive days are grouped                    
+            length_array=[]
+            index=0
+            limit = 1
+            length=1
+
+            for index2 in range (0, len(uptime_outages)-1):
+
+                temp=calc_difference_in_days(timestamp_outages[index],timestamp_outages[index2 + 1])
+                if (temp <= limit):
+                    length+=1
+                    index2+=1
+                    limit +=1              
+                else:
+                    length_array.append(length)
+                    index+=length
+                    index2+=1
+                    limit = 1
+                    length=1
         
-    for i in range(1,13):
-        count=0
-        for index in range (0, len(timestamp_outages)):
-            temptime = str(timestamp_outages[index])
-            if(i==int(temptime[5:7])):
-                count+=1
-        no_of_days.append(count)  
+            length_array.append(length)   
+            
+            total_length=0
+            for index in range(0,len(length_array)):
+                total_length+=length_array[index]
+            
+            average_length = round(float(total_length/len(length_array)),2)
+                
+            
+            #used to extract the start time of each power outage
+            start_times=[]
+            
+            point=0
+            for index in range(0,len(length_array)):  
+                if (index==0):
+                    temp = timestamp_outages[index]
+                    year = str(temp[0:4])
+                    month = str(temp[5:7])
+                    day = str(temp[8:10])
+                    start_times.append(day + "/" + month + "/" + year)
+                else:
+                    point+=length_array[index - 1]
+                    temp = timestamp_outages[point]
+                    year = str(temp[0:4])
+                    month = str(temp[5:7])
+                    day = str(temp[8:10])
+                    start_times.append(day + "/" + month + "/" + year)
+                    
+            months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
-          
-    title =  "Start Dates and Duration of Outages for " + str(date)
-    FillSpreadSheet(title, "Outage Start Date","Duration (days)", start_times , length_array, "Start_Length_Outages")            
-    bar = go.Figure()
-                       
-    dff = pd.DataFrame(
-        {"Outage Start Date" : start_times,
-         "Duration (days)" : length_array,
-        })    
-    
-    bar = px.bar(dff, x="Outage Start Date", y="Duration (days)", title = "Start Dates and Duration of Outages for " + str(date), text=length_array)                                
-    bar.add_hline(y=average_length, line_dash= "dot", line_color = "purple", line_width=4, annotation_text = "average = " + str(average_length) , annotation_font_size=16, annotation_font_color="purple")
+            no_of_days=[]
+                
+            for i in range(1,13):
+                count=0
+                for index in range (0, len(timestamp_outages)):
+                    temptime = str(timestamp_outages[index])
+                    if(i==int(temptime[5:7])):
+                        count+=1
+                no_of_days.append(count)  
+
+                
+            title =  "Start Dates and Duration of Outages for " + str(date)
+            FillSpreadSheet(title, "Outage Start Date","Duration (days)", start_times , length_array, "Start_Length_Outages")            
+            bar = go.Figure()
+                            
+            dff = pd.DataFrame(
+                {"Outage Start Date" : start_times,
+                "Duration (days)" : length_array,
+                })    
+            
+            bar = px.bar(dff, x="Outage Start Date", y="Duration (days)", title = "Start Dates and Duration of Outages for " + str(date), text=length_array)                                
+            bar.add_hline(y=average_length, line_dash= "dot", line_color = "purple", line_width=4, annotation_text = "average = " + str(average_length) , annotation_font_size=16, annotation_font_color="purple")
 
 
-    title =  "Number of Days of Outages throughout " + str(date)
-    FillSpreadSheet(title, 'Month' ,"Number of Days", months, no_of_days, "No_Days_Outages")  
-    
-    bar_2 = go.Figure()
-                       
-    dff = pd.DataFrame(
-        {"Month" : months,
-         "Number of Days" : no_of_days,
-        })    
-    
-    bar_2 = px.bar(dff, x="Month", y="Number of Days", title = "Number of Days of Outages throughout " + str(date), text=no_of_days)     
+            title =  "Number of Days of Outages throughout " + str(date)
+            FillSpreadSheet(title, 'Month' ,"Number of Days", months, no_of_days, "No_Days_Outages")  
+            
+            bar_2 = go.Figure()
+                            
+            dff = pd.DataFrame(
+                {"Month" : months,
+                "Number of Days" : no_of_days,
+                })    
+            
+            bar_2 = px.bar(dff, x="Month", y="Number of Days", title = "Number of Days of Outages throughout " + str(date), text=no_of_days)     
 
 
-    title =  "Communications Uptime for " + str(date)
-    FillSpreadSheet(title, 'Days' ,'Uptime (%)', timestamp , uptime, "Daily_Uptime")   
-    
-    
-    fig = go.Figure()
+            title =  "Communications Uptime for " + str(date)
+            FillSpreadSheet(title, 'Days' ,'Uptime (%)', timestamp , uptime, "Daily_Uptime")   
+            
+            
+            fig = go.Figure()
 
-    fig.add_trace(go.Scatter(x=timestamp, y=uptime,
-                        mode='lines+markers',
-                        ))
-    fig.add_hrect(
-    y0="50", y1="0",
-    fillcolor="LightSalmon", opacity=0.5,
-    layer="below", line_width=0,
-    )
-    
-    fig.update_layout(title = "Communications Uptime for " + str(date),
-                   xaxis_title='Month',
-                   yaxis_title='Uptime (%)')
-    
-    return fig, bar, bar_2                           
+            fig.add_trace(go.Scatter(x=timestamp, y=uptime,
+                                mode='lines+markers',
+                                ))
+            fig.add_hrect(
+            y0="50", y1="0",
+            fillcolor="LightSalmon", opacity=0.5,
+            layer="below", line_width=0,
+            )
+            
+            fig.update_layout(title = "Communications Uptime for " + str(date),
+                        xaxis_title='Month',
+                        yaxis_title='Uptime (%)')
+            
+            return fig, bar, bar_2                        
 
 
 @app.callback(
     Output(component_id='hourly_communications_uptime', component_property='figure'),
+    Input('slct_grid_05_02','value'),
     [Input(component_id='my-date-picker-range', component_property='start_date'),
      Input('my-date-picker-range','end_date')])
+    
      
-def hourlyUptime(start_date_value, end_date_value):
+def hourlyUptime(value,start_date_value, end_date_value):
     start_date = str(start_date_value)
     end_date = str(end_date_value)
-    
+    site=value
     
     num = calc_difference_in_days(start_date,end_date)
     
@@ -5406,76 +5585,150 @@ def hourlyUptime(start_date_value, end_date_value):
     
     start_date = str(start_date_value) + "T00:00:00"
     end_date = str(end_date_value) + "T00:00:00"    
-    url= "https://api.steama.co/bitharvesters/100144/comms_uptime/" + "?start_time=" + start_date + "&end_time=" + end_date
+    if(site==1):
+        url= "https://api.steama.co/bitharvesters/100144/comms_uptime/" + "?start_time=" + start_date + "&end_time=" + end_date
 
-    r = requests.get(url, headers = header)
-    s = r.content
-    df = pd.read_json(s)
-    
-    
-    uptime=[]
-    timestamp=[]
-    #filling arrays for all uptime data points
-    for index in range(0,len(df['timestamp'])):
-                            uptime.append(df['uptime'][index]*100) #convert to %
-                            timestamp.append(str(df['timestamp'][index])) 
-                        
-    timestamp_outages=[]
-    uptime_outages=[]
-    for index in range(0,len(df['timestamp'])):
-                        if (df['uptime'][index]<=0.0416): #if less than 0.5
-                            uptime_outages.append(df['uptime'][index])
-                            timestamp_outages.append(str(df['timestamp'][index]))
+        r = requests.get(url, headers = header)
+        s = r.content
+        df = pd.read_json(s)
+        
+        
+        uptime=[]
+        timestamp=[]
+        #filling arrays for all uptime data points
+        for index in range(0,len(df['timestamp'])):
+                                uptime.append(df['uptime'][index]*100) #convert to %
+                                timestamp.append(str(df['timestamp'][index])) 
                             
-    #Used to calculate the length of each outage - outages that occur on consecutive days are grouped                    
-    length_array=[]
-    index=0
-    limit = 1
-    length=1
-
-    for index2 in range (0, len(uptime_outages)-1):
-
-        temp=calc_difference_in_hours(timestamp_outages[index],timestamp_outages[index2 + 1])
-        if (temp <= limit):
-            length+=1
-            index2+=1
-            limit +=1              
-        else:
-            length_array.append(length)
-            index+=length
-            index2+=1
-            limit = 1
-            length=1
-  
-    length_array.append(length)   
-
-    
-    #used to extract the start time of each power outage
-    start_times=[]
-    
-    point=0
-    for index in range(0,len(length_array)):  
-        if (index==0):
-            start_times.append(timestamp_outages[index])
-        else:
-            point+=length_array[index - 1]
-            start_times.append(timestamp_outages[point])
-
-    title =  "Communications Uptime from " + start_date_value + " to " + end_date_value
-    FillSpreadSheet(title, 'Time' ,'Uptime (%)', timestamp , uptime, "Hourly_Uptime")   
+        timestamp_outages=[]
+        uptime_outages=[]
+        for index in range(0,len(df['timestamp'])):
+                            if (df['uptime'][index]<=0.0416): #if less than 0.5
+                                uptime_outages.append(df['uptime'][index])
+                                timestamp_outages.append(str(df['timestamp'][index]))
                                 
-    fig = go.Figure()
+        #Used to calculate the length of each outage - outages that occur on consecutive days are grouped                    
+        length_array=[]
+        index=0
+        limit = 1
+        length=1
 
-    fig.add_trace(go.Scatter(x=timestamp, y=uptime,
-                        mode='lines+markers',
-                        ))
+        for index2 in range (0, len(uptime_outages)-1):
+
+            temp=calc_difference_in_hours(timestamp_outages[index],timestamp_outages[index2 + 1])
+            if (temp <= limit):
+                length+=1
+                index2+=1
+                limit +=1              
+            else:
+                length_array.append(length)
+                index+=length
+                index2+=1
+                limit = 1
+                length=1
     
-    fig.update_layout(title = "Communications Uptime from " + start_date_value + " to " + end_date_value,
-                   xaxis_title='Time',
-                   yaxis_title='Uptime (%)')
+        length_array.append(length)   
+
+        
+        #used to extract the start time of each power outage
+        start_times=[]
+        
+        point=0
+        for index in range(0,len(length_array)):  
+            if (index==0):
+                start_times.append(timestamp_outages[index])
+            else:
+                point+=length_array[index - 1]
+                start_times.append(timestamp_outages[point])
+
+        title =  "Communications Uptime from " + start_date_value + " to " + end_date_value
+        FillSpreadSheet(title, 'Time' ,'Uptime (%)', timestamp , uptime, "Hourly_Uptime")   
+                                    
+        fig = go.Figure()
+
+        fig.add_trace(go.Scatter(x=timestamp, y=uptime,
+                            mode='lines+markers',
+                            ))
+        
+        fig.update_layout(title = "Communications Uptime from " + start_date_value + " to " + end_date_value,
+                    xaxis_title='Time',
+                    yaxis_title='Uptime (%)')
+        
+        return fig            
     
-    return fig                 
-#xp
+    elif(site==2):    
+             
+        url= "https://api.steama.co/bitharvesters/100575/comms_uptime/" + "?start_time=" + start_date + "&end_time=" + end_date
+
+        r = requests.get(url, headers = header)
+        s = r.content
+        df = pd.read_json(s)
+        
+        
+        uptime=[]
+        timestamp=[]
+        #filling arrays for all uptime data points
+        for index in range(0,len(df['timestamp'])):
+                                uptime.append(df['uptime'][index]*100) #convert to %
+                                timestamp.append(str(df['timestamp'][index])) 
+                            
+        timestamp_outages=[]
+        uptime_outages=[]
+        for index in range(0,len(df['timestamp'])):
+                            if (df['uptime'][index]<=0.0416): #if less than 0.5
+                                uptime_outages.append(df['uptime'][index])
+                                timestamp_outages.append(str(df['timestamp'][index]))
+                                
+        #Used to calculate the length of each outage - outages that occur on consecutive days are grouped                    
+        length_array=[]
+        index=0
+        limit = 1
+        length=1
+
+        for index2 in range (0, len(uptime_outages)-1):
+
+            temp=calc_difference_in_hours(timestamp_outages[index],timestamp_outages[index2 + 1])
+            if (temp <= limit):
+                length+=1
+                index2+=1
+                limit +=1              
+            else:
+                length_array.append(length)
+                index+=length
+                index2+=1
+                limit = 1
+                length=1
+    
+        length_array.append(length)   
+
+        
+        #used to extract the start time of each power outage
+        start_times=[]
+        
+        point=0
+        for index in range(0,len(length_array)):  
+            if (index==0):
+                start_times.append(timestamp_outages[index])
+            else:
+                point+=length_array[index - 1]
+                start_times.append(timestamp_outages[point])
+
+        title =  "Communications Uptime from " + start_date_value + " to " + end_date_value
+        FillSpreadSheet(title, 'Time' ,'Uptime (%)', timestamp , uptime, "Hourly_Uptime")   
+                                    
+        fig = go.Figure()
+
+        fig.add_trace(go.Scatter(x=timestamp, y=uptime,
+                            mode='lines+markers',
+                            ))
+        
+        fig.update_layout(title = "Communications Uptime from " + start_date_value + " to " + end_date_value,
+                    xaxis_title='Time',
+                    yaxis_title='Uptime (%)')
+        
+        return fig   
+         
+
 @app.callback(
     Output(component_id='batt_temp_month', component_property='figure'),
     Input(component_id='my-date-picker-single', component_property='value'),
@@ -5658,147 +5911,455 @@ def batt_temp_month (date_value,value):
                     yaxis_title='Temperature (°C)')
         
         return fig   
-    
-@app.callback(
-    Output(component_id='batt_temp_day', component_property='figure'),
-    Input(component_id='my-date-picker-single-2', component_property='date'))
-
-def batt_temp_day(date_value):
-    start_date=date_value[0:10]
-
-    if((int(start_date[5:7])==1 or int(start_date[5:7])==3 or int(start_date[5:7])==5 or int(start_date[5:7])==7 or
-        int(start_date[5:7])==8 or int(start_date[5:7])==10) and int(start_date[8:10])==31):
-        if(int(start_date[5:7])<9):
-                end_date = start_date[0:6] + str(int(start_date[6])+1) + "-01T00:00:00"
-        else:
-                end_date = start_date[0:5] + str(int(start_date[5:7])+1) + "-01T00:00:00"
-    elif((int(start_date[5:7])==4 or int(start_date[5:7])==6 or int(start_date[5:7])==9 or int(start_date[5:7])==11) and int(start_date[8:10])==30):    
-        if(int(start_date[5:7])<9):
-                end_date = start_date[0:6] + str(int(start_date[6])+1) + "-01T00:00:00"
-        else:
-                end_date = start_date[0:5] + str(int(start_date[5:7])+1) + "-01T00:00:00"
-    elif(int(start_date[0:4])%4==0 and int(start_date[5:7])==2 and int(start_date[8:10])==29):
-        end_date = start_date[0:6] + str(int(start_date[6])+1) + "-01T00:00:00"
-    elif(int(start_date[0:4])%4!=0 and int(start_date[5:7])==2 and int(start_date[8:10])==28):
-        end_date = start_date[0:6] + str(int(start_date[6])+1) + "-01T00:00:00"
-    elif(int(start_date[5:7])==12 and int(start_date[8:10])==31):
-        end_date = str(int(start_date[0:4])+1) + "-01-01T00:00:00"
-    else:
-        if(int(start_date[8:10])<9):
-                end_date = start_date[0:9] + str(int(start_date[9])+1) + "T00:00:00"
-        else:
-                end_date = start_date[0:8] + str(int(start_date[8:10])+1) + "T00:00:00"
+   
+    elif(site==2):
+            if(int(date[5:7])==12):
+                end_time = str(int(date[0:4])+1) + "-01-01T00:00:00"
+            else:
+                if(int(date[5:7])<9):
+                    end_time = str(date[0:6]) + str(int(date[6])+1) + "-01T00:00:00"
+                else:
+                    end_time = str(date[0:5]) + str(int(date[5:7])+1) + "-01T00:00:00"
+            
+            #Changing the start time so that only month and year included so that start time is the start of the month
+            start_time = str(date[0:7]) + "-01T00:00:00"   
+            
+            if(month == "01"):
+                M = "January"
+            elif(month == "02"):
+                M = "February"
+            elif(month == "03"):
+                M = "March"
+            elif(month == "04"):
+                M = "April"
+            elif(month == "05"):
+                M = "May"
+            elif(month == "06"):
+                M = "June"
+            elif(month == "07"):
+                M = "July"
+            elif(month == "08"):
+                M = "August"
+            elif(month == "09"):
+                M = "September"
+            elif(month == "10"):
+                M = "October"
+            elif(month == "11"):
+                M = "November"
+            else:
+                M = "December"
+                    
+            if(month == "04" or month == "06" or month == "09" or month == "11"):
+                num = 30
+            elif(month == "02" and int(date[0:4])%4==0):
+                num = 29
+            elif(month == "02" and int(date[0:4])%4!=0):
+                num = 28
+            else:
+                num = 31    
                 
-    readings = db.reference('UsersData/mRxIA4XvqYTmhIEjqfk8ycC02vq1/readings')
-    part_readings = readings.order_by_child('timestamp').start_at(start_date).end_at(end_date).get()
-    
-    timestamp=[]
-    temp_batt=[]
-    temp_ext=[]
-    temp_int=[]
-    temp_pcb=[]
-    
-    
-    for key,value in part_readings.items():
-        if (float(value['temp_PCB']) > 100):
-            temp_batt.append(value['temp_Batt1'])
-            temp_ext.append(value['temp_ext'])
-            temp_int.append(value['temp_int'])
-            temp_pcb.append(value['temp_PCB'])
-            timestamp.append(key)
-        else:
-            temp_batt.append(value['temp_Batt1'])
-            temp_ext.append(value['temp_ext'])
-            temp_int.append(value['temp_int'])
-            temp_pcb.append(value['temp_PCB'])            
-            timestamp.append(key)
-        
-    total_temp_batt=[0]*24
-    total_temp_ext=[0]*24
-    total_temp_int=[0]*24
-    total_temp_pcb=[0]*24
-    no_of_data_points=[0]*24
-
-    for index in range (0,24):
-        if (index<10):
-            current_hour = start_date + "T0" + str(index) 
-        else:
-            current_hour = start_date + "T" + str(index)
-        
-        temp_batt_running_total = 0
-        temp_ext_running_total = 0
-        temp_int_running_total = 0
-        temp_pcb_running_total = 0
-        data_points_count = 0
-    
-        for index2 in range(0, len(timestamp)):
-            if (current_hour == timestamp[index2][0:13]):
-                temp_batt_running_total += float(temp_batt[index2])
-                temp_ext_running_total += float(temp_ext[index2])
-                temp_int_running_total += float(temp_int[index2])
-                temp_pcb_running_total += float(temp_pcb[index2])
-                data_points_count+=1
-        
-        total_temp_batt[index] += temp_batt_running_total
-        total_temp_ext[index] += temp_ext_running_total
-        total_temp_int[index] += temp_int_running_total
-        total_temp_pcb[index] += temp_pcb_running_total
-        no_of_data_points[index] += data_points_count
+            if(len(date)!=7):   #These lines of code are just used in case of an invalid date input from the user
+                y_dont_care = [] #If the date input size is not 7, it is in valid as YYYY-MM has 7 characters
+                x_dont_care = []
+                for index in range(1,24):
+                    y_dont_care.append(0)
+                    x_dont_care.append(index)
+                    
+                fig = go.Figure()
+                fig.add_trace(go.Scatter(x=x_dont_care, y=y_dont_care,
+                                    mode='lines+markers',
+                                    ))
+                
+                fig.update_layout(title = "Invalid Input",
+                            xaxis_title='Time',
+                            yaxis_title='Temperature (°C)')  
+                return fig
 
 
-    hourly_temp_batt=[]
-    hourly_temp_ext=[]
-    hourly_temp_int=[]
-    hourly_temp_pcb=[]
-  
-    for index in range(0,len(total_temp_batt)):
-         if (no_of_data_points[index]==0):
-            hourly_temp_batt.append(0)
-            hourly_temp_ext.append(0)
-            hourly_temp_int.append(0)
-            hourly_temp_pcb.append(0)
-         else:
-            hourly_temp_batt.append(total_temp_batt[index]/no_of_data_points[index])
-            hourly_temp_ext.append(total_temp_ext[index]/no_of_data_points[index])
-            hourly_temp_int.append(total_temp_int[index]/no_of_data_points[index])
-            hourly_temp_pcb.append(total_temp_pcb[index]/no_of_data_points[index])
-    
-    hours = []
-    
-    for index in range(0,24):
-        if (index<10):
-            hours.append("0" + str(index) + ":00:00")
-        else:
-            hours.append(str(index) + ":00:00")
-
-
-    title =  "Average Battery Temperature for " + start_date
-    FillSpreadSheet1(title, 'Hour' ,'Batt Temp (°C)', 'Ext Temp (°C)','Int Temp (°C)', 'PCB Temp (°C)',  hours , hourly_temp_batt, hourly_temp_ext, hourly_temp_ext, hourly_temp_pcb, "Batt_Temp_Day") 
+            readings = db.reference('UsersData/ww0fLZo3XtOXMnX7Zq3C5iMFuFq1/readings')
+            part_readings = readings.order_by_child('timestamp').start_at(start_time).end_at(end_time).get()
 
             
-    fig = go.Figure()
+            timestamp=[]
+            temp_batt=[]
+            temp_ext=[]
+            temp_int=[]
+            temp_pcb=[]
+            
 
-    fig.add_trace(go.Scatter(x=hours, y=hourly_temp_batt,
-                        mode='lines+markers', name = 'Battery'
-                        ))
+            for key,value in part_readings.items():
+                if (float(value['temp_PCB']) > 100): ##some fake values detected in pcb temp (temp being recorded at 500000)
+                    temp_batt.append(value['temp_Batt1']) #if detected append all other temps as normal
+                    temp_ext.append(value['temp_ext'])
+                    temp_int.append(value['temp_int'])
+                    temp_pcb.append(28) ##append pcb to 28 - rough avg temp that will have minimal effect on daily average
+                    timestamp.append(key)
+                else:
+                    temp_batt.append(value['temp_Batt1'])
+                    temp_ext.append(value['temp_ext'])
+                    temp_int.append(value['temp_int'])
+                    temp_pcb.append(value['temp_PCB'])
+                    timestamp.append(key)
+                
+            total_temp_batt=[0]*num
+            total_temp_ext=[0]*num
+            total_temp_int=[0]*num
+            total_temp_pcb=[0]*num
+            no_of_data_points=[0]*num
+            #0 1 2 3 4 5 6 7 8 9  10
+            #1 2 3 4 5 6 7 8 9 10 11
+            
+            days=[]
+            
+            for index in range(0,num):
+                days.append(str(index+1))
+                
+            
+            for index in range (0,num):
+                if (index<9):
+                    current_day = year + "-" + month + "-0" + str(index+1)
+                else:
+                    current_day = year + "-" + month + "-" + str(index+1)
+                
+                temp_batt_running_total = 0
+                temp_ext_running_total = 0
+                temp_int_running_total = 0
+                temp_pcb_running_total = 0
+                data_points_count = 0
+                
+                for index2 in range(0, len(timestamp)):
+                    if (current_day == timestamp[index2][0:10]):
+                        temp_batt_running_total += float(temp_batt[index2])
+                        temp_ext_running_total += float(temp_ext[index2])
+                        temp_int_running_total += float(temp_int[index2])
+                        temp_pcb_running_total += float(temp_pcb[index2])
+                        data_points_count+=1
+                total_temp_batt[index] += temp_batt_running_total
+                total_temp_ext[index] += temp_ext_running_total
+                total_temp_int[index] += temp_int_running_total
+                total_temp_pcb[index] += temp_pcb_running_total
+                no_of_data_points[index] += data_points_count
+
+            daily_temp_batt=[]
+            daily_temp_ext=[]
+            daily_temp_int=[]
+            daily_temp_pcb=[]
+            
+            for index in range(0,len(total_temp_batt)):
+                if (no_of_data_points[index]==0):
+                    daily_temp_batt.append(0)
+                    daily_temp_ext.append(0)
+                    daily_temp_int.append(0)
+                    daily_temp_pcb.append(0)
+                else:
+                    daily_temp_batt.append(total_temp_batt[index]/no_of_data_points[index])
+                    daily_temp_ext.append(total_temp_ext[index]/no_of_data_points[index])
+                    daily_temp_int.append(total_temp_int[index]/no_of_data_points[index])
+                    daily_temp_pcb.append(total_temp_pcb[index]/no_of_data_points[index])
+
+
+            title =  "Average Battery Temperature for " + M + " " + year
+            FillSpreadSheet1(title, 'Days' ,'Batt Temp', 'Ext Temp','Int Temp', 'PCB Temp',  days , daily_temp_batt, daily_temp_ext, daily_temp_ext, daily_temp_pcb, "Batt_Temp_Month")   
+            
+            
+            fig = go.Figure()
+
+            fig.add_trace(go.Scatter(x=days, y=daily_temp_batt,
+                                mode='lines+markers', name = 'Battery'
+                                ))
+            fig.add_trace(go.Scatter(x=days, y=daily_temp_ext,
+                                mode='lines+markers', name = 'External'
+                                ))
+
+            fig.add_trace(go.Scatter(x=days, y=daily_temp_int,
+                                mode='lines+markers', name = 'Internal'
+                                ))
+
+            fig.add_trace(go.Scatter(x=days, y=daily_temp_pcb,
+                                mode='lines+markers', name = 'PCB'
+                                ))
+            
+            fig.update_layout(title = "Average Battery Temperature for " + M + " " + year,
+                        xaxis_title='Days of The Month',
+                        yaxis_title='Temperature (°C)')
+            
+            return fig   
+@app.callback(
+    Output(component_id='batt_temp_day', component_property='figure'),
+    Input('slct_grid_04_02','value'),
+    Input(component_id='my-date-picker-single-2', component_property='date'))
+
+def batt_temp_day(value,date_value):
+    start_date=date_value[0:10]
+    site=value
+   
+    if(site==1):
+        if((int(start_date[5:7])==1 or int(start_date[5:7])==3 or int(start_date[5:7])==5 or int(start_date[5:7])==7 or
+            int(start_date[5:7])==8 or int(start_date[5:7])==10) and int(start_date[8:10])==31):
+            if(int(start_date[5:7])<9):
+                    end_date = start_date[0:6] + str(int(start_date[6])+1) + "-01T00:00:00"
+            else:
+                    end_date = start_date[0:5] + str(int(start_date[5:7])+1) + "-01T00:00:00"
+        elif((int(start_date[5:7])==4 or int(start_date[5:7])==6 or int(start_date[5:7])==9 or int(start_date[5:7])==11) and int(start_date[8:10])==30):    
+            if(int(start_date[5:7])<9):
+                    end_date = start_date[0:6] + str(int(start_date[6])+1) + "-01T00:00:00"
+            else:
+                    end_date = start_date[0:5] + str(int(start_date[5:7])+1) + "-01T00:00:00"
+        elif(int(start_date[0:4])%4==0 and int(start_date[5:7])==2 and int(start_date[8:10])==29):
+            end_date = start_date[0:6] + str(int(start_date[6])+1) + "-01T00:00:00"
+        elif(int(start_date[0:4])%4!=0 and int(start_date[5:7])==2 and int(start_date[8:10])==28):
+            end_date = start_date[0:6] + str(int(start_date[6])+1) + "-01T00:00:00"
+        elif(int(start_date[5:7])==12 and int(start_date[8:10])==31):
+            end_date = str(int(start_date[0:4])+1) + "-01-01T00:00:00"
+        else:
+            if(int(start_date[8:10])<9):
+                    end_date = start_date[0:9] + str(int(start_date[9])+1) + "T00:00:00"
+            else:
+                    end_date = start_date[0:8] + str(int(start_date[8:10])+1) + "T00:00:00"
+                    
+        readings = db.reference('UsersData/mRxIA4XvqYTmhIEjqfk8ycC02vq1/readings')
+        part_readings = readings.order_by_child('timestamp').start_at(start_date).end_at(end_date).get()
+        
+        timestamp=[]
+        temp_batt=[]
+        temp_ext=[]
+        temp_int=[]
+        temp_pcb=[]
+        
+        
+        for key,value in part_readings.items():
+            if (float(value['temp_PCB']) > 100):
+                temp_batt.append(value['temp_Batt1'])
+                temp_ext.append(value['temp_ext'])
+                temp_int.append(value['temp_int'])
+                temp_pcb.append(value['temp_PCB'])
+                timestamp.append(key)
+            else:
+                temp_batt.append(value['temp_Batt1'])
+                temp_ext.append(value['temp_ext'])
+                temp_int.append(value['temp_int'])
+                temp_pcb.append(value['temp_PCB'])            
+                timestamp.append(key)
+            
+        total_temp_batt=[0]*24
+        total_temp_ext=[0]*24
+        total_temp_int=[0]*24
+        total_temp_pcb=[0]*24
+        no_of_data_points=[0]*24
+
+        for index in range (0,24):
+            if (index<10):
+                current_hour = start_date + "T0" + str(index) 
+            else:
+                current_hour = start_date + "T" + str(index)
+            
+            temp_batt_running_total = 0
+            temp_ext_running_total = 0
+            temp_int_running_total = 0
+            temp_pcb_running_total = 0
+            data_points_count = 0
+        
+            for index2 in range(0, len(timestamp)):
+                if (current_hour == timestamp[index2][0:13]):
+                    temp_batt_running_total += float(temp_batt[index2])
+                    temp_ext_running_total += float(temp_ext[index2])
+                    temp_int_running_total += float(temp_int[index2])
+                    temp_pcb_running_total += float(temp_pcb[index2])
+                    data_points_count+=1
+            
+            total_temp_batt[index] += temp_batt_running_total
+            total_temp_ext[index] += temp_ext_running_total
+            total_temp_int[index] += temp_int_running_total
+            total_temp_pcb[index] += temp_pcb_running_total
+            no_of_data_points[index] += data_points_count
+
+
+        hourly_temp_batt=[]
+        hourly_temp_ext=[]
+        hourly_temp_int=[]
+        hourly_temp_pcb=[]
     
-    fig.add_trace(go.Scatter(x=hours, y=hourly_temp_ext,
-                        mode='lines+markers', name = 'External'
-                        ))
+        for index in range(0,len(total_temp_batt)):
+            if (no_of_data_points[index]==0):
+                hourly_temp_batt.append(0)
+                hourly_temp_ext.append(0)
+                hourly_temp_int.append(0)
+                hourly_temp_pcb.append(0)
+            else:
+                hourly_temp_batt.append(total_temp_batt[index]/no_of_data_points[index])
+                hourly_temp_ext.append(total_temp_ext[index]/no_of_data_points[index])
+                hourly_temp_int.append(total_temp_int[index]/no_of_data_points[index])
+                hourly_temp_pcb.append(total_temp_pcb[index]/no_of_data_points[index])
+        
+        hours = []
+        
+        for index in range(0,24):
+            if (index<10):
+                hours.append("0" + str(index) + ":00:00")
+            else:
+                hours.append(str(index) + ":00:00")
+
+
+        title =  "Average Battery Temperature for " + start_date
+        FillSpreadSheet1(title, 'Hour' ,'Batt Temp (°C)', 'Ext Temp (°C)','Int Temp (°C)', 'PCB Temp (°C)',  hours , hourly_temp_batt, hourly_temp_ext, hourly_temp_ext, hourly_temp_pcb, "Batt_Temp_Day") 
+
+                
+        fig = go.Figure()
+
+        fig.add_trace(go.Scatter(x=hours, y=hourly_temp_batt,
+                            mode='lines+markers', name = 'Battery'
+                            ))
+        
+        fig.add_trace(go.Scatter(x=hours, y=hourly_temp_ext,
+                            mode='lines+markers', name = 'External'
+                            ))
+        
+        fig.add_trace(go.Scatter(x=hours, y=hourly_temp_int,
+                            mode='lines+markers', name = 'Internal'
+                            ))
+        
+        fig.add_trace(go.Scatter(x=hours, y=hourly_temp_pcb,
+                            mode='lines+markers', name = 'PCB'
+                            ))
+        
+        fig.update_layout(title = "Average Battery Temperature for " + start_date,
+                    xaxis_title='Hours of The Day',
+                    yaxis_title='Temperature (°C)')
+        return fig
+     
+    elif(site==2):
+        if((int(start_date[5:7])==1 or int(start_date[5:7])==3 or int(start_date[5:7])==5 or int(start_date[5:7])==7 or
+            int(start_date[5:7])==8 or int(start_date[5:7])==10) and int(start_date[8:10])==31):
+            if(int(start_date[5:7])<9):
+                    end_date = start_date[0:6] + str(int(start_date[6])+1) + "-01T00:00:00"
+            else:
+                    end_date = start_date[0:5] + str(int(start_date[5:7])+1) + "-01T00:00:00"
+        elif((int(start_date[5:7])==4 or int(start_date[5:7])==6 or int(start_date[5:7])==9 or int(start_date[5:7])==11) and int(start_date[8:10])==30):    
+            if(int(start_date[5:7])<9):
+                    end_date = start_date[0:6] + str(int(start_date[6])+1) + "-01T00:00:00"
+            else:
+                    end_date = start_date[0:5] + str(int(start_date[5:7])+1) + "-01T00:00:00"
+        elif(int(start_date[0:4])%4==0 and int(start_date[5:7])==2 and int(start_date[8:10])==29):
+            end_date = start_date[0:6] + str(int(start_date[6])+1) + "-01T00:00:00"
+        elif(int(start_date[0:4])%4!=0 and int(start_date[5:7])==2 and int(start_date[8:10])==28):
+            end_date = start_date[0:6] + str(int(start_date[6])+1) + "-01T00:00:00"
+        elif(int(start_date[5:7])==12 and int(start_date[8:10])==31):
+            end_date = str(int(start_date[0:4])+1) + "-01-01T00:00:00"
+        else:
+            if(int(start_date[8:10])<9):
+                    end_date = start_date[0:9] + str(int(start_date[9])+1) + "T00:00:00"
+            else:
+                    end_date = start_date[0:8] + str(int(start_date[8:10])+1) + "T00:00:00"
+                    
+        readings = db.reference('UsersData/ww0fLZo3XtOXMnX7Zq3C5iMFuFq1/readings')
+        part_readings = readings.order_by_child('timestamp').start_at(start_date).end_at(end_date).get()
+        
+        timestamp=[]
+        temp_batt=[]
+        temp_ext=[]
+        temp_int=[]
+        temp_pcb=[]
+        
+        
+        for key,value in part_readings.items():
+            if (float(value['temp_PCB']) > 100):
+                temp_batt.append(value['temp_Batt1'])
+                temp_ext.append(value['temp_ext'])
+                temp_int.append(value['temp_int'])
+                temp_pcb.append(value['temp_PCB'])
+                timestamp.append(key)
+            else:
+                temp_batt.append(value['temp_Batt1'])
+                temp_ext.append(value['temp_ext'])
+                temp_int.append(value['temp_int'])
+                temp_pcb.append(value['temp_PCB'])            
+                timestamp.append(key)
+            
+        total_temp_batt=[0]*24
+        total_temp_ext=[0]*24
+        total_temp_int=[0]*24
+        total_temp_pcb=[0]*24
+        no_of_data_points=[0]*24
+
+        for index in range (0,24):
+            if (index<10):
+                current_hour = start_date + "T0" + str(index) 
+            else:
+                current_hour = start_date + "T" + str(index)
+            
+            temp_batt_running_total = 0
+            temp_ext_running_total = 0
+            temp_int_running_total = 0
+            temp_pcb_running_total = 0
+            data_points_count = 0
+        
+            for index2 in range(0, len(timestamp)):
+                if (current_hour == timestamp[index2][0:13]):
+                    temp_batt_running_total += float(temp_batt[index2])
+                    temp_ext_running_total += float(temp_ext[index2])
+                    temp_int_running_total += float(temp_int[index2])
+                    temp_pcb_running_total += float(temp_pcb[index2])
+                    data_points_count+=1
+            
+            total_temp_batt[index] += temp_batt_running_total
+            total_temp_ext[index] += temp_ext_running_total
+            total_temp_int[index] += temp_int_running_total
+            total_temp_pcb[index] += temp_pcb_running_total
+            no_of_data_points[index] += data_points_count
+
+
+        hourly_temp_batt=[]
+        hourly_temp_ext=[]
+        hourly_temp_int=[]
+        hourly_temp_pcb=[]
     
-    fig.add_trace(go.Scatter(x=hours, y=hourly_temp_int,
-                        mode='lines+markers', name = 'Internal'
-                        ))
-    
-    fig.add_trace(go.Scatter(x=hours, y=hourly_temp_pcb,
-                        mode='lines+markers', name = 'PCB'
-                        ))
-    
-    fig.update_layout(title = "Average Battery Temperature for " + start_date,
-                   xaxis_title='Hours of The Day',
-                   yaxis_title='Temperature (°C)')
-    return fig
-#zz
+        for index in range(0,len(total_temp_batt)):
+            if (no_of_data_points[index]==0):
+                hourly_temp_batt.append(0)
+                hourly_temp_ext.append(0)
+                hourly_temp_int.append(0)
+                hourly_temp_pcb.append(0)
+            else:
+                hourly_temp_batt.append(total_temp_batt[index]/no_of_data_points[index])
+                hourly_temp_ext.append(total_temp_ext[index]/no_of_data_points[index])
+                hourly_temp_int.append(total_temp_int[index]/no_of_data_points[index])
+                hourly_temp_pcb.append(total_temp_pcb[index]/no_of_data_points[index])
+        
+        hours = []
+        
+        for index in range(0,24):
+            if (index<10):
+                hours.append("0" + str(index) + ":00:00")
+            else:
+                hours.append(str(index) + ":00:00")
+
+
+        title =  "Average Battery Temperature for " + start_date
+        FillSpreadSheet1(title, 'Hour' ,'Batt Temp (°C)', 'Ext Temp (°C)','Int Temp (°C)', 'PCB Temp (°C)',  hours , hourly_temp_batt, hourly_temp_ext, hourly_temp_ext, hourly_temp_pcb, "Batt_Temp_Day") 
+
+                
+        fig = go.Figure()
+
+        fig.add_trace(go.Scatter(x=hours, y=hourly_temp_batt,
+                            mode='lines+markers', name = 'Battery'
+                            ))
+        
+        fig.add_trace(go.Scatter(x=hours, y=hourly_temp_ext,
+                            mode='lines+markers', name = 'External'
+                            ))
+        
+        fig.add_trace(go.Scatter(x=hours, y=hourly_temp_int,
+                            mode='lines+markers', name = 'Internal'
+                            ))
+        
+        fig.add_trace(go.Scatter(x=hours, y=hourly_temp_pcb,
+                            mode='lines+markers', name = 'PCB'
+                            ))
+        
+        fig.update_layout(title = "Average Battery Temperature for " + start_date,
+                    xaxis_title='Hours of The Day',
+                    yaxis_title='Temperature (°C)')
+        return fig
 @app.callback(
     Output(component_id='technical_efficiency', component_property='figure'),
     Input(component_id='slct_year', component_property='value'),
@@ -5948,81 +6509,154 @@ def DistributionEfficiency(date_value,value):
     time = ["January","February","March","April","May","June","July","August","September","October","November","December"]  
     monthly_usage=[] 
     
-    url = "https://api.steama.co/sites/26385/utilities/1/usage/?start_time=" + start_time + "&end_time=" + end_time
-    r = requests.get(url=url, headers = header)
-    s = r.content
-    df = pd.read_json(s)
+    if(site==1):
+        url = "https://api.steama.co/sites/26385/utilities/1/usage/?start_time=" + start_time + "&end_time=" + end_time
+        r = requests.get(url=url, headers = header)
+        s = r.content
+        df = pd.read_json(s)
 
-    for index in range(0,len(df['timestamp'])):
-        timestamp.append(str(df['timestamp'][index]))
-        daily_usage.append(df['usage'][index])
-    
-    for i in range(1,13):
+        for index in range(0,len(df['timestamp'])):
+            timestamp.append(str(df['timestamp'][index]))
+            daily_usage.append(df['usage'][index])
         
-        amount = 0
+        for i in range(1,13):
+            
+            amount = 0
+            
+            for index in range(0,len(timestamp)):
+                temptime = timestamp[index]
+                if(i==int(temptime[5:7])):
+                    amount += (float(daily_usage[index]))
+                else:
+                    continue    
+
+            if(amount==0):
+                monthly_usage.append(0) 
+            else:    
+                monthly_usage.append(amount)
+                amount = 0 
+                
+                
+        TOKEN = refreshtoken(r1)
+
+        TotalConsumption = [0,0,0,0,0,0,0,0,0,0,0,0]
+
+
+        r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(date_value)
+
+        headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
+        r = session.get(r,headers=headers2)
+        data = r.json()
+        i = 0
+        for value in data['set']:
+            if int(date_value) == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
+                TotalConsumption[6+i] = ((value['totalConsumption']/1000))
+            elif data is None:
+                TotalConsumption[i] = 0
+            else: 
+                TotalConsumption[i] = ((value['totalConsumption']/1000))
+            i = i+1            
         
-        for index in range(0,len(timestamp)):
-            temptime = timestamp[index]
-            if(i==int(temptime[5:7])):
-                amount += (float(daily_usage[index]))
+        
+        monthly_dist_efficiency = []
+        for index in range(0,len(monthly_usage)):
+            if (monthly_usage[index] == 0 or TotalConsumption[index]==0):
+                monthly_dist_efficiency.append(0)
             else:
-                continue    
+                monthly_dist_efficiency.append((monthly_usage[index]/TotalConsumption[index])*100)
 
-        if(amount==0):
-            monthly_usage.append(0) 
-        else:    
-            monthly_usage.append(amount)
-            amount = 0 
+
+        title =  "Distribution Efficiency for  " + str(date_value)
+        FillSpreadSheet(title, 'Month' ,'Efficiency (%)', time , monthly_dist_efficiency, "Distribution_Efficiency") 
             
-            
-    TOKEN = refreshtoken(r1)
+        fig = go.Figure()
 
-    TotalConsumption = [0,0,0,0,0,0,0,0,0,0,0,0]
-
-
-    r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(date_value)
-
-    headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
-    r = session.get(r,headers=headers2)
-    data = r.json()
-    i = 0
-    for value in data['set']:
-        if int(date_value) == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
-            TotalConsumption[6+i] = ((value['totalConsumption']/1000))
-        elif data is None:
-            TotalConsumption[i] = 0
-        else: 
-            TotalConsumption[i] = ((value['totalConsumption']/1000))
-        i = i+1            
-    
-    
-    monthly_dist_efficiency = []
-    for index in range(0,len(monthly_usage)):
-        if (monthly_usage[index] == 0 or TotalConsumption[index]==0):
-            monthly_dist_efficiency.append(0)
-        else:
-            monthly_dist_efficiency.append((monthly_usage[index]/TotalConsumption[index])*100)
-
-
-    title =  "Distribution Efficiency for  " + str(date_value)
-    FillSpreadSheet(title, 'Month' ,'Efficiency (%)', time , monthly_dist_efficiency, "Distribution_Efficiency") 
+        fig.add_trace(go.Scatter(x=time, y=monthly_dist_efficiency,
+                            mode='lines+markers'
+                            )) 
         
-    fig = go.Figure()
+        fig.update_layout(title = "Distribution Efficiency for  " + str(date_value),
+                    xaxis_title='Month',
+                    yaxis_title='Efficiency (%)')
+        return fig  
+    elif(site==2):
+        url = "https://api.steama.co/sites/26678/utilities/1/usage/?start_time=" + start_time + "&end_time=" + end_time
+        r = requests.get(url=url, headers = header)
+        s = r.content
+        df = pd.read_json(s)
 
-    fig.add_trace(go.Scatter(x=time, y=monthly_dist_efficiency,
-                        mode='lines+markers'
-                        )) 
+        for index in range(0,len(df['timestamp'])):
+            timestamp.append(str(df['timestamp'][index]))
+            daily_usage.append(df['usage'][index])
+        
+        for i in range(1,13):
+            
+            amount = 0
+            
+            for index in range(0,len(timestamp)):
+                temptime = timestamp[index]
+                if(i==int(temptime[5:7])):
+                    amount += (float(daily_usage[index]))
+                else:
+                    continue    
+
+            if(amount==0):
+                monthly_usage.append(0) 
+            else:    
+                monthly_usage.append(amount)
+                amount = 0 
+                
+                
+        TOKEN = refreshtoken(r1)
+
+        TotalConsumption = [0,0,0,0,0,0,0,0,0,0,0,0]
+
+
+        r = "https://async-auth.smaapis.de/monitoring/v1/plants/9209949/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(date_value)
+
+        headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
+        r = session.get(r,headers=headers2)
+        data = r.json()
+        i = 0
+        for value in data['set']:
+            if int(date_value) == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
+                TotalConsumption[6+i] = ((value['totalConsumption']/1000))
+            elif data is None:
+                TotalConsumption[i] = 0
+            else: 
+                TotalConsumption[i] = ((value['totalConsumption']/1000))
+            i = i+1            
+        
+        
+        monthly_dist_efficiency = []
+        for index in range(0,len(monthly_usage)):
+            if (monthly_usage[index] == 0 or TotalConsumption[index]==0):
+                monthly_dist_efficiency.append(0)
+            else:
+                monthly_dist_efficiency.append((monthly_usage[index]/TotalConsumption[index])*100)
+
+
+        title =  "Distribution Efficiency for  " + str(date_value)
+        FillSpreadSheet(title, 'Month' ,'Efficiency (%)', time , monthly_dist_efficiency, "Distribution_Efficiency") 
+            
+        fig = go.Figure()
+
+        fig.add_trace(go.Scatter(x=time, y=monthly_dist_efficiency,
+                            mode='lines+markers'
+                            )) 
+        
+        fig.update_layout(title = "Distribution Efficiency for  " + str(date_value),
+                    xaxis_title='Month',
+                    yaxis_title='Efficiency (%)')
+        return fig  
     
-    fig.update_layout(title = "Distribution Efficiency for  " + str(date_value),
-                   xaxis_title='Month',
-                   yaxis_title='Efficiency (%)')
-    return fig  
-
+    
 @app.callback(
     Output(component_id='overall_efficiency', component_property='figure'),
-    [Input(component_id='slct_year3', component_property='value')])
+    [Input(component_id='slct_year3', component_property='value')],
+    Input('slct_grid_06_03','value'))
 
-def OverallEfficiency(date_value):
+def OverallEfficiency(date_value,value):
     date=date_value 
     
     start_time = str(date) + "-01-01T00:00:00"
@@ -6033,74 +6667,144 @@ def OverallEfficiency(date_value):
     timestamp = []
     time = ["January","February","March","April","May","June","July","August","September","October","November","December"]  
     monthly_usage=[] 
+    site=value
     
-    url = "https://api.steama.co/sites/26385/utilities/1/usage/?start_time=" + start_time + "&end_time=" + end_time
-    r = requests.get(url=url, headers = header)
-    s = r.content
-    df = pd.read_json(s)
+    if(site==1):
+        url = "https://api.steama.co/sites/26385/utilities/1/usage/?start_time=" + start_time + "&end_time=" + end_time
+        r = requests.get(url=url, headers = header)
+        s = r.content
+        df = pd.read_json(s)
 
-    for index in range(0,len(df['timestamp'])):
-        timestamp.append(str(df['timestamp'][index]))
-        daily_usage.append(df['usage'][index])
-    
-    for i in range(1,13):
+        for index in range(0,len(df['timestamp'])):
+            timestamp.append(str(df['timestamp'][index]))
+            daily_usage.append(df['usage'][index])
         
-        amount = 0
+        for i in range(1,13):
+            
+            amount = 0
+            
+            for index in range(0,len(timestamp)):
+                temptime = timestamp[index]
+                if(i==int(temptime[5:7])):
+                    amount += (float(daily_usage[index]))
+                else:
+                    continue    
+
+            if(amount==0):
+                monthly_usage.append(0) 
+            else:    
+                monthly_usage.append(amount)
+                amount = 0       
+
+        TotalGeneration = [0,0,0,0,0,0,0,0,0,0,0,0]
+
+
+        r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(date_value)
+
+        headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
+        r = session.get(r,headers=headers2)
+        data = r.json()
+        i = 0
+        for value in data['set']:
+            if int(date_value) == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
+                TotalGeneration[6+i] = ((value['totalGeneration']/1000))
+            elif data is None:
+                TotalGeneration[i] = 0
+            else: 
+                TotalGeneration[i] = ((value['totalGeneration']/1000))
+            i = i+1
+            
+        monthly_overall_efficiency = []
         
-        for index in range(0,len(timestamp)):
-            temptime = timestamp[index]
-            if(i==int(temptime[5:7])):
-                amount += (float(daily_usage[index]))
+        for index in range(0,len(TotalGeneration)):
+            if (TotalGeneration[index] == 0 or monthly_usage[index]==0):
+                monthly_overall_efficiency.append(0)
             else:
-                continue    
-
-        if(amount==0):
-            monthly_usage.append(0) 
-        else:    
-            monthly_usage.append(amount)
-            amount = 0       
-
-    TotalGeneration = [0,0,0,0,0,0,0,0,0,0,0,0]
-
-
-    r = "https://async-auth.smaapis.de/monitoring/v1/plants/5340310/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(date_value)
-
-    headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
-    r = session.get(r,headers=headers2)
-    data = r.json()
-    i = 0
-    for value in data['set']:
-        if int(date_value) == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
-            TotalGeneration[6+i] = ((value['totalGeneration']/1000))
-        elif data is None:
-            TotalGeneration[i] = 0
-        else: 
-            TotalGeneration[i] = ((value['totalGeneration']/1000))
-        i = i+1
+                monthly_overall_efficiency.append((monthly_usage[index]/TotalGeneration[index])*100)
         
-    monthly_overall_efficiency = []
-    
-    for index in range(0,len(TotalGeneration)):
-        if (TotalGeneration[index] == 0 or monthly_usage[index]==0):
-            monthly_overall_efficiency.append(0)
-        else:
-            monthly_overall_efficiency.append((monthly_usage[index]/TotalGeneration[index])*100)
-    
-    title =  "Overall System Efficiency for  " + str(date_value)
-    FillSpreadSheet(title, 'Month' ,'Efficiency (%)', time , monthly_overall_efficiency, "Overall_Efficiency") 
+        title =  "Overall System Efficiency for  " + str(date_value)
+        FillSpreadSheet(title, 'Month' ,'Efficiency (%)', time , monthly_overall_efficiency, "Overall_Efficiency") 
 
+            
+        fig = go.Figure()
+
+        fig.add_trace(go.Scatter(x=time, y=monthly_overall_efficiency,
+                            mode='lines+markers'
+                            )) 
         
-    fig = go.Figure()
+        fig.update_layout(title = "Overall System Efficiency for  " + str(date_value),
+                    xaxis_title='Month',
+                    yaxis_title='Efficiency (%)')
+        return fig 
+    elif(site==2):
+            
+        url = "https://api.steama.co/sites/26678/utilities/1/usage/?start_time=" + start_time + "&end_time=" + end_time
+        r = requests.get(url=url, headers = header)
+        s = r.content
+        df = pd.read_json(s)
 
-    fig.add_trace(go.Scatter(x=time, y=monthly_overall_efficiency,
-                        mode='lines+markers'
-                        )) 
-    
-    fig.update_layout(title = "Overall System Efficiency for  " + str(date_value),
-                   xaxis_title='Month',
-                   yaxis_title='Efficiency (%)')
-    return fig  
-#zzz
+        for index in range(0,len(df['timestamp'])):
+            timestamp.append(str(df['timestamp'][index]))
+            daily_usage.append(df['usage'][index])
+        
+        for i in range(1,13):
+            
+            amount = 0
+            
+            for index in range(0,len(timestamp)):
+                temptime = timestamp[index]
+                if(i==int(temptime[5:7])):
+                    amount += (float(daily_usage[index]))
+                else:
+                    continue    
+
+            if(amount==0):
+                monthly_usage.append(0) 
+            else:    
+                monthly_usage.append(amount)
+                amount = 0       
+
+        TotalGeneration = [0,0,0,0,0,0,0,0,0,0,0,0]
+
+
+        r = "https://async-auth.smaapis.de/monitoring/v1/plants/9209949/measurements/sets/EnergyBalance/Year?Date={0}&WithTotal=false".format(date_value)
+
+        headers2 = {'Host':'smaapis.de','Content-Type': 'application/json','Authorization':'Bearer {0}'.format(TOKEN)}
+        r = session.get(r,headers=headers2)
+        data = r.json()
+        i = 0
+        for value in data['set']:
+            if int(date_value) == 2020: # Solar microgrid only started operation from July, before then no data so exception needs to be considered for 2020
+                TotalGeneration[6+i] = ((value['totalGeneration']/1000))
+            elif data is None:
+                TotalGeneration[i] = 0
+            else: 
+                TotalGeneration[i] = ((value['totalGeneration']/1000))
+            i = i+1
+            
+        monthly_overall_efficiency = []
+        
+        for index in range(0,len(TotalGeneration)):
+            if (TotalGeneration[index] == 0 or monthly_usage[index]==0):
+                monthly_overall_efficiency.append(0)
+            else:
+                monthly_overall_efficiency.append((monthly_usage[index]/TotalGeneration[index])*100)
+        
+        title =  "Overall System Efficiency for  " + str(date_value)
+        FillSpreadSheet(title, 'Month' ,'Efficiency (%)', time , monthly_overall_efficiency, "Overall_Efficiency") 
+
+            
+        fig = go.Figure()
+
+        fig.add_trace(go.Scatter(x=time, y=monthly_overall_efficiency,
+                            mode='lines+markers'
+                            )) 
+        
+        fig.update_layout(title = "Overall System Efficiency for  " + str(date_value),
+                    xaxis_title='Month',
+                    yaxis_title='Efficiency (%)')
+        return fig 
+
 @app.callback(
     Output(component_id='carbon_savings', component_property='figure'),
     [Input(component_id='slct_year', component_property='value')],
