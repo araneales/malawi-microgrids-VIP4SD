@@ -152,6 +152,6 @@ if __name__ == '__main__': # Check if code is being run as a script or being imp
         return fighist
 
 
-    app.run_server(debug=True,port=3000)
+    app.run_server(debug=False,port=3000)
     # CTRL+C to terminate 
 # Complete guide to Plotly Dash bootstrap dashboard - link 7

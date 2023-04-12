@@ -7,7 +7,17 @@ Created on Thu Feb 11 15:53:26 2021
 @pre existing author(s): aaron,chris,jack
 @current author(s): ian,jamie,adam,ruaridh,
 
+STEPs to get code running:
+- install code running application (suggested: VScode)
+- install python extension on vscode 
+- install python on pc (version: 3.10)
+- connect vscode to github and link to project repository
+- run "pip install ..." for required libraries, in vscode terminal
+- Copy and paste errors into chat GPT for guidance
+
+- When working on code be sure to turn debug mode on (Change to true)
 """
+
 import os # find current file directory
 import datetime as datetime
 import dash
@@ -30,7 +40,7 @@ from firebase_admin import credentials
 from firebase_admin import db 
 import time
 import xlsxwriter
-#from io import BytesIO (Use for Macs)
+import io
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.ZEPHYR, dbc.icons.BOOTSTRAP],suppress_callback_exceptions=True) 
@@ -110,7 +120,7 @@ header = {'Authorization': 'Token 519802b968a55413f26964f53f99787cffaf11ac'}
 url_ER = "https://api.steama.co/exchange-rates/?format=json"                   
 r = requests.get(url=url_ER, headers = header)
 s = r.content
-df_ER = pd.read_json(s)##
+df_ER = pd.read_json(io.BytesIO(s))
 
 # Initialising Firebase app as admin 
 cred = credentials.Certificate({"type": "service_account",
@@ -714,19 +724,19 @@ C_day = int(C_date[8:10])
 url = "https://api.steama.co/sites/26385/revenue/" + "?start_time=" + start_time
 r = requests.get(url=url, headers = header)
 s = r.content
-df = pd.read_json(s)
+df = pd.read_json(io.BytesIO(s))
 
 # Request from the first URL
 url1 = "https://api.steama.co/sites/26385/revenue/" + "?start_time=" + start_time
 r1 = requests.get(url=url1, headers = header)
 s1 = r1.content
-df1 = pd.read_json(s1)
+df1 = pd.read_json(io.BytesIO(s1))
 
 # Request from the second URL
 url2 = "https://api.steama.co/sites/26678/revenue/" + "?start_time=" + start_time
 r2 = requests.get(url=url2, headers = header)
 s2 = r2.content
-df2 = pd.read_json(s2)
+df2 = pd.read_json(io.BytesIO(s2))
 
 # Combine the two datasets
 df = pd.concat([df1, df2], ignore_index=True)
@@ -780,20 +790,21 @@ sidebar = html.Div(
         dbc.Nav(
             [
                 dbc.NavLink("Home", href="/", active="exact", external_link=True),
-                dbc.NavLink("Demand and Revenue", href="/demand", active="exact", external_link=True),
-                dbc.NavLink("Generation and Storage", href="/technical", active="exact", external_link=True),
-                dbc.NavLink("Social & Environmental Impact", href="/social", active="exact", external_link=True),
+                dbc.NavLink("Demand & Revenue", href="/demand", active="exact", external_link=True),
+                dbc.NavLink("Generation & Storage", href="/technical", active="exact", external_link=True),
+                dbc.NavLink("Social & Environmental", href="/social", active="exact", external_link=True),
                 dbc.NavLink("Maintenance", href="/maintenance", active="exact", external_link=True),
                 dbc.NavLink("Learn More", href = "/learnmore", active="exact", external_link=True)
             ],
             vertical=True,
             pills=True,
         ),
+        
+        html.Hr(),
+        html.P("BETA VERSION: errors may occur."),
     ],
     style=SIDEBAR_STYLE,
 )
-        
-
 
 content = html.Div(id="page-content", children=[], style=CONTENT_STYLE)
 
@@ -920,6 +931,8 @@ def render_page_content(pathname):
                 html.Div(
                 children = html.H1("Social and Environmental Impact Data"),style={'backgroundColor': '#f2f2f2', 'textAlign': 'center'}),
                 html.Hr(),
+                html.P("NOTE: Kudembe has only had a baseline completed, thus there is no Kudembe Social data live on the platform just yet."),
+                html.Hr(),
                 html.P("Social Impact data is the measure of how a product or service changes the lives of the people and community that uses it. The social impact data of the microgrid has been broken down into five categories shown by the tabs below. "),
                 html.P("As of February 2022, three Social Impact surveys have been conducted. "),
                 html.Li("Baseline: August 2019"),
@@ -1027,7 +1040,6 @@ def render_tech_tabs_1(tab): # =================================================
                 inputStyle={"margin-left": "15px", "margin-right":"5px"}
                 ),
                 html.Br(),
-                html.Hr(),
                 html.H6("Please Select a date (Do not select several months):"),
                 dcc.DatePickerRange(
                 id='my-date-picker-range-2',
@@ -1096,7 +1108,6 @@ def render_tech_tabs_1(tab): # =================================================
                 inputStyle={"margin-left": "15px", "margin-right":"5px"}
                 ),
                 html.Br(),
-                html.Hr(),
                 html.P("Please select a date:"),
                 dcc.DatePickerSingle(
                     id='my-date-picker-single-gen',
@@ -1105,6 +1116,7 @@ def render_tech_tabs_1(tab): # =================================================
                     initial_visible_month=date(C_year, C_month, C_day),
                     date=date(C_year, C_month, C_day)
             ),  
+                html.Br(),
                 html.Br(),
                 html.Button("Click to download spreadsheet", id="generation-day-file"),
                 dcc.Download(id="download-generation-day-file"),
@@ -1158,7 +1170,6 @@ def render_tech_tabs_1(tab): # =================================================
                 inputStyle={"margin-left": "15px", "margin-right":"5px"}
             ),
             html.Br(),
-                html.Hr(),
                 html.H6("Please Select a Date (Do not select several months):"),
 
                 dcc.DatePickerRange(
@@ -1170,6 +1181,7 @@ def render_tech_tabs_1(tab): # =================================================
                 end_date=date(C_year, C_month-1, 12) # Changed so it selects current day, previously it was set to June the 5th 2020
                 # more user friendly
                 ),
+                html.Br(),
                 html.Br(),
                 html.Button("Click to download spreadsheet", id="soc-range-file"),
                 dcc.Download(id="download-soc-range-file"),
@@ -1199,6 +1211,7 @@ def render_tech_tabs_1(tab): # =================================================
                 initial_visible_month=date(C_year, C_month, C_day),
                 date=date(C_year, C_month, C_day)
             ),
+                html.Br(),
                 html.Br(),
                 html.Button("Click to download spreadsheet", id="soc-day-file"),
                 dcc.Download(id="download-soc-day-file"),
@@ -1231,7 +1244,6 @@ def render_tech_tabs_1(tab): # =================================================
                 inputStyle={"margin-left": "15px", "margin-right":"5px"}
             ),
                 html.Br(),
-                html.Br(),
                 html.Button("Click to download spreadsheet", id="soc-year-file"),
                 dcc.Download(id="download-soc-year-file"),
                 dcc.Graph(id='my_graph_6_2',figure={}),
@@ -1255,9 +1267,9 @@ def render_tech_tabs_1(tab): # =================================================
                 inputStyle={"margin-left": "15px", "margin-right":"5px"}
             ),
             html.Br(),
-            html.Hr(),
             html.H6("Please Select a Month:"),
             dcc.Input(id='my-date-picker-single', type="text", value=currentYYMM, placeholder="YYYY-MM", debounce=True,style={'fontSize':16}),
+            html.Br(),
             html.Br(),
             html.Button("Click to download spreadsheet", id="batt-temp-month-file"),
             dcc.Download(id="download-batt-temp-month-file"),            
@@ -1272,7 +1284,7 @@ def render_tech_tabs_1(tab): # =================================================
             html.Br(),
             html.Hr(),
             html.H2("Average Battery Temperature Over Given Day"),
-
+            html.Br(),
             html.H6("Please Select Microgrid Site:"),
                 dcc.RadioItems(id = 'slct_grid_04_02',
                 options=[
@@ -1292,6 +1304,7 @@ def render_tech_tabs_1(tab): # =================================================
                 date=date(C_year, C_month, C_day) # Changed so it selects current day, previously it was set to June the 5th 2020
                 # more user friendly
             ),
+            html.Br(),
             html.Br(),
             html.Button("Click to download spreadsheet", id="batt-temp-day-file"),
             dcc.Download(id="download-batt-temp-day-file"),   
@@ -1316,7 +1329,6 @@ def render_tech_tabs_1(tab): # =================================================
                 inputStyle={"margin-left": "15px", "margin-right":"5px"}
             ),
             html.Br(),
-                html.Hr(),
                 html.H6("Please Select a Year (This is the input for the 3 subsequent indicators) "),
                 dcc.Dropdown(id="slct_year",
                      options=[
@@ -1404,7 +1416,6 @@ def render_tech_tabs_1(tab): # =================================================
             ),
     
                 html.Br(),
-                html.Hr(),
                 html.H6("Please Select a Year : "),
                 dcc.Dropdown(id="slct_year",
                      options=[
@@ -1511,7 +1522,6 @@ def render_tech_tabs_1(tab): # =================================================
                 inputStyle={"margin-left": "15px", "margin-right":"5px"}
                 ),
                 html.Br(), 
-                html.Hr(), 
                 html.H6("Please Select a Year : "),
                 dcc.Dropdown(id="slct_year",
                      options=[
@@ -1838,7 +1848,7 @@ def render_home_tab(tab):
                 
                 html.Div([
                     html.B("Demand and Revenue data:"),
-                    html.P("relating the to the functionality of the generation and distribution systems, a variety of data on technical performance is being collected through remote monitoring of the PV, batteries and inverters, along with measurements and observations of the system collected through scheduled maintenance visits on site."),
+                    html.P("Relating the to the functionality of the generation and distribution systems, a variety of data on technical performance is being collected through remote monitoring of the PV, batteries and inverters, along with measurements and observations of the system collected through scheduled maintenance visits on site."),
                     html.P(""),
                     html.B("Social and Environmental Impact data:"),
                     html.P("A Key Performance Indicator framework is being used to track data relating to the impact the microgrid is having on the community, in themes such as health and education, employment and finance, and female empowerment."),
@@ -2122,8 +2132,7 @@ def render_content(tab):
             html.H6("Please Select Microgrid Site:"),
             dcc.RadioItems(id = 'slct_grid_3_1',
                 options=[
-                    {'label': 'Mthembanji', 'value': 1},
-                    {'label': 'Kudembe', 'value': 2},
+                    {'label': 'Mthembanji       (Kudembe option on the way)', 'value': 1},
                 ],
                 value=1,
                 inputStyle={"margin-left": "15px", "margin-right":"5px"}
@@ -2377,7 +2386,7 @@ def render_content(tab):
             s = r.content
 
             #converting json string to a panda object
-            dfC_mth = pd.read_json(s)
+            dfC_mth = pd.read_json(io.BytesIO(s))
             
             #in the range of 0 and the no of customers (items) in the object
             for index in range(0,len(dfC_mth['count'])):
@@ -2403,7 +2412,7 @@ def render_content(tab):
             r2 = requests.get(url=url_kud, headers = header)
             s2 = r2.content
 
-            dfC_kud = pd.read_json(s2)
+            dfC_kud = pd.read_json(io.BytesIO(s2))
 
             for index in range(0,len(dfC_kud['count'])):
                 holder2 = dfC_kud['results'][index]
@@ -2442,6 +2451,7 @@ def render_content(tab):
             html.Br(),
             html.Hr(),
             html.H2("Customer Usage for a Given Day"),
+            html.P("Please note that customer data cannot be shared to the public (name, number, address)."),
             html.Br(),
             html.H6("Please Select Microgrid Site:"),
             dcc.RadioItems(id = 'slct_grid_6_1',
@@ -2462,7 +2472,7 @@ def render_content(tab):
                      searchable = False,
                      clearable = False,
                      multi = False,
-                     value = str("001"),
+                     value="Zacharia Alfred",
                      style = {'width': "60%"}
                      ),
             html.Br(),
@@ -2473,7 +2483,7 @@ def render_content(tab):
                 max_date_allowed=date(C_year, C_month, C_day),
                 initial_visible_month=date(C_year, C_month, C_day),
                 date=date(C_year, C_month, C_day),
-                display_format='MMM/YYYY'
+                display_format='DD/MMM/YYYY',
                 ),
             html.Br(), 
             html.Br(),
@@ -2736,7 +2746,7 @@ def update_cust_month_average_graph(date_value, cust_name):
     
         r = requests.get(url=url, headers = header)
         s = r.content
-        df = pd.read_json(s)
+        df = pd.read_json(io.BytesIO(s))
         holder = df['results'][0]
         
         usage_url = holder['utilities_url'] + "1/usage/"
@@ -2758,7 +2768,7 @@ def update_cust_month_average_graph(date_value, cust_name):
         
         r2 = requests.get(url=url2, headers = header)
         s2 = r2.content
-        df2 = pd.read_json(s2)
+        df2 = pd.read_json(io.BytesIO(s2))
         
 
         
@@ -2986,7 +2996,7 @@ def update_cust_on_day_graph(date_value, cust_name):
     
     r = requests.get(url=url, headers = header)
     s = r.content
-    df = pd.read_json(s)
+    df = pd.read_json(io.BytesIO(s))
     holder = df['results'][0]
     
     usage_url = holder['utilities_url'] + "1/usage/"
@@ -3020,7 +3030,7 @@ def update_cust_on_day_graph(date_value, cust_name):
     
     r2 = requests.get(url=url2, headers = header)
     s2 = r2.content
-    df2 = pd.read_json(s2)
+    df2 = pd.read_json(io.BytesIO(s2))
     
     timestamp = []
     usage_amount = []
@@ -3138,7 +3148,7 @@ def update_av_load_graph(start_date_value, end_date_value, site, bttn1, bttn2,is
     r = requests.get(url=url, headers = header)
     s = r.content
     #converting json string to a panda object
-    dfC = pd.read_json(s)
+    dfC = pd.read_json(io.BytesIO(s))
     
     #declaring arrays to store names (for get requests later)
     cust_fnames_res=[]
@@ -3191,7 +3201,7 @@ def update_av_load_graph(start_date_value, end_date_value, site, bttn1, bttn2,is
             site_name = "Kudembe"
         r2 = requests.get(url=url, headers = header)
         s2 = r2.content
-        df2 = pd.read_json(s2)
+        df2 = pd.read_json(io.BytesIO(s2))
                                 
         for index in range(0,len(df2['timestamp'])):
             hourly_usage[index] += df2['usage'][index]
@@ -3212,7 +3222,7 @@ def update_av_load_graph(start_date_value, end_date_value, site, bttn1, bttn2,is
                 
             r = requests.get(url=url, headers = header)
             s = r.content
-            df = pd.read_json(s)
+            df = pd.read_json(io.BytesIO(s))
             holder = df['results'][0]
             
             usage_url = holder['utilities_url'] + "1/usage/"
@@ -3220,7 +3230,7 @@ def update_av_load_graph(start_date_value, end_date_value, site, bttn1, bttn2,is
             
             r2 = requests.get(url=url2, headers = header)
             s2 = r2.content
-            df2 = pd.read_json(s2)
+            df2 = pd.read_json(io.BytesIO(s2))
             
             if df2.empty:
                 continue
@@ -3237,7 +3247,7 @@ def update_av_load_graph(start_date_value, end_date_value, site, bttn1, bttn2,is
             
         r3 = requests.get(url=total_url, headers = header)
         s3 = r3.content
-        df3 = pd.read_json(s3)
+        df3 = pd.read_json(io.BytesIO(s3))
          
         #Filling total usage array          
         for index in range(0,len(df3['timestamp'])):
@@ -3266,7 +3276,7 @@ def update_av_load_graph(start_date_value, end_date_value, site, bttn1, bttn2,is
                 
             r = requests.get(url=url, headers = header)
             s = r.content
-            df = pd.read_json(s)
+            df = pd.read_json(io.BytesIO(s))
             holder = df['results'][0]
             
             usage_url = holder['utilities_url'] + "1/usage/"
@@ -3274,7 +3284,7 @@ def update_av_load_graph(start_date_value, end_date_value, site, bttn1, bttn2,is
             
             r2 = requests.get(url=url2, headers = header)
             s2 = r2.content
-            df2 = pd.read_json(s2)
+            df2 = pd.read_json(io.BytesIO(s2))
             
             if df2.empty:
                 continue
@@ -3303,7 +3313,7 @@ def update_av_load_graph(start_date_value, end_date_value, site, bttn1, bttn2,is
                 
             r = requests.get(url=url, headers = header)
             s = r.content
-            df = pd.read_json(s)
+            df = pd.read_json(io.BytesIO(s))
             holder = df['results'][0]
             
             usage_url = holder['utilities_url'] + "1/usage/"
@@ -3311,7 +3321,7 @@ def update_av_load_graph(start_date_value, end_date_value, site, bttn1, bttn2,is
             
             r2 = requests.get(url=url2, headers = header)
             s2 = r2.content
-            df2 = pd.read_json(s2)
+            df2 = pd.read_json(io.BytesIO(s2))
             
             if df2.empty:
                 continue
@@ -3416,7 +3426,7 @@ def update_peak_graph(date_value, site):
         site_name = "Kudembe"                          
     r = requests.get(url=url, headers = header)
     s = r.content
-    df = pd.read_json(s)
+    df = pd.read_json(io.BytesIO(s))
         
     if(month == "01"):
         M = "January"
@@ -3585,7 +3595,7 @@ def update_peak_graph_2(date, site):
 
     r = requests.get(url, headers = header)
     s = r.content
-    df = pd.read_json(s)
+    df = pd.read_json(io.BytesIO(s))
             
     for index in range(0,len(df['timestamp'])):
                         usage.append(df['usage'][index])
@@ -3671,7 +3681,7 @@ def update_graph(option_slctd, bttn1, bttn2, site):
     url_ER = "https://api.steama.co/exchange-rates/"                     
     r = requests.get(url=url_ER, headers = header)
     s = r.content
-    df_ER = pd.read_json(s)
+    df_ER = pd.read_json(io.BytesIO(s))
 
     for index in range(len(df_ER['rate'])):
         if(df_ER['source'][index]=='MWK' and df_ER['target'][index]=='USD'):
@@ -3695,7 +3705,7 @@ def update_graph(option_slctd, bttn1, bttn2, site):
     r = requests.get(url=url, headers = header)
     s = r.content
     #converting json string to a panda object
-    dfC = pd.read_json(s)
+    dfC = pd.read_json(io.BytesIO(s))
     
     #declaring arrays to store names (for get requests later)
     cust_fnames_res=[]
@@ -3752,13 +3762,13 @@ def update_graph(option_slctd, bttn1, bttn2, site):
         site_url = "https://api.steama.co/sites/26385/revenue/" + "?start_time=" + start_time + "&end_time=" + end_time 
         rT = requests.get(url=site_url, headers = header)
         sT = rT.content
-        dfT = pd.read_json(sT)
+        dfT = pd.read_json(io.BytesIO(sT))
         site_name = "Mthembanji"
     elif(site == 3):
         site_url = "https://api.steama.co/sites/26678/revenue/" + "?start_time=" + start_time + "&end_time=" + end_time
         rT = requests.get(url=site_url, headers = header) 
         sT = rT.content
-        dfT = pd.read_json(sT)     
+        dfT = pd.read_json(io.BytesIO(sT))     
         site_name = "Kudembe"               
     
     if (div==1):
@@ -3766,13 +3776,13 @@ def update_graph(option_slctd, bttn1, bttn2, site):
             url = "https://api.steama.co/sites/26385/revenue/" + "?start_time=" + start_time + "&end_time=" + end_time 
             r = requests.get(url=url, headers = header)
             s = r.content
-            df = pd.read_json(s)
+            df = pd.read_json(io.BytesIO(s))
             site_name = "Mthembanji"
         elif(site == 3):
             url = "https://api.steama.co/sites/26678/revenue/" + "?start_time=" + start_time + "&end_time=" + end_time  
             r = requests.get(url=url, headers = header) 
             s = r.content
-            df = pd.read_json(s)    
+            df = pd.read_json(io.BytesIO(s))    
             site_name = "Kudembe"               
         
         for index in range(0,len(df['timestamp'])):
@@ -3794,7 +3804,7 @@ def update_graph(option_slctd, bttn1, bttn2, site):
 
             r = requests.get(url=url, headers = header)
             s = r.content
-            df = pd.read_json(s)
+            df = pd.read_json(io.BytesIO(s))
             holder = df['results'][0]
             
             usage_url = holder['revenue_url']
@@ -3802,7 +3812,7 @@ def update_graph(option_slctd, bttn1, bttn2, site):
             
             r2 = requests.get(url=url2, headers = header)
             s2 = r2.content
-            df2 = pd.read_json(s2)
+            df2 = pd.read_json(io.BytesIO(s2))
 
             if df2.empty:
                 continue
@@ -3817,13 +3827,13 @@ def update_graph(option_slctd, bttn1, bttn2, site):
             url3 = "https://api.steama.co/sites/26385/revenue/" + "?start_time=" + start_time + "&end_time=" + end_time 
             r3 = requests.get(url=url3, headers = header)
             s3 = r3.content
-            df3 = pd.read_json(s3)
+            df3 = pd.read_json(io.BytesIO(s3))
             site_name = "Mthembanji"
         elif(site == 3):
             url3 = "https://api.steama.co/sites/26678/revenue/" + "?start_time=" + start_time + "&end_time=" + end_time 
             r3 = requests.get(url=url3, headers = header)   
             s3 = r3.content
-            df3 = pd.read_json(s3)   
+            df3 = pd.read_json(io.BytesIO(s3))   
             site_name = "Kudembe"                
         
         for index in range(0,len(df3['timestamp'])):
@@ -3847,7 +3857,7 @@ def update_graph(option_slctd, bttn1, bttn2, site):
 
             r = requests.get(url=url, headers = header)
             s = r.content
-            df = pd.read_json(s)
+            df = pd.read_json(io.BytesIO(s))
             holder = df['results'][0]
 
             usage_url = holder['revenue_url']
@@ -3855,7 +3865,7 @@ def update_graph(option_slctd, bttn1, bttn2, site):
             
             r2 = requests.get(url=url2, headers = header)
             s2 = r2.content
-            df2 = pd.read_json(s2)
+            df2 = pd.read_json(io.BytesIO(s2))
             
             if df2.empty:
                 continue
@@ -3879,7 +3889,7 @@ def update_graph(option_slctd, bttn1, bttn2, site):
 
             r = requests.get(url=url, headers = header)
             s = r.content
-            df = pd.read_json(s)
+            df = pd.read_json(io.BytesIO(s))
             holder = df['results'][0]
             
 
@@ -3888,7 +3898,7 @@ def update_graph(option_slctd, bttn1, bttn2, site):
             
             r2 = requests.get(url=url2, headers = header)
             s2 = r2.content
-            df2 = pd.read_json(s2)
+            df2 = pd.read_json(io.BytesIO(s2))
 
             if df2.empty:
                 continue
@@ -4014,7 +4024,7 @@ def update_output(date_value, site, bttn1, bttn2):
     r = requests.get(url=url, headers = header)
     s = r.content
     #converting json string to a panda object
-    dfC = pd.read_json(s)
+    dfC = pd.read_json(io.BytesIO(s))
     
     #declaring arrays to store names (for get requests later)
     cust_fnames_res=[]
@@ -4065,7 +4075,7 @@ def update_output(date_value, site, bttn1, bttn2):
 
         r = requests.get(url=url, headers = header)
         s = r.content
-        df2 = pd.read_json(s)
+        df2 = pd.read_json(io.BytesIO(s))
         
         #iterates through n number of times (n - number of readings )
         for index in range(0,len(df2['timestamp'])):
@@ -4095,7 +4105,7 @@ def update_output(date_value, site, bttn1, bttn2):
                 
             r = requests.get(url=url, headers = header)
             s = r.content
-            df = pd.read_json(s)
+            df = pd.read_json(io.BytesIO(s))
             holder = df['results'][0]
             
             usage_url = holder['utilities_url'] + "1/usage/"
@@ -4103,7 +4113,7 @@ def update_output(date_value, site, bttn1, bttn2):
             
             r2 = requests.get(url=url2, headers = header)
             s2 = r2.content
-            df2 = pd.read_json(s2)
+            df2 = pd.read_json(io.BytesIO(s2))
             
             if df2.empty:
                 continue
@@ -4119,7 +4129,7 @@ def update_output(date_value, site, bttn1, bttn2):
             
         r3 = requests.get(url=total_url, headers = header)
         s3 = r3.content
-        df3 = pd.read_json(s3)
+        df3 = pd.read_json(io.BytesIO(s3))
          
         #Filling total usage array          
         for index in range(0,len(df3['timestamp'])):
@@ -4151,7 +4161,7 @@ def update_output(date_value, site, bttn1, bttn2):
                 
             r = requests.get(url=url, headers = header)
             s = r.content
-            df = pd.read_json(s)
+            df = pd.read_json(io.BytesIO(s))
             holder = df['results'][0]
             
             usage_url = holder['utilities_url'] + "1/usage/"
@@ -4159,7 +4169,7 @@ def update_output(date_value, site, bttn1, bttn2):
             
             r2 = requests.get(url=url2, headers = header)
             s2 = r2.content
-            df2 = pd.read_json(s2)
+            df2 = pd.read_json(io.BytesIO(s2))
             
             if df2.empty:
                 continue
@@ -4189,7 +4199,7 @@ def update_output(date_value, site, bttn1, bttn2):
                 
             r = requests.get(url=url, headers = header)
             s = r.content
-            df = pd.read_json(s)
+            df = pd.read_json(io.BytesIO(s))
             holder = df['results'][0]
             
             usage_url = holder['utilities_url'] + "1/usage/"
@@ -4197,7 +4207,7 @@ def update_output(date_value, site, bttn1, bttn2):
             
             r2 = requests.get(url=url2, headers = header)
             s2 = r2.content
-            df2 = pd.read_json(s2)
+            df2 = pd.read_json(io.BytesIO(s2))
             if df2.empty:
                 continue
             
@@ -4372,7 +4382,7 @@ def update_output_2(date_value, bttn1, bttn2, site):
     r = requests.get(url = url, headers = header)
     s = r.content
     #converting json string to a panda object
-    dfC = pd.read_json(s)
+    dfC = pd.read_json(io.BytesIO(s))
     
     cust_fnames_res=[]
     cust_fnames_bus=[]
@@ -4434,7 +4444,7 @@ def update_output_2(date_value, bttn1, bttn2, site):
             
         r = requests.get(url = url, headers = header)
         s = r.content
-        df2 = pd.read_json(s)
+        df2 = pd.read_json(io.BytesIO(s))
       
         for index in range(0,len(df2['timestamp'])):
             if (div2==1):
@@ -4457,7 +4467,7 @@ def update_output_2(date_value, bttn1, bttn2, site):
                 
             r = requests.get(url = url, headers = header)
             s = r.content
-            df = pd.read_json(s)
+            df = pd.read_json(io.BytesIO(s))
             holder = df['results'][0]
             
             usage_url = holder['utilities_url'] + "1/usage/"
@@ -4465,7 +4475,7 @@ def update_output_2(date_value, bttn1, bttn2, site):
             
             r2 = requests.get(url=url2, headers = header)
             s2 = r2.content
-            df2 = pd.read_json(s2)
+            df2 = pd.read_json(io.BytesIO(s2))
 
             if df2.empty:
                 continue
@@ -4485,7 +4495,7 @@ def update_output_2(date_value, bttn1, bttn2, site):
 
         r3 = requests.get(url = total_url, headers = header)
         s3 = r3.content
-        df3 = pd.read_json(s3)
+        df3 = pd.read_json(io.BytesIO(s3))
             
         for index in range(0,len(df3['timestamp'])):
                         total_daily_usage[index]+=(df3['usage'][index])
@@ -4518,7 +4528,7 @@ def update_output_2(date_value, bttn1, bttn2, site):
                 
             r = requests.get(url=url, headers = header)
             s = r.content
-            df = pd.read_json(s)
+            df = pd.read_json(io.BytesIO(s))
             holder = df['results'][0]
             
             usage_url = holder['utilities_url'] + "1/usage/"
@@ -4526,7 +4536,7 @@ def update_output_2(date_value, bttn1, bttn2, site):
             
             r2 = requests.get(url=url2, headers=header)
             s2 = r2.content
-            df2 = pd.read_json(s2)
+            df2 = pd.read_json(io.BytesIO(s2))
  
             if df2.empty:
                 continue
@@ -4562,7 +4572,7 @@ def update_output_2(date_value, bttn1, bttn2, site):
                 
             r = requests.get(url=url, headers = header)
             s = r.content
-            df = pd.read_json(s)
+            df = pd.read_json(io.BytesIO(s))
             holder = df['results'][0]
             
             usage_url = holder['utilities_url'] + "1/usage/"
@@ -4570,7 +4580,7 @@ def update_output_2(date_value, bttn1, bttn2, site):
             
             r2 = requests.get(url=url2, headers = header)
             s2 = r2.content
-            df2 = pd.read_json(s2)
+            df2 = pd.read_json(io.BytesIO(s2))
 
             if df2.empty:
                 continue
@@ -5294,7 +5304,7 @@ def dailyUptime(value,date_value):
     
             r = requests.get(url, headers = header)
             s = r.content
-            df = pd.read_json(s)
+            df = pd.read_json(io.BytesIO(s))
             
             #filling arrays for all uptime data points
             for index in range(0,len(df['timestamp'])):
@@ -5423,7 +5433,7 @@ def dailyUptime(value,date_value):
             site_name = "Kudembe"   
             r = requests.get(url, headers = header)
             s = r.content
-            df = pd.read_json(s)
+            df = pd.read_json(io.BytesIO(s))
             
             #filling arrays for all uptime data points
             for index in range(0,len(df['timestamp'])):
@@ -5590,7 +5600,7 @@ def hourlyUptime(value,start_date_value, end_date_value):
 
         r = requests.get(url, headers = header)
         s = r.content
-        df = pd.read_json(s)
+        df = pd.read_json(io.BytesIO(s))
         
         
         uptime=[]
@@ -5662,7 +5672,7 @@ def hourlyUptime(value,start_date_value, end_date_value):
 
         r = requests.get(url, headers = header)
         s = r.content
-        df = pd.read_json(s)
+        df = pd.read_json(io.BytesIO(s))
         
         
         uptime=[]
@@ -6513,7 +6523,7 @@ def DistributionEfficiency(date_value,value):
         url = "https://api.steama.co/sites/26385/utilities/1/usage/?start_time=" + start_time + "&end_time=" + end_time
         r = requests.get(url=url, headers = header)
         s = r.content
-        df = pd.read_json(s)
+        df = pd.read_json(io.BytesIO(s))
 
         for index in range(0,len(df['timestamp'])):
             timestamp.append(str(df['timestamp'][index]))
@@ -6583,7 +6593,7 @@ def DistributionEfficiency(date_value,value):
         url = "https://api.steama.co/sites/26678/utilities/1/usage/?start_time=" + start_time + "&end_time=" + end_time
         r = requests.get(url=url, headers = header)
         s = r.content
-        df = pd.read_json(s)
+        df = pd.read_json(io.BytesIO(s))
 
         for index in range(0,len(df['timestamp'])):
             timestamp.append(str(df['timestamp'][index]))
@@ -6673,7 +6683,7 @@ def OverallEfficiency(date_value,value):
         url = "https://api.steama.co/sites/26385/utilities/1/usage/?start_time=" + start_time + "&end_time=" + end_time
         r = requests.get(url=url, headers = header)
         s = r.content
-        df = pd.read_json(s)
+        df = pd.read_json(io.BytesIO(s))
 
         for index in range(0,len(df['timestamp'])):
             timestamp.append(str(df['timestamp'][index]))
@@ -6741,7 +6751,7 @@ def OverallEfficiency(date_value,value):
         url = "https://api.steama.co/sites/26678/utilities/1/usage/?start_time=" + start_time + "&end_time=" + end_time
         r = requests.get(url=url, headers = header)
         s = r.content
-        df = pd.read_json(s)
+        df = pd.read_json(io.BytesIO(s))
 
         for index in range(0,len(df['timestamp'])):
             timestamp.append(str(df['timestamp'][index]))
@@ -7181,7 +7191,7 @@ def downloadfile1(n_clicks):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)
 
 
 

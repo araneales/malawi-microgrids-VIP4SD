@@ -442,5 +442,5 @@ def TotalGenerationDay(date):
        return fig 
 # https://sandbox.smaapis.de/monitoring/index.html
 if __name__ == '__main__': # Protects users from accidentally invoking the script when they didn't intend to. Based on Flask framework
-    app.run_server(debug=True) # Ctrl+C in terminal to terminate
+    app.run_server(debug=False) # Ctrl+C in terminal to terminate
 
