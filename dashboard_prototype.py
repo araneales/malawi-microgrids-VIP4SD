@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Created on Thu Feb 11 15:53:26 2021
+Created on Thu Feb 11 15:53:26 2021:
 @original author: heatherwaddell
 @pre existing author(s): aaron,chris,jack
 @current author(s): ian,jamie,adam,ruaridh,
@@ -18,7 +18,7 @@ STEPs to get code running:
 - When working on code be sure to turn debug mode on (Change to true)
 """
 
-import os # find current file directory
+import os 
 import datetime as datetime
 import dash
 from dash import dcc as file 
