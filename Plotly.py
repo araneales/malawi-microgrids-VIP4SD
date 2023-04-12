@@ -145,6 +145,6 @@ app.layout = html.Div([ # The <div> tag defines a division or a section in an HT
     ),
 ])
 if __name__ == '__main__': # Protects users from accidentally invoking the script when they didn't intend to. Based on Flask framework
-    app.run_server(debug=True) # Ctrl+C in terminal to terminate
+    app.run_server(debug=False) # Ctrl+C in terminal to terminate
 
 # Up to tut. 11 of Plotly of link 5 
