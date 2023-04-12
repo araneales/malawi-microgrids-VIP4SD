@@ -5066,7 +5066,7 @@ def TotalGenerationDay(date,value):
        fig.update_layout(
                     title ='Daily Generation of Microgrid (Plant {0}):'.format(data_initial['plants'][0]['plantId']),
                     xaxis_title='Hours',
-                    yaxis_title='Generation (kWh)',
+                    yaxis_title='Generation (W)',
                     autotypenumbers='convert types',
                     )
        
@@ -5802,7 +5802,7 @@ def batt_temp_month (date_value,value):
                         yaxis_title='Temperature (°C)')  
             return fig
 
-
+          #site=1
         readings = db.reference('UsersData/mRxIA4XvqYTmhIEjqfk8ycC02vq1/readings')
         part_readings = readings.order_by_child('timestamp').start_at(start_time).end_at(end_time).get()
 
@@ -5975,7 +5975,7 @@ def batt_temp_month (date_value,value):
                             yaxis_title='Temperature (°C)')  
                 return fig
 
-
+              #Site=2
             readings = db.reference('UsersData/ww0fLZo3XtOXMnX7Zq3C5iMFuFq1/readings')
             part_readings = readings.order_by_child('timestamp').start_at(start_time).end_at(end_time).get()
 
