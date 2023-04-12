@@ -47,7 +47,7 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.ZEPHYR, dbc.icons.BOO
 server = app.server
 # CERULEAN, COSMO, CYBORG, DARKLY, FLATLY, JOURNAL, LITERA, LUMEN, LUX, MATERIA, MINTY, MORPH, PULSE, QUARTZ, SANDSTONE, SIMPLEX, SKETCHY, SLATE, SOLAR, SPACELAB, SUPERHERO, UNITED, VAPOR, YETI, ZEPHYR.
 #Original = LUX
-#fav = COSMO, ZEPHYR
+#fav = COSMO, ZEPHYR.
 session=requests.Session()
 
 
