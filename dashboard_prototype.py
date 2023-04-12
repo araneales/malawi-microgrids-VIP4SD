@@ -1952,6 +1952,7 @@ def render_content(tab):
         return html.Div([
             html.Hr(),
             html.H2("Monthly Revenue for Given Year"),
+            html.Hr(),
             html.Br(),
             html.H6("Please Select Microgrid Site:"),
             dcc.RadioItems(id = 'slct_grid_1_1',
@@ -2039,6 +2040,7 @@ def render_content(tab):
         return html.Div([            
             html.Hr(),
             html.H2("Monthly Demand for Given Year"),
+            html.Hr(),
             html.Br(),
             html.H6("Please Select Microgrid Site:"),
             dcc.RadioItems(id = 'slct_grid_2_1',
@@ -2128,6 +2130,7 @@ def render_content(tab):
         return html.Div([
             html.Hr(),
             html.H2("Load Profile for a Full Year"),
+            html.Hr(),
             html.Br(),
             html.H6("Please Select Microgrid Site:"),
             dcc.RadioItems(id = 'slct_grid_3_1',
@@ -2171,6 +2174,7 @@ def render_content(tab):
             html.Hr(),
 
             html.H2("Microgrid Load Profile for Given Day"),
+            html.Hr(),
             html.Br(),
             html.H6("Please Select Microgrid Site:"),
             dcc.RadioItems(id = 'slct_grid_3_2',
@@ -2250,6 +2254,7 @@ def render_content(tab):
             html.Hr(),
 
             html.H2("Microgrid Load Profile for Given Range"),
+            html.Hr(),
             html.Br(),
             html.H6("Please Select Microgrid Site:"),
             dcc.RadioItems(id = 'slct_grid_3_3',
@@ -2310,6 +2315,7 @@ def render_content(tab):
             html.Br(),
             html.Hr(),
             html.H2("Peak Loads for Given Month"),
+            html.Hr(),
             html.Br(),
             html.H6("Please Select Microgrid Site:"),
             dcc.RadioItems(id = 'slct_grid_4_1',
@@ -2337,6 +2343,7 @@ def render_content(tab):
             html.Hr(),
 
             html.H2("Peak Load for Given Year"),
+            html.Hr(),
             html.Br(),
             html.H6("Please Select Microgrid Site:"),
             dcc.RadioItems(id = 'slct_grid_4_2',
@@ -2432,6 +2439,7 @@ def render_content(tab):
                     html.Br(),
                     html.Hr(),
                     html.H2('Current Connection Status'),
+                    html.Hr(),
                     html.Br(),
                     html.H6("Mthembanji Connection Status"),
                     dcc.Graph(id="pie-chart-mth", figure = fig_mth),
@@ -2452,6 +2460,7 @@ def render_content(tab):
             html.Hr(),
             html.H2("Customer Usage for a Given Day"),
             html.P("Please note that customer data cannot be shared to the public (name, number, address)."),
+            html.Hr(),
             html.Br(),
             html.H6("Please Select Microgrid Site:"),
             dcc.RadioItems(id = 'slct_grid_6_1',
@@ -2497,6 +2506,7 @@ def render_content(tab):
             html.Hr(),
             
             html.H2("Customer’s Average Daily Usage for Given Month"),
+            html.Hr(),
             html.Br(),
             html.H6("Please Select Microgrid Site:"),
             dcc.RadioItems(id = 'slct_grid_6_2',
