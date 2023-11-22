@@ -17,6 +17,7 @@ STEPs to get code running:
 
 - When working on code be sure to turn debug mode on (Change to true)
 """
+from timeit import default_timer as timer
 
 import os 
 import datetime as datetime
@@ -136,8 +137,8 @@ cred = credentials.Certificate({"type": "service_account",
 
 # Initialize the app with a service account, granting admin privileges
 firebase_admin.initialize_app(cred, {
-        'databaseURL': 'https://openrmu-default-rtdb.europe-west1.firebasedatabase.app'
-       })
+        'databaseURL': 'https://openrmu-default-rtdb.europe-west1.firebasedatabase.app' # 'https://openrmu-default-rtdb.europe-west1.firebasedatabase.app'
+       }) 
 
 cred_kud = credentials.Certificate({"type": "service_account",
   "project_id": "openrmu",
@@ -3687,11 +3688,14 @@ def update_graph(option_slctd, bttn1, bttn2, site):
         T2="Business Users"
     else:
         T2="Institutional Users"
-    
+    start_1 = timer()
     url_ER = "https://api.steama.co/exchange-rates/"                     
     r = requests.get(url=url_ER, headers = header)
+    dash.callback_context.record_timing('task_1', timer() - start_1, 'Get request')
+    start_1 = timer()
     s = r.content
     df_ER = pd.read_json(io.BytesIO(s))
+    dash.callback_context.record_timing('task_2', timer() - start_1, 'Read json')
 
     for index in range(len(df_ER['rate'])):
         if(df_ER['source'][index]=='MWK' and df_ER['target'][index]=='USD'):
@@ -3707,12 +3711,14 @@ def update_graph(option_slctd, bttn1, bttn2, site):
    
     #request to customer list
     #url = "https://api.steama.co/customers/?fields=status,foo/?page=1&page_size=110"
+    start_1 = timer()
     if site == 2:
         url = "https://api.steama.co/customers/?fields=status,foo/?page=1&page_size=61&&site&site_id=26385"
     elif site == 3:
         url = "https://api.steama.co/customers/?fields=status,foo/?page=1&page_size=50&&site&site_id=26678"
             
     r = requests.get(url=url, headers = header)
+    dash.callback_context.record_timing('task_3', timer() - start_1, 'Main get request')
     s = r.content
     #converting json string to a panda object
     dfC = pd.read_json(io.BytesIO(s))
@@ -4302,7 +4308,9 @@ def Load_year(bttn, site):
         lower = df['Ins_Low'].tolist()
         upper = df['Ins_High'].tolist()
         category = "Institutional"
-        
+    
+    
+
     fig = go.Figure()
 
     fig.add_trace(go.Scatter(x=hour, y=mean,
@@ -4795,7 +4803,7 @@ def TotalConsumptionMonth(slct_user_2,value):
         
         
         title =  'Monthly Consumption (Plant {0}):'.format(data_initial['plants'][0]['plantId'])
-        FillSpreadSheet(title, 'Months' ,'Total Consumption (kWh)', date, TotalConsumption,"Consumpton_Year")    
+        FillSpreadSheet(title, 'Months' ,'Total Consumption (kWh)', date, TotalConsumption,"Consumption_Year")    
         
         
         fig = px.bar(
@@ -7201,7 +7209,7 @@ def downloadfile1(n_clicks):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=False)
+    app.run_server(debug=True)
 
 
 
