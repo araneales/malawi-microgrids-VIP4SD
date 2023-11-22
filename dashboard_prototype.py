@@ -4308,8 +4308,10 @@ def Load_year(bttn, site):
         lower = df['Ins_Low'].tolist()
         upper = df['Ins_High'].tolist()
         category = "Institutional"
-    
-    
+
+    spread_sheet_hour = [int(i.strftime("%H")) for i in hour] # The hours are saved as 1/hour, so we need to multiply by 12 to get the correct hour
+
+    FillSpreadSheet1("8760", "Hour", "Mean", "Median", "Lower Sensitivity", "Upper Sensitivity", spread_sheet_hour, mean, median, lower, upper, "8760")
 
     fig = go.Figure()
 
