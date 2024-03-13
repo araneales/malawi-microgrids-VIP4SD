@@ -42,6 +42,9 @@ from firebase_admin import db
 import time
 import xlsxwriter
 import io
+import urllib.parse
+import base64
+from flask import send_file
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.ZEPHYR, dbc.icons.BOOTSTRAP],suppress_callback_exceptions=True) 
@@ -273,6 +276,7 @@ df_WomenIndependance = pd.read_excel(os.path.join(APP_ROOT, r'Women_Independance
 df_WomenRespectHOME = pd.read_excel(os.path.join(APP_ROOT, r'Respect_Household.xlsx'))
 df_WomenRespectCOMM = pd.read_excel(os.path.join(APP_ROOT, r'Respect_Community.xlsx'))
 df_HomeSecurity = pd.read_excel(os.path.join(APP_ROOT, r'HouseholdSecurity.xlsx'))
+df_businesslist = pd.read_excel("Businesslist1.xlsx",converters={'customer_id':str})
 #......................FUNCTIONS...............................................
 # Health and Education #
 def funct_StudyingHours(df):
@@ -794,6 +798,7 @@ sidebar = html.Div(
                 dbc.NavLink("Demand & Revenue", href="/demand", active="exact", external_link=True),
                 dbc.NavLink("Generation & Storage", href="/technical", active="exact", external_link=True),
                 dbc.NavLink("Social & Environmental", href="/social", active="exact", external_link=True),
+                dbc.NavLink("Businesses", href="/business", active="exact", external_link=True),
                 dbc.NavLink("Maintenance", href="/maintenance", active="exact", external_link=True),
                 dbc.NavLink("Learn More", href = "/learnmore", active="exact", external_link=True)
             ],
@@ -1010,7 +1015,25 @@ def render_page_content(pathname):
                 html.Hr(),
                 html.P("We hope that these links are of good use to you and that you find what you're looking for. However, please do not hesitate to contact us if you would like more information!"),
                 html.Div(id='learnmore'),
-                ]           
+                ]        
+    elif pathname == "/business":
+        return [
+                html.Div(
+                children = html.H1("Business Data"),style={'backgroundColor': '#f2f2f2', 'textAlign': 'center'}),
+                html.Hr(),
+                html.Hr(),
+                html.P("Business data is data relating to businessess. Each business type has been broken down and the average usage is found "),
+                
+                      
+                html.Br(),
+                html.Hr(),
+                dcc.Tabs(id='business_tabs', value='tab-1', children=[
+                dcc.Tab(label='Business Energy Usage', value='tab-1'), 
+               
+                ],),               
+                html.Div(id='business_tabs_content'),
+                ]
+    
     return dbc.Jumbotron(
         [
             html.H1("404: Not found", className="text-danger"),
@@ -1018,6 +1041,54 @@ def render_page_content(pathname):
             html.P(f"The pathname {pathname} was not recognised..."),
         ]
     )
+       
+@app.callback(
+     Output('business_tabs_content', 'children'),
+     [Input('business_tabs', 'value')
+      ]
+ )
+
+def render_business_tabs(tab):
+    dropdown_options = [
+        {'label': 'Grocery Shop', 'value': 'grocery_shop'},
+        {'label': 'Barber Shop', 'value': 'barber_shop'},
+        {'label': 'Bar', 'value': 'bar'},
+        {'label': 'Video Show', 'value': 'video_show'},
+        {'label': 'Street food vendor', 'value': 'street_food_vendor'},
+        {'label': 'Restaurant', 'value': 'restaurant'},
+        {'label': 'Tailor', 'value': 'Tailor'},
+        {'label': 'Wood/metal shop', 'value': 'wood/metal_shop'},
+        {'label': 'Phone charging', 'value': 'phone_charging'},
+        {'label': 'Other', 'value': 'other'},
+        ]
+    if tab == 'tab-1':
+        return html.Div([
+    
+
+            # Define the layout
+       html.Br(),
+       html.H2("Energy Usage Data"),
+       html.Br(),
+        dcc.Dropdown(
+            id='name-dropdown',
+            options=dropdown_options,
+            value=dropdown_options[0]['value'],
+            style={'width': '300px'}
+        ),
+        html.Br(),
+        dcc.DatePickerRange(
+            id='date-picker-range',
+            min_date_allowed=datetime.datetime(2021, 1, 1),
+            max_date_allowed=datetime.datetime.today(),
+            initial_visible_month=datetime.datetime.today(),
+            end_date=datetime.datetime.today(),
+        ),
+        dcc.Graph(id='my_graph_bs',figure ='figure'),
+        html.P("This chart displays the average energy usage for a range of different businesses."),
+        html.P(" Tracking this indicator shows us how businesses are using energy and will allow us to predict for future usage with similar businesses."),   
+        html.Button('Download data', id='download-csv-button', n_clicks=0),
+        dcc.Download(id="download-data"),
+    ])
     
 @app.callback(
         Output('technical_tabs_1_content', 'children'),
@@ -2568,6 +2639,115 @@ def calc_difference_in_hours(start_time, end_time):
     diff_seconds = diff.total_seconds()
     diff_hours = diff_seconds/3600
     return diff_hours          
+# Callback to update the graph
+@app.callback(
+    Output(component_id='my_graph_bs', component_property='figure'),
+    [Input('name-dropdown', 'value'),
+     Input('date-picker-range', 'start_date'),
+     Input('date-picker-range', 'end_date')]
+)
+def update_graph(value, start_date, end_date):
+    print("Business type: ", value)
+    all_data = []
+    timestamps =[]
+    
+    # Filter the DataFrame based on the selected name
+    subset_df = df_businesslist[df_businesslist[value].str.contains('yes')]
+
+    # Fetch data from API using the current value
+    
+    header = {'Authorization': 'Token 91b021f1dad23ed3967fd7b3fcee130f4859f8fe'}
+    for i in subset_df['customer_id']:
+        #print(i)
+        if str(i).lower() != 'nan':
+            
+            url =  f"https://api.steama.co/customers/{i}/utilities/1/usage/?start_time={start_date}&end_time={end_date}"
+            print("Get: ", url)
+            response = requests.get(url=url, headers=header)
+
+            if response.status_code == 200:
+                api_data = response.content
+                #print(api_data)
+                if "api_df" in locals():
+                    api_df = api_df.append(pd.read_json(io.BytesIO(api_data)))
+                else:
+                    api_df = pd.read_json(io.BytesIO(api_data))
+                #print(api_df)
+
+    #print("API Data:", api_df)   
+            
+    try:
+        api_df['timestamp'] = pd.to_datetime(api_df['timestamp'])
+        
+        # Filter data between start_date and end_date
+        mask = (api_df['timestamp'] >= start_date) & (api_df['timestamp'] <= end_date)
+        api_df = api_df.loc[mask]
+        
+        # Convert timestamp values to 24-hour format
+        api_df['timestamp'] = api_df['timestamp'].dt.strftime('%H:%M')
+        
+        # Calculate the average data
+        average_data = api_df.groupby(api_df.timestamp)['usage'].mean()
+        #print("Average data:\n", average_data)
+        #print(average_data.index)
+        
+        figure = {
+        'data': [
+            {'x': average_data.index, 'y': average_data, 'type': 'scatter', 'mode': 'lines+markers', 'name': 'Average Data'}
+        ],
+        'layout': { 'title': 'Average Data Across Customers over a day',
+                'xaxis': {'title': 'Time (hours)'},
+                'yaxis': {'title': 'Average Usage (kWh)'},
+                
+                
+                   }
+        }
+    except:
+        # Return an empty figure
+        return {
+            'data': [],
+            'layout': {'title': 'Please select a date range'}
+        }
+    
+    # Create the plot figure using the average data
+    
+
+    return figure
+
+# Callback to handle CSV download
+@app.callback(
+    Output("download-data", "data"),
+    [Input('download-csv-button', 'n_clicks')],
+    [State('name-dropdown', 'value'),
+     State('date-picker-range', 'start_date'),
+     State('date-picker-range', 'end_date')]
+)
+def download_csv(n_clicks, value, start_date, end_date):
+    if n_clicks > 0:
+        subset_df = df_businesslist[df_businesslist[value].str.contains('yes')]
+        # Fetch data from API using the current value
+        header = {'Authorization': 'Token 91b021f1dad23ed3967fd7b3fcee130f4859f8fe'}
+        api_df = pd.DataFrame()
+        for i in subset_df['customer_id']:
+            if str(i).lower() != 'nan':
+                url = f"https://api.steama.co/customers/{i}/utilities/1/usage/?start_time={start_date}&end_time={end_date}"
+                print("Get: ", url)
+                response = requests.get(url=url, headers=header)
+
+                if response.status_code == 200:
+                    api_data = response.content
+                    if not api_df.empty:
+                        api_df = api_df.append(pd.read_json(io.BytesIO(api_data)))
+                    else:
+                        api_df = pd.read_json(io.BytesIO(api_data))
+
+        # Convert filtered data to CSV string
+        csv_string = api_df.to_csv(index=False, encoding='utf-8')
+        # Encode CSV string as base64
+        csv_string = "data:text/csv;base64," + base64.b64encode(csv_string.encode()).decode()
+        # Return download link
+        return dcc.send_data_frame(api_df.to_csv, filename="Business Average usage.csv", index=False)
+
 
 @app.callback(
     Output('slct_customer_2', 'options'),
