@@ -1059,7 +1059,7 @@ def render_business_tabs(tab):
         {'label': 'Tailor', 'value': 'Tailor'},
         {'label': 'Wood/metal shop', 'value': 'wood/metal_shop'},
         {'label': 'Phone charging', 'value': 'phone_charging'},
-        {'label': 'Other', 'value': 'other'},
+        {'label': 'Other', 'value': 'Other'},
         ]
     if tab == 'tab-1':
         return html.Div([
