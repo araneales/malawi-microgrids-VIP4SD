@@ -2638,79 +2638,89 @@ def calc_difference_in_hours(start_time, end_time):
     diff = end - start
     diff_seconds = diff.total_seconds()
     diff_hours = diff_seconds/3600
-    return diff_hours          
+    return diff_hours
+
+def split_date_range(start_date, end_date, interval_days=40):
+    date_intervals = []
+    
+    # Check if start_date or end_date is None
+    if start_date is None or end_date is None:
+        return date_intervals
+    
+    # Convert start_date and end_date to datetime objects if they are strings
+    if isinstance(start_date, str):
+        start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d')
+    if isinstance(end_date, str):
+        end_date =  datetime.datetime.strptime(end_date, '%Y-%m-%dT%H:%M:%S.%f')
+
+    
+    current_start_date = start_date
+    while current_start_date < end_date:
+        current_end_date = min(current_start_date +  datetime.timedelta(days=interval_days), end_date)
+        date_intervals.append((current_start_date, current_end_date))
+        current_start_date = current_end_date +  datetime.timedelta(days=1)
+    return date_intervals
+
 # Callback to update the graph
 @app.callback(
     Output(component_id='my_graph_bs', component_property='figure'),
     [Input('name-dropdown', 'value'),
      Input('date-picker-range', 'start_date'),
      Input('date-picker-range', 'end_date')]
-)
+    )
 def update_graph(value, start_date, end_date):
     print("Business type: ", value)
     all_data = []
-    timestamps =[]
-    
+    timestamps = []
+
     # Filter the DataFrame based on the selected name
     subset_df = df_businesslist[df_businesslist[value].str.contains('yes')]
 
     # Fetch data from API using the current value
-    
     header = {'Authorization': 'Token 91b021f1dad23ed3967fd7b3fcee130f4859f8fe'}
-    for i in subset_df['customer_id']:
-        #print(i)
-        if str(i).lower() != 'nan':
-            
-            url =  f"https://api.steama.co/customers/{i}/utilities/1/usage/?start_time={start_date}&end_time={end_date}"
-            print("Get: ", url)
-            response = requests.get(url=url, headers=header)
+    api_df = pd.DataFrame()
+    date_intervals = split_date_range(start_date, end_date)
+    for interval_start, interval_end in date_intervals:
+        for i in subset_df['customer_id']:
+            if str(i).lower() != 'nan':
+                url = f"https://api.steama.co/customers/{i}/utilities/1/usage/?start_time={interval_start}&end_time={interval_end}"
+                print("Get: ", url)
+                response = requests.get(url=url, headers=header)
 
-            if response.status_code == 200:
-                api_data = response.content
-                #print(api_data)
-                if "api_df" in locals():
+                if response.status_code == 200:
+                    api_data = response.content
                     api_df = api_df.append(pd.read_json(io.BytesIO(api_data)))
-                else:
-                    api_df = pd.read_json(io.BytesIO(api_data))
-                #print(api_df)
+                    print(f"Data for {interval_start} - {interval_end} retrieved.")
 
-    #print("API Data:", api_df)   
-            
     try:
         api_df['timestamp'] = pd.to_datetime(api_df['timestamp'])
-        
+
         # Filter data between start_date and end_date
         mask = (api_df['timestamp'] >= start_date) & (api_df['timestamp'] <= end_date)
         api_df = api_df.loc[mask]
-        
+
         # Convert timestamp values to 24-hour format
         api_df['timestamp'] = api_df['timestamp'].dt.strftime('%H:%M')
-        
+
         # Calculate the average data
         average_data = api_df.groupby(api_df.timestamp)['usage'].mean()
-        #print("Average data:\n", average_data)
-        #print(average_data.index)
-        
+
         figure = {
-        'data': [
-            {'x': average_data.index, 'y': average_data, 'type': 'scatter', 'mode': 'lines+markers', 'name': 'Average Data'}
-        ],
-        'layout': { 'title': 'Average Data Across Customers over a day',
-                'xaxis': {'title': 'Time (hours)'},
-                'yaxis': {'title': 'Average Usage (kWh)'},
-                
-                
-                   }
+            'data': [
+                {'x': average_data.index, 'y': average_data, 'type': 'scatter', 'mode': 'lines+markers',
+                 'name': 'Average Data'}
+            ],
+            'layout': {'title': 'Average Data Across Customers over a day',
+                       'xaxis': {'title': 'Time'},
+                       'yaxis': {'title': 'Average Usage (kWh)'},
+                       }
         }
     except:
         # Return an empty figure
         return {
             'data': [],
-            'layout': {'title': 'Please select a date range'}
+            'layout': {'title': 'Please select date range'}
         }
-    
-    # Create the plot figure using the average data
-    
 
     return figure
 
