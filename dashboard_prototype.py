@@ -2724,7 +2724,6 @@ def update_graph(value, start_date, end_date):
 
     return figure
 
-# Callback to handle CSV download
 @app.callback(
     Output("download-data", "data"),
     [Input('download-csv-button', 'n_clicks')],
@@ -2751,14 +2750,25 @@ def download_csv(n_clicks, value, start_date, end_date):
                     else:
                         api_df = pd.read_json(io.BytesIO(api_data))
 
-        # Convert filtered data to CSV string
-        csv_string = api_df.to_csv(index=False, encoding='utf-8')
-        # Encode CSV string as base64
-        csv_string = "data:text/csv;base64," + base64.b64encode(csv_string.encode()).decode()
-        # Return download link
-        return dcc.send_data_frame(api_df.to_csv, filename="Business Average usage.csv", index=False)
-
-
+        try:
+            # Convert timestamp values to 24-hour format
+            api_df['timestamp'] = pd.to_datetime(api_df['timestamp']).dt.strftime('%H:%M')
+            
+            # Calculate the average usage for each unique timestamp
+            average_usage = api_df.groupby('timestamp')['usage'].mean().reset_index()
+            
+            # Convert the data to CSV string
+            csv_string = average_usage.to_csv(index=False, encoding='utf-8')
+            
+            # Encode CSV string as base64
+            csv_string = "data:text/csv;base64," + base64.b64encode(csv_string.encode()).decode()
+            
+            # Return download link
+            return dcc.send_data_frame(average_usage.to_csv, filename="Time_and_Average_Usage.csv", index=False)
+        
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
 @app.callback(
     Output('slct_customer_2', 'options'),
     [Input('slct_grid_6_2', 'value')])
