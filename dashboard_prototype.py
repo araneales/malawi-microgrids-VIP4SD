@@ -2649,16 +2649,16 @@ def split_date_range(start_date, end_date, interval_days=40):
     
     # Convert start_date and end_date to datetime objects if they are strings
     if isinstance(start_date, str):
-        start_date = dt.datetime.strptime(start_date, '%Y-%m-%d')
+        start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d')
     if isinstance(end_date, str):
         # Split the date and time components and take only the date part
-        end_date = dt.datetime.strptime(end_date.split('T')[0], '%Y-%m-%d')
+        end_date = datetime.datetime.strptime(end_date.split('T')[0], '%Y-%m-%d')
 
     current_start_date = start_date
     while current_start_date < end_date:
-        current_end_date = min(current_start_date + dt.timedelta(days=interval_days), end_date)
+        current_end_date = min(current_start_date + datetime.timedelta(days=interval_days), end_date)
         date_intervals.append((current_start_date, current_end_date))
-        current_start_date = current_end_date + dt.timedelta(days=1)
+        current_start_date = current_end_date + datetime.timedelta(days=1)
     return date_intervals
 
 
