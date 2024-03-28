@@ -4,8 +4,8 @@
 """
 Created on Thu Feb 11 15:53:26 2021:
 @original author: heatherwaddell
-@pre existing author(s): aaron,chris,jack
-@current author(s): ian,jamie,adam,ruaridh,
+@pre existing author(s): aaron,chris,jackian,jamie,adam,ruaridh,
+@current author(s): Boluwatiwi, Sanyukta, Ben
 
 STEPs to get code running:
 - install code running application (suggested: VScode)
