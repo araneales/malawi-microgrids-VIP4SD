@@ -1,11 +1,11 @@
-#!/usr/bin/env python3
+ #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """
 Created on Thu Feb 11 15:53:26 2021:
 @original author: heatherwaddell
-@pre existing author(s): aaron,chris,jack
-@current author(s): ian,jamie,adam,ruaridh,
+@pre existing author(s): aaron,chris,jackian,jamie,adam,ruaridh,
+@current author(s): Boluwatiwi, Sanyukta, Ben
 
 STEPs to get code running:
 - install code running application (suggested: VScode)
@@ -27,7 +27,7 @@ from dash import State
 from dash import Dash, dcc, html, Input, Output, dash_table
 from dash import dcc
 from dash import html
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 import requests
 from requests.structures import CaseInsensitiveDict
@@ -42,6 +42,9 @@ from firebase_admin import db
 import time
 import xlsxwriter
 import io
+import urllib.parse
+import base64
+from flask import send_file
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.ZEPHYR, dbc.icons.BOOTSTRAP],suppress_callback_exceptions=True) 
@@ -136,9 +139,6 @@ cred = credentials.Certificate({"type": "service_account",
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-q13qo%40openrmu.iam.gserviceaccount.com" })
 
 # Initialize the app with a service account, granting admin privileges
-firebase_admin.initialize_app(cred, {
-        'databaseURL': 'https://openrmu-default-rtdb.europe-west1.firebasedatabase.app' # 'https://openrmu-default-rtdb.europe-west1.firebasedatabase.app'
-       }) 
 
 cred_kud = credentials.Certificate({"type": "service_account",
   "project_id": "openrmu",
@@ -273,6 +273,7 @@ df_WomenIndependance = pd.read_excel(os.path.join(APP_ROOT, r'Women_Independance
 df_WomenRespectHOME = pd.read_excel(os.path.join(APP_ROOT, r'Respect_Household.xlsx'))
 df_WomenRespectCOMM = pd.read_excel(os.path.join(APP_ROOT, r'Respect_Community.xlsx'))
 df_HomeSecurity = pd.read_excel(os.path.join(APP_ROOT, r'HouseholdSecurity.xlsx'))
+df_businesslist = pd.read_excel("Businesslist1.xlsx",converters={'customer_id':str})
 #......................FUNCTIONS...............................................
 # Health and Education #
 def funct_StudyingHours(df):
@@ -790,13 +791,29 @@ sidebar = html.Div(
         html.Hr(),
         dbc.Nav(
             [
-                dbc.NavLink("Home", href="/", active="exact", external_link=True),
-                dbc.NavLink("Demand & Revenue", href="/demand", active="exact", external_link=True),
-                dbc.NavLink("Generation & Storage", href="/technical", active="exact", external_link=True),
-                dbc.NavLink("Social & Environmental", href="/social", active="exact", external_link=True),
-                dbc.NavLink("Maintenance", href="/maintenance", active="exact", external_link=True),
-                dbc.NavLink("Learn More", href = "/learnmore", active="exact", external_link=True)
-            ],
+                dbc.NavLink("Home", href="/", active="exact", external_link=True,
+                style={"color": "#000"}, 
+                            id="nav-home"),
+                dbc.NavLink("Demand & Revenue", href="/demand", active="exact", external_link=True,
+                     style={"color": "#000"}, 
+                            id="nav-demand"),       
+                dbc.NavLink("Generation & Storage", href="/technical", active="exact", external_link=True,
+                      style={"color": "#000"}, 
+                            id="nav-generation"),       
+                dbc.NavLink("Social & Environmental", href="/social", active="exact", external_link=True,
+                            style={"color": "#000"}, 
+                            id="nav-social"),
+                dbc.NavLink("Productive Uses Of Energy", href="/business", active="exact", external_link=True,
+                            style={"color": "#000"}, 
+                            id="nav-business"),                            
+                dbc.NavLink("Maintenance", href="/maintenance", active="exact", external_link=True,
+                            style={"color": "#000"}, 
+                            id="nav-maintenance"),
+             
+                dbc.NavLink("Learn More", href = "/learnmore", active="exact", external_link=True,
+                            style={"color": "#000"}, 
+                            id="nav-learnmore")
+                            ],
             vertical=True,
             pills=True,
         ),
@@ -814,6 +831,7 @@ app.layout = html.Div([
     sidebar,
     content
 ])
+
 # For YYYY-MM inputs
 if C_month < 10: # To suit YY/MM format since C_month does not include the 0 in front of singular months i.e 01,03
     currentYYMM = '{0}-0{1}'.format(C_year,C_month) # C_ = Current 
@@ -1010,7 +1028,25 @@ def render_page_content(pathname):
                 html.Hr(),
                 html.P("We hope that these links are of good use to you and that you find what you're looking for. However, please do not hesitate to contact us if you would like more information!"),
                 html.Div(id='learnmore'),
-                ]           
+                ]        
+    elif pathname == "/business":
+        return [
+                html.Div(
+                children = html.H1("Productive Uses of Energy"),style={'backgroundColor': '#f2f2f2', 'textAlign': 'center'}),
+                html.Hr(),
+                html.Hr(),
+                html.P("Business data is data relating to businessess. Each business type has been identified and the average energy usage is found ",style={'textAlign': 'center', 'margin': '20px 0'}),
+                
+                      
+                html.Br(),
+                html.Hr(),
+                dcc.Tabs(id='business_tabs', value='tab-1', children=[
+                dcc.Tab(label='Business Energy Usage', value='tab-1'), 
+               
+                ],),               
+                html.Div(id='business_tabs_content'),
+                ]
+    
     return dbc.Jumbotron(
         [
             html.H1("404: Not found", className="text-danger"),
@@ -1018,7 +1054,306 @@ def render_page_content(pathname):
             html.P(f"The pathname {pathname} was not recognised..."),
         ]
     )
+       
+@app.callback(
+     Output('business_tabs_content', 'children'),
+     [Input('business_tabs', 'value')
+      ]
+ )
+
+def render_business_tabs(tab):
+    dropdown_options = [
+        {'label': 'Grocery Shop', 'value': 'grocery_shop'},
+        {'label': 'Barber Shop', 'value': 'barber_shop'},
+        {'label': 'Bar', 'value': 'bar'},
+        {'label': 'Video Show', 'value': 'video_show'},
+        {'label': 'Street food vendor', 'value': 'street_food_vendor'},
+        {'label': 'Restaurant', 'value': 'restaurant'},
+        {'label': 'Tailor', 'value': 'tailor'},
+        {'label': 'Wood/metal shop', 'value': 'wood/metal_workshop'},
+        {'label': 'Phone charging', 'value': 'phone_charging'},
+        {'label': 'Other', 'value': 'Other'},
+        ]
     
+    years = [{'label': str(year), 'value': year} for year in range(2024, datetime.datetime.now().year + 1)]
+    
+    if tab == 'tab-1':
+        return html.Div([
+    
+
+            # Define the layout
+       html.Br(),
+       html.Br(),
+       html.Br(),
+            html.H2("Average Monthly Energy Usage by Year"),
+     dcc.Dropdown(
+         id='name-dropdown-yearly',
+         options=dropdown_options,
+         value=None,
+         placeholder="Please select a business",
+         style={'width': '300px', 'display': 'inline-block'}
+     ),
+     html.Span(
+        '?',  # Question mark icon
+        id='question-mark',
+        style={
+                    'font-size': '20px', 
+                    'color': 'blue', 
+                    'cursor': 'pointer', 
+                    'margin-left': '5px',
+                    'vertical-align': 'top'  # Ensures it aligns with the dropdown
+                }
+    ),
+     html.Div(
+            id='tooltip-container', 
+            style={
+                'font-size': '12px', 
+                'background-color': 'lightblue', 
+                'padding': '5px', 
+                'display': 'none',  # Hidden by default
+                'position': 'absolute',  # To place it next to the question mark
+                'top': '450px',
+                'left': '500px',
+                'border-radius': '5px',
+                'max-width': '350px',
+                'z-index': '999' 
+            }
+            
+),
+
+    
+    
+     dcc.Dropdown(
+         id='year-dropdown',
+         options=years,
+         value=None,
+         placeholder="Please select a year",
+         style={'width': '300px'}
+     ),
+     
+dcc.RadioItems(
+        id='chart-type-radio',
+    options=[
+        {'label': 'Bar Chart', 'value': 'bar'},
+        {'label': 'Line Chart', 'value': 'line'},
+        {'label': 'Scatter Plot', 'value': 'scatter'}
+    ],
+    value='bar',  # Default chart type is 'bar'
+    labelStyle={'display': 'inline-block', 'margin-right': '15px'},  # Inline styling for each label
+    style={'display': 'flex', 'margin-top': '10px'}
+    ),
+
+html.Div(
+    children=[
+        html.Div(
+            children="Please wait for the graph to load...",  # Message displayed during loading
+            id='loading-message',  # ID for the message to manipulate visibility
+            style={
+                'font-size': '20px',
+                'color': 'rgb(58, 113, 255)',  # Blue color for the message
+                'text-align': 'center',
+                'margin-top': '20px',
+                'display': 'block'
+            }
+        ),
+        dcc.Loading(
+            children=[
+                dcc.Graph(id='my_graph_yearly'),  # The graph will be rendered after the data is fetched
+
+            ],
+            type="circle",  # Type of spinner (circle, dot, or bar)
+        ),
+                html.Button('Download data', id='download-csv-button_bus_year', n_clicks=0),
+                dcc.Download(id="download-data_bus_year"),
+    ],
+    style={
+        'border': '2px solid black',  # Blue border color
+        'padding': '20px',  # Padding inside the box
+        'margin-top': '20px',  # Margin above the box
+        'border-radius': '8px',  # Rounded corners for the box
+        'background-color': 'rgb(255, 255, 255)'  # White background inside the box
+    }
+),
+            html.Br(),
+            html.Br(),
+       html.H2("Energy Usage Data Over Time"),
+html.Div(
+    children=[
+        dcc.Dropdown(
+            id='name-dropdown_2',
+            options=dropdown_options,
+            value=None,
+            placeholder="Please select a business",
+            style={'width': '300px'}
+        ),
+        html.Span(
+            '?',  # Question mark icon
+            id='question-mark_2',
+            style={
+                'font-size': '20px', 
+                'color': 'blue', 
+                'cursor': 'pointer', 
+                'margin-left': '5px',  # Space between dropdown and question mark
+                'display': 'inline-block',  # Display inline
+                'vertical-align': 'middle'  # Align vertically with dropdown
+            }
+        ),
+    ],
+    style={
+        'display': 'flex',  # Use flexbox for inline alignment of dropdown and question mark
+        'align-items': 'center'  # Vertically align the items
+    }
+),
+         dcc.DatePickerRange(
+             id='date-picker-range_2',
+             min_date_allowed=datetime.datetime(2021, 1, 1),
+             max_date_allowed=datetime.datetime.today(),
+             initial_visible_month=datetime.datetime.today(),
+             end_date=datetime.datetime.today(),
+         ),
+
+     html.Div(
+            id='tooltip-container_2', 
+            style={
+                'font-size': '12px', 
+                'background-color': 'lightblue', 
+                'padding': '5px', 
+                'display': 'none',  # Hidden by default
+                'position': 'absolute',  # To place it next to the question mark
+                'top': '1200px',
+                'left': '500px',
+                'border-radius': '5px',
+                'max-width': '350px',
+                'z-index': '999' 
+            }
+            
+),
+
+            
+html.Div(
+    children=[
+        # The loading spinner will be wrapped around the graph and message
+        dcc.Loading(
+            children=[
+                html.Div(
+                    children="Please wait for the graph to load...",  # Message displayed during loading
+                    id='loading-message-2',  # ID for the message to manipulate visibility
+                    style={
+                        'font-size': '20px',
+                        'color': 'rgb(58, 113, 255)',  # Blue color for the message
+                        'text-align': 'center',
+                        'margin-top': '20px',
+                        'display': 'none'  # Hide by default, show when loading
+                    }
+                ),
+                dcc.Graph(id='my_graph_bs', figure='figure'),
+            ],
+            type="circle",  # Type of spinner (circle, dot, or bar)
+        ),
+        html.Br(),
+        html.P("The graph displays the average energy usage for a range of different businesses over a 24-hour period."),
+        html.P("Tracking this indicator shows us how businesses are using energy and will allow a prediction of future usage with similar businesses."),
+        html.Button('Download data', id='download-csv-button', n_clicks=0),
+        dcc.Download(id="download-data"),
+    ],
+    style={
+        'border': '2px solid black',  # Black border color
+        'padding': '20px',  # Padding inside the box
+        'margin-top': '20px',  # Margin above the box
+        'border-radius': '8px',  # Rounded corners for the box
+        'background-color': 'rgb(255, 255, 255)'  # White background inside the box
+    }
+),
+])
+    def fetch_data_from_api(year):
+        header = {'Authorization': 'Token 91b021f1dad23ed3967fd7b3fcee130f4859f8fe'}
+        api_url =f"https://api.steama.co/customers/utilities/1/usage/{year}"
+        response = requests.get(url=url, headers=header)
+
+        # Check if the request was successful
+        if response.status_code == 200:
+            # Assume the API returns a JSON with a "date" and "usage" column
+            data = response.json()
+            df = pd.DataFrame(data)
+
+            # Ensure 'date' is in datetime format and extract month and year
+            df['date'] = pd.to_datetime(df['date'])
+            df['month'] = df['date'].dt.month
+
+            # Calculate monthly average usage
+            monthly_avg = df.groupby('month')['usage'].mean().reset_index()
+
+            # Add month names for better readability in the plot
+            monthly_avg['month_name'] = monthly_avg['month'].apply(lambda x: datetime.date(1900, x, 1).strftime('%B'))
+            return monthly_avg
+
+        else:
+            # Handle errors (e.g., API request failed)
+            print(f"Failed to fetch data for {year}: {response.status_code}")
+            return pd.DataFrame(columns=['month', 'usage', 'month_name'])  # Return an empty DataFrame if failed
+
+
+    
+@app.callback(
+    Output('business-description', 'children'),
+    Input('name-dropdown', 'value')
+)
+def update_business_info(selected_value):
+    # Descriptive text for each business type
+    text_dict = {
+        'grocery_shop': "A grocery shop is a small store which provides food and other necessities to the local community.",
+        'barber_shop': "A barber shop offers haircuts and other grooming services, consisting of a few chairs and using basic tools.",
+        'bar': "A bar is a spot where people come to socialise and enjoy drinks, the bar is  a simple setup used to unwind after a day's work.",
+        'video_show': "A video show is usually a small setup in home or communal area where community members can watch movies or local programmes on a TV, this provides a break and entertainment for the community.",
+        'street_food_vendor': "Street food vendors offer local snacks such as maize, mandasi (fried dough) or grilled meat.",
+        'restaurant': "A restaurant is usually a small family run establishment which provides local meals to the community and can be essential for workers who are unable to cook during daytime.",
+        'Tailor': "A tailor offers clothing repair and alterations, as well as clothing made from chitenje (a fabric), a tailor is  esesential for providing durable clothing.",
+        'wood/metal_shop': "A wood/metal shop is a small workshop that crafts and repairs items such as furniture, tools and farming equipmement, uisng locally sourced wood and metal, supporting community needs at home and for farming.",
+        'phone_charging': "Phone charging stations, which are normally located in a shop or kiosk allows villagers to pay a small fee to charge their phones due to limited electricity access at their homes.",
+        'Other': "Other small businesses provide unique services such as carpentry and help in contribuiting to the economy and village life."
+    }
+    return text_dict.get(selected_value, "Select a business type to see details.")
+
+@app.callback(Output("nav-home", "style"), [Input("nav-home", "n_clicks")], prevent_initial_call=True)
+def update_nav_home(n_clicks):
+    if n_clicks:
+        return {"color": "#f39c12"}
+
+@app.callback(Output("nav-demand", "style"), [Input("nav-demand", "n_clicks")], prevent_initial_call=True)
+def update_nav_demand(n_clicks):
+    if n_clicks:
+        return {"color": "#f39c12"}
+
+@app.callback(Output("nav-generation", "style"), [Input("nav-generation", "n_clicks")], prevent_initial_call=True)
+def update_nav_generation(n_clicks):
+    if n_clicks:
+        return {"color": "#f39c12"}
+
+@app.callback(Output("nav-social", "style"), [Input("nav-social", "n_clicks")], prevent_initial_call=True)
+def update_nav_social(n_clicks):
+    if n_clicks:
+        return {"color": "#f39c12"}
+
+@app.callback(Output("nav-business", "style"), [Input("nav-business", "n_clicks")], prevent_initial_call=True)
+def update_nav_business(n_clicks):
+    if n_clicks:
+        return {"color": "#f39c12"}
+
+@app.callback(Output("nav-maintenance", "style"), [Input("nav-maintenance", "n_clicks")], prevent_initial_call=True)
+def update_nav_maintenance(n_clicks):
+    if n_clicks:
+        return {"color": "#f39c12"}
+
+@app.callback(Output("nav-learnmore", "style"), [Input("nav-learnmore", "n_clicks")], prevent_initial_call=True)
+def update_nav_learnmore(n_clicks):
+    if n_clicks:
+        return {"color": "#f39c12"}
+def update_nav_hover(n_clicks):
+    if n_clicks:
+        return {"color": "#f39c12"} 
+    
+
+
 @app.callback(
         Output('technical_tabs_1_content', 'children'),
         Input('technical_tabs_1', 'value'))
@@ -2567,7 +2902,558 @@ def calc_difference_in_hours(start_time, end_time):
     diff = end - start
     diff_seconds = diff.total_seconds()
     diff_hours = diff_seconds/3600
-    return diff_hours          
+    return diff_hours
+
+def split_date_range(start_date, end_date, interval_days=40):
+    date_intervals = []
+    
+    # Check if start_date or end_date is None
+    if start_date is None or end_date is None:
+        return date_intervals
+    
+    # Convert start_date and end_date to datetime objects if they are strings
+    if isinstance(start_date, str):
+        start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d')
+    if isinstance(end_date, str):
+        # Split the date and time components and take only the date part
+        end_date = datetime.datetime.strptime(end_date.split('T')[0], '%Y-%m-%d')
+
+    current_start_date = start_date
+    while current_start_date < end_date:
+        current_end_date = min(current_start_date + datetime.timedelta(days=interval_days), end_date)
+        date_intervals.append((current_start_date, current_end_date))
+        current_start_date = current_end_date + datetime.timedelta(days=1)
+    return date_intervals
+
+# Callback to update the graph
+@app.callback(
+    Output(component_id='my_graph_bs', component_property='figure'),
+    [Input('name-dropdown_2', 'value'),
+     Input('date-picker-range_2', 'start_date'),
+     Input('date-picker-range_2', 'end_date')]
+)
+def update_graph(value, start_date, end_date):
+    print("Business type: ", value)
+
+    if not start_date or not end_date:
+        # If no date range is selected, show only the message instead of a graph
+        figure = {
+            'data': [],
+            'layout': {
+                'title': {
+                    'text': 'Please select a date range',
+                    'font': {'size': 18, 'color': 'rgb(33, 37, 41)'},
+                    'x': 0.5,
+                    'y': 0.5,
+                },
+                'xaxis': {'showgrid': False, 'showline': False, 'zeroline': False, 'showticklabels': False},
+                'yaxis': {'showgrid': False, 'showline': False, 'zeroline': False, 'showticklabels': False},
+                'plot_bgcolor': 'rgb(255, 255, 255)',
+                'paper_bgcolor': 'rgb(255, 255, 255)',
+            }
+        }
+        return figure
+
+    # Filter the DataFrame based on the selected business type
+    subset_df = df_businesslist[df_businesslist[value].str.contains('yes')]
+
+    # Fetch data from API using the current value
+    header = {'Authorization': 'Token 91b021f1dad23ed3967fd7b3fcee130f4859f8fe'}
+    api_df = pd.DataFrame()
+    date_intervals = split_date_range(start_date, end_date)
+
+    for interval_start, interval_end in date_intervals:
+        for i in subset_df['customer_id']:
+            if str(i).lower() != 'nan':
+                url = f"https://api.steama.co/customers/{i}/utilities/1/usage/?start_time={interval_start}&end_time={interval_end}"
+                response = requests.get(url=url, headers=header)
+
+                if response.status_code == 200:
+                    api_data = response.content
+                    api_df = api_df.append(pd.read_json(io.BytesIO(api_data)))
+                    print(f"Data for {interval_start} - {interval_end} retrieved.")
+
+    try:
+        api_df['timestamp'] = pd.to_datetime(api_df['timestamp'])
+
+        # Filter data between start_date and end_date
+        mask = (api_df['timestamp'] >= start_date) & (api_df['timestamp'] <= end_date)
+        api_df = api_df.loc[mask]
+
+        # Calculate the hourly average
+        api_df['hour'] = api_df['timestamp'].dt.hour
+        hourly_avg = api_df.groupby('hour')['usage'].mean()
+
+        # Check if hourly average data is complete
+        all_hours = set(range(24))  # All hours (0-23)
+        available_hours = set(hourly_avg.index)  # Hours with data
+
+        if available_hours != all_hours:
+            # If any hour is missing in the hourly average, display a warning message
+            figure = {
+                'data': [],
+                'layout': {
+                    'title': {
+                        'text': 'Data not available for this time range',
+                        'font': {'size': 18, 'color': 'rgb(33, 37, 41)'},
+                        'x': 0.5,
+                        'y': 0.5,
+                    },
+                    'xaxis': {'showgrid': False, 'showline': False, 'zeroline': False, 'showticklabels': False},
+                    'yaxis': {'showgrid': False, 'showline': False, 'zeroline': False, 'showticklabels': False},
+                    'plot_bgcolor': 'rgb(255, 255, 255)',
+                    'paper_bgcolor': 'rgb(255, 255, 255)',
+                }
+            }
+            return figure
+
+        # Create the graph
+        figure = {
+            'data': [
+                {'x': hourly_avg.index,
+                 'y': hourly_avg,
+                 'type': 'scatter',
+                 'mode': 'lines+markers',
+                 'name': 'Average Data',
+                 'line': {'color': 'rgb(58, 113, 255)', 'width': 3},
+                 'marker': {'color': 'rgb(58, 113, 255)', 'size': 8, 'line': {'width': 2, 'color': 'white'}}
+                }
+            ],
+            'layout': {
+                'title': {
+                    'text': 'Average Energy Usage Across Customers Over a Day',
+                    'font': {'size': 24, 'family': 'Arial', 'color': 'rgb(33, 37, 41)'},
+                    'x': 0.5
+                },
+                'xaxis': {
+                    'title': {'text': 'Time', 'font': {'size': 18, 'family': 'Arial', 'color': 'rgb(33, 37, 41)'}},
+                    'showgrid': True,
+                    'gridcolor': 'rgba(0, 0, 0, 0.1)',
+                    'tickangle': 45
+                },
+                'yaxis': {
+                    'title': {'text': 'Average Energy Usage (kWh)', 'font': {'size': 18, 'family': 'Arial', 'color': 'rgb(33, 37, 41)'}},
+                    'showgrid': True,
+                    'gridcolor': 'rgba(0, 0, 0, 0.1)'
+                },
+                'plot_bgcolor': 'rgb(255, 255, 255)',
+                'paper_bgcolor': 'rgb(255, 255, 255)',
+                'margin': {'l': 60, 'r': 60, 't': 100, 'b': 50},
+                'hovermode': 'closest',
+                'template': 'plotly_white'
+            }
+        }
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return {
+            'data': [],
+            'layout': {'title': 'Error retrieving data. Please try again later.'}
+        }
+
+    return figure
+@app.callback(
+    [Output('my_graph_yearly', 'figure'),
+     Output('loading-message', 'style')],  # Controls visibility of the loading message
+    [Input('name-dropdown-yearly', 'value'),
+     Input('year-dropdown', 'value'),
+     Input('chart-type-radio', 'value')]  # Change dropdown to radio input
+)
+def update_yearly_graph(value, selected_year, chart_type):
+    print("Yearly Graph - Business type:", value)
+
+    # --- Step 1: Show the loading message ---
+    loading_message_style = {'display': 'block'}  # Show the loading message initially
+
+    # --- Step 2: Check if year or business type is missing ---
+    if not selected_year or not value:
+        # If no year or business type is selected, show a message instead of a graph
+        figure = {
+            'data': [],  # No data for the graph
+            'layout': {
+                'title': {
+                    'text': 'Please select a year and business type',  # Display the message
+                    'font': {'size': 18, 'color': 'rgb(33, 37, 41)'},  # Styling for the message
+                    'x': 0.5,  # Title centered
+                    'y': 0.5,  # Title vertically centered
+                },
+                'xaxis': {
+                    'showgrid': False,  # Hide grid
+                    'showline': False,  # Hide axis line
+                    'showticklabels': False,  # Hide tick labels
+                    'ticks': '',  # No tick marks
+                    'zeroline': False 
+                },
+                'yaxis': {
+                    'showgrid': False,  # Hide grid
+                    'showline': False,  # Hide axis line
+                    'showticklabels': False,  # Hide tick labels
+                    'ticks': '',  # No tick marks
+                    'zeroline': False 
+                },
+                'plot_bgcolor': 'rgb(255, 255, 255)',  # White background
+                'paper_bgcolor': 'rgb(255, 255, 255)',  # White paper background
+                'margin': {'l': 60, 'r': 60, 't': 100, 'b': 50},  # Adjust margins for the message
+            }
+        }
+        loading_message_style = {'display': 'none'}  # Hide the loading message if no year or business type is selected
+        return figure, loading_message_style  # Return the message and hide the loading message
+
+    # Proceed with data processing if year and business type are selected
+
+    # Filter the DataFrame based on the selected business type
+    subset_df = df_businesslist[df_businesslist[value].str.contains('yes')]
+
+    # Fetch data from API using the selected year
+    header = {'Authorization': 'Token 91b021f1dad23ed3967fd7b3fcee130f4859f8fe'}
+    api_df = pd.DataFrame()
+
+    # Retrieve data for each customer and each month within the selected year
+    for month in range(1, 13):  # January to December
+        month_start = f"{selected_year}-{month:02d}-01"
+        month_end = f"{selected_year}-{month:02d}-{pd.Period(month_start).days_in_month}"
+
+        for customer_id in subset_df['customer_id']:
+            if str(customer_id).lower() != 'nan':
+                url = f"https://api.steama.co/customers/{customer_id}/utilities/1/usage/?start_time={month_start}&end_time={month_end}"
+                response = requests.get(url=url, headers=header)
+
+                if response.status_code == 200:
+                    api_data = response.content
+                    month_data = pd.read_json(io.BytesIO(api_data))
+                    month_data['month'] = month  # Add a month column for filtering later
+                    api_df = pd.concat([api_df, month_data], ignore_index=True)
+                    print(f"Data for {month_start} to {month_end} retrieved.")
+
+    try:
+        if api_df.empty:
+            # If the API returns no data, show the message "No data available"
+            figure = {
+                'data': [],
+                'layout': {
+                    'title': 'No data available for the selected date range',
+                    'font': {'size': 18, 'color': 'rgb(33, 37, 41)'},
+                    'xaxis': {'showgrid': False, 'showline': False, 'showticklabels': False, 'ticks': '', 'zeroline': False},
+                    'yaxis': {'showgrid': False, 'showline': False, 'showticklabels': False, 'ticks': '', 'zeroline': False},
+                    'plot_bgcolor': 'rgb(255, 255, 255)',  # White background
+                    'paper_bgcolor': 'rgb(255, 255, 255)',  # White paper background
+                    'margin': {'l': 60, 'r': 60, 't': 100, 'b': 50},  # Adjust margins for the message
+                }
+            }
+            loading_message_style = {'display': 'none'}  # Hide loading message
+            return figure, loading_message_style  # Hide the loading message if no data
+
+        # Proceed with generating the graph if data is available
+        api_df['timestamp'] = pd.to_datetime(api_df['timestamp'])
+
+        # Filter data for the selected year
+        mask = (api_df['timestamp'].dt.year == selected_year)
+        api_df = api_df.loc[mask]
+
+        # Group data by hour and calculate the average usage for each hour of the day
+        api_df['hour'] = api_df['timestamp'].dt.hour
+        hourly_avg = api_df.groupby('hour')['usage'].mean().reset_index()
+
+        # Check if there is data for all 24 hours
+        all_hours = set(range(24))  # Set of all 24 hours (0-23)
+        available_hours = set(hourly_avg['hour'])  # Set of available hours in the data
+        # Identify unavailable hours
+        unavailable_hours = all_hours - available_hours
+        
+        # Add the print statement here
+        print(f"Unavailable hours: {sorted(unavailable_hours)}")
+        # If not all 24 hours are present, display the "Data not available" message
+        if available_hours != all_hours:
+            figure = {
+                'data': [],
+                'layout': {
+                    'title': 'Data not available for a full 24-hour period',
+                    'font': {'size': 18, 'color': 'rgb(33, 37, 41)'},
+                    'xaxis': {'showgrid': False, 'showline': False, 'showticklabels': False, 'ticks': '', 'zeroline': False},
+                    'yaxis': {'showgrid': False, 'showline': False, 'showticklabels': False, 'ticks': '', 'zeroline': False},
+                    'plot_bgcolor': 'rgb(255, 255, 255)',  # White background
+                    'paper_bgcolor': 'rgb(255, 255, 255)',  # White paper background
+                    'margin': {'l': 60, 'r': 60, 't': 100, 'b': 50},  # Adjust margins for the message
+                }
+            }
+            loading_message_style = {'display': 'none'}  # Hide the loading message if no full 24-hour data
+            return figure, loading_message_style  # Show "Data not available" message
+
+        # Create the figure based on the selected chart type
+        if chart_type == 'bar':
+            figure = {
+                'data': [
+                    go.Bar(x=hourly_avg['hour'], y=hourly_avg['usage'], name=f'Average Hourly Usage {selected_year}')
+                ],
+                'layout': {
+                    'title': f'Average Hourly Energy Usage in {selected_year}',
+                    'xaxis': {'title': 'Hour of the Day', 'tickvals': [i for i in range(24)], 'ticktext': [f"{i}:00" for i in range(24)]},
+                    'yaxis': {'title': 'Average Usage (kWh)'},
+                }
+            }
+        elif chart_type == 'line':
+            figure = {
+                'data': [
+                    go.Scatter(x=hourly_avg['hour'], y=hourly_avg['usage'], mode='lines', name=f'Average Hourly Usage {selected_year}')
+                ],
+                'layout': {
+                    'title': f'Average Hourly Energy Usage in {selected_year}',
+                    'xaxis': {'title': 'Hour of the Day', 'tickvals': [i for i in range(24)], 'ticktext': [f"{i}:00" for i in range(24)]},
+                    'yaxis': {'title': 'Average Usage (kWh)'},
+                }
+            }
+        elif chart_type == 'scatter':
+            figure = {
+                'data': [
+                    go.Scatter(x=hourly_avg['hour'], y=hourly_avg['usage'], mode='markers', name=f'Average Hourly Usage {selected_year}')
+                ],
+                'layout': {
+                    'title': f'Average Hourly Energy Usage in {selected_year}',
+                    'xaxis': {'title': 'Hour of the Day', 'tickvals': [i for i in range(24)], 'ticktext': [f"{i}:00" for i in range(24)]},
+                    'yaxis': {'title': 'Average Usage (kWh)'},
+                }
+            }
+
+        # Hide the loading message once the data is rendered
+        loading_message_style = {'display': 'none'}
+
+    except Exception as e:
+        print(f"Error: {e}")
+        # Return an error message if there's an issue
+        return {
+            'data': [],
+            'layout': {'title': 'Error occurred while fetching data'}
+        }, {'display': 'none'}
+
+    # Return the final graph and hide the loading message
+    # Print out debugging information
+    print(f"Requested data for {selected_year}: {len(api_df)} records.")
+    print(f"Available hours: {available_hours}")
+    print(f"Filtered data length for {selected_year}: {len(api_df)}")
+
+    return figure, loading_message_style
+
+@app.callback(
+    Output('tooltip-container', 'style'),
+    [Input('question-mark', 'n_clicks')],
+    [State('tooltip-container', 'style')]
+)
+def toggle_tooltip(n_clicks, tooltip_style):
+    if n_clicks:
+        # Toggle tooltip visibility when clicking on the question mark
+        if tooltip_style['display'] == 'none':
+            tooltip_style['display'] = 'block'  # Show the tooltip on click
+        else:
+            tooltip_style['display'] = 'none'  # Hide the tooltip on click
+    return tooltip_style
+@app.callback(
+    Output('tooltip-container', 'children'),
+    [Input('name-dropdown-yearly', 'value')]
+)
+def update_tooltip_text(selected_value):
+    # Define the tooltip text based on the selected business type
+    if selected_value == 'grocery_shop':
+            return "Grocery Shop: A small store providing essential items to local families."
+    elif selected_value == 'barber_shop':
+        return "Barber Shop: A modest shop offering affordable haircuts and grooming services, usually with a few chairs and basic tools."
+    elif selected_value == 'bar':
+        return "Bar: A local gathering spot where people come to socialise and enjoy traditional drinks."
+    elif selected_value == 'video_show':
+        return "Video Show: A small setup, often in a home or communal space, where villagers can watch movies or local programs on a TV, providing entertainment and a break from daily routines."
+    elif selected_value == 'street_food_vendor':
+        return "Street Food Vendor: A street food vendor offers local snacks such as roasted maize, mandasi (fried dough), and grilled meat."
+    elif selected_value == 'restaurant':
+        return "Restaurant: A small establishment providing local meals like nsima (cornmeal porridge)  or meat. These restaurants are vital for workers who may not have time to cook during the day."
+    elif selected_value == 'tailor':
+        return "Tailor: A local tailor provides clothing repair and alterations, as well as custom clothing made from vibrant chitenje (fabric) for special occasions."
+    elif selected_value == 'wood/metal_workshop':
+        return "Wood/Metal Shop: A small workshop that crafts and repairs items like furniture, tools, and farming equipment, using locally sourced wood and metal. "
+    elif selected_value == 'phone_charging':
+        return "Phone Charging: A phone charging station, often located in a shop or kiosk, where villagers can pay a small fee to charge their mobile phones due to limited access to electricity in homes."
+    elif selected_value == 'Other':
+        return "Other: Other small businesses provide a range of unique services, such as traditional medicine, or carpentry, each contributing to the economic and social fabric of village life."
+    else:
+        return "Select a business type from the dropdown."
+    
+    
+@app.callback(
+    Output('tooltip-container_2', 'style'),
+    [Input('question-mark_2', 'n_clicks')],
+    [State('tooltip-container_2', 'style')]
+)
+def toggle_tooltip_2(n_clicks, tooltip_style):
+    if n_clicks:
+        # Toggle tooltip visibility when clicking on the question mark
+        if tooltip_style['display'] == 'none':
+            tooltip_style['display'] = 'block'  # Show the tooltip on click
+        else:
+            tooltip_style['display'] = 'none'  # Hide the tooltip on click
+    return tooltip_style
+@app.callback(
+    Output('tooltip-container_2', 'children'),
+    [Input('name-dropdown_2', 'value')]
+)
+def update_tooltip_text_2(selected_value):
+    # Define the tooltip text based on the selected business type
+    if selected_value == 'grocery_shop':
+            return "Grocery Shop: A small store providing essential items to local families."
+    elif selected_value == 'barber_shop':
+        return "Barber Shop: A modest shop offering affordable haircuts and grooming services, usually with a few chairs and basic tools."
+    elif selected_value == 'bar':
+        return "Bar: A local gathering spot where people come to socialise and enjoy traditional drinks."
+    elif selected_value == 'video_show':
+        return "Video Show: A small setup, often in a home or communal space, where villagers can watch movies or local programs on a TV, providing entertainment and a break from daily routines."
+    elif selected_value == 'street_food_vendor':
+        return "Street Food Vendor: A street food vendor offers local snacks such as roasted maize, mandasi (fried dough), and grilled meat."
+    elif selected_value == 'restaurant':
+        return "Restaurant: A small establishment providing local meals like nsima (cornmeal porridge)  or meat. These restaurants are vital for workers who may not have time to cook during the day."
+    elif selected_value == 'tailor':
+        return "Tailor: A local tailor provides clothing repair and alterations, as well as custom clothing made from vibrant chitenje (fabric) for special occasions."
+    elif selected_value == 'wood/metal_workshop':
+        return "Wood/Metal Shop: A small workshop that crafts and repairs items like furniture, tools, and farming equipment, using locally sourced wood and metal. "
+    elif selected_value == 'phone_charging':
+        return "Phone Charging: A phone charging station, often located in a shop or kiosk, where villagers can pay a small fee to charge their mobile phones due to limited access to electricity in homes."
+    elif selected_value == 'Other':
+        return "Other: Other small businesses provide a range of unique services, such as traditional medicine, or carpentry, each contributing to the economic and social fabric of village life."
+    else:
+        return "Select a business type from the dropdown."
+    
+    
+@app.callback(
+    Output("download-data_bus_year", "data"),
+    [Input('download-csv-button_bus_year', 'n_clicks')],
+    [State('name-dropdown-yearly', 'value'),
+     State('year-dropdown', 'value')]  # Use year dropdown for the selected year
+)
+def download_csv_year(n_clicks, value, selected_year):
+    if n_clicks > 0:
+        # Filter data based on selected business type
+        subset_df = df_businesslist[df_businesslist[value].str.contains('yes')]
+
+        # Fetch data from API using the current value
+        header = {'Authorization': 'Token 91b021f1dad23ed3967fd7b3fcee130f4859f8fe'}
+        api_df = pd.DataFrame()
+
+        # Retrieve data for each customer and each month within the selected year
+        for month in range(1, 13):  # January to December
+            month_start = f"{selected_year}-{month:02d}-01"
+            month_end = f"{selected_year}-{month:02d}-{pd.Period(month_start).days_in_month}"
+
+            for customer_id in subset_df['customer_id']:
+                if str(customer_id).lower() != 'nan':
+                    url = f"https://api.steama.co/customers/{customer_id}/utilities/1/usage/?start_time={month_start}&end_time={month_end}"
+                    print("Get: ", url)
+                    response = requests.get(url=url, headers=header)
+
+                    if response.status_code == 200:
+                        api_data = response.content
+                        api_df = api_df.append(pd.read_json(io.BytesIO(api_data)))
+
+        try:
+            if api_df.empty:
+                return None  # If there's no data, don't return anything
+
+            # Convert timestamp values to datetime format
+            api_df['timestamp'] = pd.to_datetime(api_df['timestamp'])
+
+            # Extract hour from timestamp and add hour, year to dataframe
+            api_df['hour'] = api_df['timestamp'].dt.hour
+            api_df['month'] = api_df['timestamp'].dt.month
+            api_df['year'] = api_df['timestamp'].dt.year
+
+            # Group by hour to get average usage for each hour of the day
+            hourly_avg = api_df.groupby(['hour', 'year'])['usage'].mean().reset_index()
+
+            # Format data for exporting to CSV
+            hourly_avg['usage'] = hourly_avg['usage'].apply(lambda x: f"{round(x, 4)} kWh")
+            hourly_avg['hour'] = hourly_avg['hour'].apply(lambda x: f"{x}:00")  # Formatting hour to display as H:00
+
+            # Convert the data to CSV string
+            csv_string = hourly_avg.to_csv(index=False, encoding='utf-8')
+
+            # Encode CSV string as base64
+            csv_string = "data:text/csv;base64," + base64.b64encode(csv_string.encode()).decode()
+
+            # Return the CSV as a downloadable file
+            return dcc.send_data_frame(hourly_avg.to_csv, filename=f"Hourly_Average_Usage_{selected_year}.csv", index=False)
+
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+    return None
+import pandas as pd
+import requests
+import io
+import base64
+from dash import dcc, html, Input, Output, State
+import datetime
+
+@app.callback(
+    Output("download-data", "data"),
+    [Input('download-csv-button', 'n_clicks')],
+    [State('name-dropdown_2', 'value'),
+     State('date-picker-range_2', 'start_date'),
+     State('date-picker-range_2', 'end_date')]
+)
+def download_csv(n_clicks, value, start_date, end_date):
+    print(f"Callback triggered. n_clicks: {n_clicks}, business type: {value}, start_date: {start_date}, end_date: {end_date}")
+    
+    if n_clicks > 0:
+        # Filter the business data based on the selected business type
+        subset_df = df_businesslist[df_businesslist[value].str.contains('yes')]
+        print(f"Subset dataframe length: {len(subset_df)}")  # Print the length of the filtered dataframe
+
+        # Fetch data from the API using the current value (business type)
+        header = {'Authorization': 'Token 91b021f1dad23ed3967fd7b3fcee130f4859f8fe'}
+        api_df = pd.DataFrame()
+
+        # Loop through the customers and retrieve data
+        for i in subset_df['customer_id']:
+            if str(i).lower() != 'nan':
+                url = f"https://api.steama.co/customers/{i}/utilities/1/usage/?start_time={start_date}&end_time={end_date}"
+                print(f"Fetching data from URL: {url}")  # Print the URL being requested
+                response = requests.get(url=url, headers=header)
+                
+                print(f"Response status code: {response.status_code}")  # Print response status code
+                if response.status_code == 200:
+                    api_data = response.content
+                    try:
+                        df = pd.read_json(io.BytesIO(api_data))
+                        api_df = api_df.append(df, ignore_index=True)
+                        print(f"Data appended for customer {i}.")
+                    except Exception as e:
+                        print(f"Error processing data for customer {i}: {e}")
+                else:
+                    print(f"Failed to retrieve data for customer {i}, Status Code: {response.status_code}")
+
+        # Check if data is present after fetching from API
+        if api_df.empty:
+            print("No data available after API fetch.")
+            return None  # If no data is available, return None to prevent download
+
+        try:
+            # Convert 'timestamp' column to datetime
+            api_df['timestamp'] = pd.to_datetime(api_df['timestamp'])
+
+            # Extract hour from timestamp to group by hour and calculate the average usage for each hour
+            api_df['hour'] = api_df['timestamp'].dt.strftime('%H:00')  # Format hour as "H:00"
+            average_usage = api_df.groupby('hour')['usage'].mean().reset_index()
+
+            # Add "kWh" unit to the usage values
+            average_usage['usage'] = average_usage['usage'].apply(lambda x: f"{round(x, 4)} kWh") # Format to 2 decimal places with units
+
+            # Debug: Print the processed data
+            print("Data ready for download:", average_usage.head())  # Print the first few rows of processed data
+
+            # Return the data as a downloadable CSV
+            return dcc.send_data_frame(average_usage.to_csv, filename="Hourly_Average_Usage.csv", index=False)
+
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+
+    return None
+
 
 @app.callback(
     Output('slct_customer_2', 'options'),
