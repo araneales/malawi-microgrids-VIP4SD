@@ -3143,11 +3143,18 @@ def update_yearly_graph(value, selected_year, chart_type):
             loading_message_style = {'display': 'none'}  # Hide loading message
             return figure, loading_message_style  # Hide the loading message if no data
 
-        # Proceed with generating the graph if data is available
+        # Convert timestamp column to datetime if not already
         api_df['timestamp'] = pd.to_datetime(api_df['timestamp'])
-
-        # Filter data for the selected year
-        mask = (api_df['timestamp'].dt.year == selected_year)
+        
+        # Ensure the timestamps are in UTC
+        api_df['timestamp'] = api_df['timestamp'].dt.tz_convert('UTC')
+        
+        # Define the exclusion range with timezone awareness
+        start_exclude = pd.Timestamp('2024-01-01', tz='UTC')
+        end_exclude = pd.Timestamp('2024-02-11', tz='UTC')
+        
+        # Apply filtering: keep records outside the exclusion range
+        mask = ~((api_df['timestamp'] >= start_exclude) & (api_df['timestamp'] <= end_exclude))
         api_df = api_df.loc[mask]
 
         # Group data by hour and calculate the average usage for each hour of the day
