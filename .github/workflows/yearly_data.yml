@@ -1,0 +1,34 @@
+name: Fetch Yearly Data and Push to GitHub
+
+on:
+  schedule:
+    - cron: '59 23 31 12 *'  # Runs on December 31st at 23:59 UTC
+
+jobs:
+  fetch_and_push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set Up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.9'
+
+    - name: Install Dependencies
+      run: pip install requests pandas
+
+    - name: Run Python Script
+      env:
+        API_TOKEN: ${{ secrets.API_TOKEN }}  # Use GitHub secret for security
+      run: python fetch_data.py
+
+    - name: Commit and Push Changes
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add .
+        git commit -m "Update yearly data for $(date +'%Y')" || echo "No changes to commit"
+        git push
