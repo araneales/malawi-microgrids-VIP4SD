@@ -249,23 +249,38 @@ df_SmartphoneSatisfaction = pd.read_excel(os.path.join(APP_ROOT, r'AccessToSmart
 df_NoSchool = pd.read_excel(os.path.join(APP_ROOT, r'Children_Not_School.xlsx'))
 df_StudyingHours = pd.read_excel(os.path.join(APP_ROOT, r'StudyingHours.xlsx'))
 df_HealthInfo = pd.read_excel(os.path.join(APP_ROOT, r'HealthInformationSource.xlsx'))
+df_KudembeSmartphoneSatisfaction = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_AccessToSmartphones.xlsx'))
+df_KudembeNoSchool = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_Children_Not_School.xlsx'))
+df_KudembeStudyingHours = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_StudyingHours.xlsx'))
+df_KudembeHealthInfo = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_HealthInformationSource.xlsx'))
 
 # Employment and Finance # 
 df_Finances = pd.read_excel(os.path.join(APP_ROOT, r'Monthly_Finances.xlsx'))
 df_Income = pd.read_excel(os.path.join(APP_ROOT, r'Monthly_Income.xlsx'))
 df_FinancialSecurity = pd.read_excel(os.path.join(APP_ROOT, r'Financial_Security.xlsx'))
 df_business_month = pd.read_excel(os.path.join(APP_ROOT, r'Businesses_Month.xlsx'))
+df_KudembeFinances = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_Monthly_Finances.xlsx'))
+df_KudembeIncome = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_Monthly_Income.xlsx'))
+df_KudembeFinancialSecurity = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_Financial_Security.xlsx'))
+df_Kudembebusiness_month = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_Businesses_Month.xlsx'))
 
 # Energy Access #
 df_EnergySources = pd.read_excel(os.path.join(APP_ROOT, r'Electricity_Source.xlsx'))
 df_EnergySatisfaction = pd.read_excel(os.path.join(APP_ROOT, r'Energy_Satisfaction.xlsx'))
 df_Appliances = pd.read_excel(os.path.join(APP_ROOT, r'Household_Appliances.xlsx'))
 df_LightSource = pd.read_excel(os.path.join(APP_ROOT, r'Lighting_Source.xlsx'))
+df_KudembeEnergySources = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_Electricity_Source.xlsx'))
+df_KudembeEnergySatisfaction = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_Energy_Satisfaction.xlsx'))
+df_KudembeAppliances = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_Household_Appliances.xlsx'))
+df_KudembeLightSource = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_Lighting_Source.xlsx'))
 
 # Tarif and Services #
 df_CostSatisfaction = pd.read_excel(os.path.join(APP_ROOT, r'Cost_Satisfaction.xlsx'))
 df_PaymentMethod = pd.read_excel(os.path.join(APP_ROOT, r'PaymentMethod_Satisfaction.xlsx'))
 df_satisfaction = pd.read_excel(os.path.join(APP_ROOT, r'Recommendation_Likelihood.xlsx'))
+df_KudembeCostSatisfaction = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_Cost_Satisfaction.xlsx'))
+df_KudembePaymentMethod = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_PaymentMethod_Satisfaction.xlsx'))
+df_Kudembesatisfaction = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_Recommendation_Likelihood.xlsx'))
 
 # Women Empowerment #
 df_WomenFreetime = pd.read_excel(os.path.join(APP_ROOT, r'Womens_Freetime.xlsx'))
@@ -273,7 +288,11 @@ df_WomenIndependance = pd.read_excel(os.path.join(APP_ROOT, r'Women_Independance
 df_WomenRespectHOME = pd.read_excel(os.path.join(APP_ROOT, r'Respect_Household.xlsx'))
 df_WomenRespectCOMM = pd.read_excel(os.path.join(APP_ROOT, r'Respect_Community.xlsx'))
 df_HomeSecurity = pd.read_excel(os.path.join(APP_ROOT, r'HouseholdSecurity.xlsx'))
-df_businesslist = pd.read_excel("Businesslist1.xlsx",converters={'customer_id':str})
+df_KudembeWomenFreetime = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_Womens_Freetime.xlsx'))
+df_KudembeWomenIndependance = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_Women_Independance.xlsx'))
+df_KudembeWomenRespectHOME = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_Respect_Household.xlsx'))
+df_KudembeWomenRespectCOMM = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_Respect_Community.xlsx'))
+df_KudembeHomeSecurity = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_HouseholdSecurity.xlsx'))
 #......................FUNCTIONS...............................................
 # Health and Education #
 def funct_StudyingHours(df):
@@ -333,6 +352,62 @@ def funct_HealthInfo(df):
         range_y = [0,55])
     return fig_HealthInfo
 
+def funct_KudembeStudyingHours(df):
+    survey = df['Survey']
+    avg_hours = df['Avg_Hours']
+    fig_StudyingHours = px.bar(
+        df,
+        title = 'Average Number of Hours Spent Studying in the Home',
+        x = survey,
+        y = avg_hours,)
+    return fig_StudyingHours
+
+def funct_KudembeNoSchool(df):
+    children   = df['Number of Children']
+    survey     = df['Survey']
+    fig_KudembeNoSchool = px.bar(
+        df,
+        title = 'Number of Children not in School',
+        x = survey,
+        y = children)
+    return fig_KudembeNoSchool
+
+def funct_KudembeSmartphoneSatisfaction(df):
+    survey  = df['Survey']
+    v_unhap = df['Very Unhappy']
+    q_unhap = df['Quite Unhappy']
+    neutral = df['Neutral']
+    q_hap   = df['Quite Happy']
+    v_hap   = df['Very Happy']
+    
+    fig_KudembeSmartPhoneSatisfaction = px.bar(
+        df,
+        title = 'Payment Method Satisfaction',
+        x = survey,
+        y = [v_unhap,q_unhap,neutral,q_hap,v_hap],
+        color_discrete_map = {
+            'Very Unhappy':'red',
+            'Quite Unhappy':'orange',
+            'Neutral':'yellow',
+            'Quite Happy':'limegreen',
+            'Very Happy':'green'},
+        range_y = [0,55],)
+    return fig_KudembeSmartPhoneSatisfaction
+
+def funct_KudembeHealthInfo(df): 
+    sources    = df['Health Information Source']
+    households = df['Households']
+    survey     = df['Survey']
+
+    fig_KudembeHealthInfo = px.bar(
+        df,
+        title = 'Main Source for Accessing Health Information (Number of Households)',
+        x = sources,
+        y = households,
+        animation_frame = survey,
+        animation_group = sources,
+        range_y = [0,55])
+    return fig_KudembeHealthInfo
 # Employment and Finance #
 def funct_Finances(df):
     finances  = df['Average Monthly (MWK)']
@@ -388,6 +463,60 @@ def funct_Business_Month(df):
         y = num_business,)
     return fig_BusinessMonth
 
+def funct_KudembeFinances(df):
+    finances  = df['Average Monthly (MWK)']
+    limit   = df['Range']
+    survey  = df['Survey']
+    fig_Income = px.line(
+        df,
+        title = 'Monthly Income and Expenditure (MWK)',
+        x = survey,
+        y = finances,
+        color = limit,)
+    return fig_Income
+
+def funct_KudembeIncome(df):
+    income = df['Monthly Income (MWK)']
+    limit  = df['Range']
+    survey = df['Survey']
+    fig_Kudembeincomex = px.line(
+        df,
+        x = survey,
+        y = income,
+        color = limit,)
+    return fig_Kudembeincomex
+
+def funct_KudembeFinancialSecurity(df):
+    survey     = df['Survey']
+    v_insecure = df['Very Insecure']
+    q_insecure = df['Quite Insecure']
+    neutral    = df['Neutral']
+    q_secure   = df['Quite Secure']
+    v_secure   = df['Very Secure']
+    fig_KudembeFinancialSecurity = px.bar(
+        df,
+        title = 'Household Financial Security',
+        x = survey,
+        y = [v_insecure,q_insecure,neutral,q_secure,v_secure],
+        color_discrete_map = {
+            'Very Insecure':'red',
+            'Quite Insecure':'orange',
+            'Neutral':'yellow',
+            'Quite Secure':'limegreen',
+            'Very Secure':'green'},
+        range_y = [0,55],)
+    return fig_KudembeFinancialSecurity
+
+def funct_KudembeBusiness_Month(df):
+    date = df['Date']
+    num_business = df['Number of Businesses']
+    fig_KudembeBusinessMonth = px.line(
+        df,
+        title = 'Number of Businesses VS. Months After Microgrid Installation',
+        x = date,
+        y = num_business,)
+    return fig_KudembeBusinessMonth
+# Social and Enviornmental #
 # Energy Access #
 def funct_EnergySources(df): 
     sources    = df['Source']
@@ -455,7 +584,74 @@ def funct_LightSource(df):
         animation_group = light_sources,
         range_y = [0,55])
     return fig_LightSources
+    
+def funct_KudembeEnergySources(df): 
+     sources    = df['Source']
+     households = df['Households']
+     survey     = df['Survey']
 
+     fig_sources = px.bar(
+         df_KudembeEnergySources,
+         title = 'Source of Electricity Used (Household)',
+         x = sources,
+         y = households,
+         animation_frame = survey,
+         animation_group = sources,
+         range_y = [0,55])
+     return fig_sources
+
+def funct_KudembeEnergySatisfaction(df):
+    survey  = df['Survey']
+    v_unhap = df['Very Unhappy']
+    q_unhap = df['Quite Unhappy']
+    neutral = df['Neutral']
+    q_hap   = df['Quite Happy']
+    v_hap   = df['Very Happy']
+
+    fig_KudembeEnergySatisfaction = px.bar(
+        df,
+        title = 'Energy Access Satisfaction',
+        x = survey,
+        y = [v_unhap,q_unhap,neutral,q_hap,v_hap],
+        color_discrete_map = {
+            'Very Unhappy':'red',
+            'Quite Unhappy':'orange',
+            'Neutral':'yellow',
+            'Quite Happy':'limegreen',
+            'Very Happy':'green'},
+        range_y = [0,55],)
+    return fig_KudembeEnergySatisfaction
+
+def funct_KudembeAppliances(df): 
+    appliance    = df['Appliance']
+    households = df['Households']
+    survey     = df['Survey']
+
+    fig_Kudembeapp = px.bar(
+        df,
+        title = 'Appliances used in the Household',
+        x = appliance,
+        y = households,
+        animation_frame = survey,
+        animation_group = appliance,
+        range_y = [0,55])
+    return fig_Kudembeapp
+
+def funct_KudembeLightSource(df):
+    light_sources = df['Light Source']
+    households    = df['Households']
+    survey        = df['Survey']
+    
+    fig_KudembeLightSources = px.bar(
+        df,
+        title = 'Light Sources used in the Household',
+        x = light_sources,
+        y = households,
+        animation_frame = survey,
+        animation_group = light_sources,
+        range_y = [0,55])
+    return fig_KudembeLightSources
+    
 # Tariff and Services #
 def funct_CostSatisfaction(df):
     survey  = df['Survey']
@@ -522,7 +718,72 @@ def funct_Recommendation(df):
             'Very Likely':'green'},
         range_y = [0,55],)
     return fig_Recommendation
+
+def funct_KudembeCostSatisfaction(df):
+    survey  = df['Survey']
+    v_unhap = df['Very Unhappy']
+    q_unhap = df['Quite Unhappy']
+    neutral = df['Neutral']
+    q_hap   = df['Quite Happy']
+    v_hap   = df['Very Happy']
     
+    fig_Kudembesatisfaction = px.bar(
+        df,
+        title = 'Tariff Pricing Satisfaction',
+        x = survey,
+        y = [v_unhap,q_unhap,neutral,q_hap,v_hap],
+        color_discrete_map = {
+            'Very Unhappy':'red',
+            'Quite Unhappy':'orange',
+            'Neutral':'yellow',
+            'Quite Happy':'limegreen',
+            'Very Happy':'green'},
+        range_y = [0,55],)
+    return fig_Kudembesatisfaction
+            
+def funct_KudembePaymentMethod(df):
+    survey  = df['Survey']
+    v_unhap = df['Very Unhappy']
+    q_unhap = df['Quite Unhappy']
+    neutral = df['Neutral']
+    q_hap   = df['Quite Happy']
+    v_hap   = df['Very Happy']
+        
+    fig_KudembePaymentMethod = px.bar(
+        df,
+        title = 'Payment Method Satisfaction',
+        x = survey,
+        y = [v_unhap,q_unhap,neutral,q_hap,v_hap],
+        color_discrete_map = {
+            'Very Unhappy':'red',
+            'Quite Unhappy':'orange',
+            'Neutral':'yellow',
+            'Quite Happy':'limegreen',
+            'Very Happy':'green'},
+        range_y = [0,55],)
+    return fig_KudembePaymentMethod
+
+def funct_KudembeRecommendation(df):
+    survey  = df['Survey']
+    v_unhap = df['Very Unlikely']
+    q_unhap = df['Unlikely']
+    neutral = df['May Recommend']
+    q_hap   = df['Likely']
+    v_hap   = df['Very Likely']
+
+    fig_KudembeRecommendation = px.bar(
+        df,
+        title = 'Microgrid Recommendation Likelihood',
+        x = survey,
+        y = [v_unhap,q_unhap,neutral,q_hap,v_hap],
+        color_discrete_map = {
+        'Very Unlikely':'red',
+        'Unlikely':'orange',
+        'May Recommend':'yellow',
+        'Likely':'limegreen',
+        'Very Likely':'green'},
+        range_y = [0,55],)
+    return fig_KudembeRecommendation
 # Women Empowerment #
 def funct_WomenFreetime(df):
     similar   = df['Remained Similar']
@@ -598,6 +859,81 @@ def funct_HomeSecurity(df):
         range_y = [0,28])
     
     return fig_HomeSecurity
+
+def funct_KudembeWomenFreetime(df):
+    similar   = df['Remained Similar']
+    sw_increased = df['Somewhat Increased']
+    vm_increased = df['Very Much Increased']
+    survey    = df['Survey']
+
+    fig_KudembeWomenFreetime = px.bar(
+        df,
+        title = "Ammount of Freetime (Number of Women)",
+        x = survey,
+        y = [vm_increased,sw_increased, similar], 
+        range_y = [0,28])
+    
+    return fig_KudembeWomenFreetime
+
+def funct_KudembeWomenIndependance(df):
+    similar   = df['Remained Similar']
+    sw_increased = df['Somewhat Increased']
+    vm_increased = df['Very Much Increased']
+    survey    = df['Survey']
+
+    fig_KudembeWomenIndependance = px.bar(
+        df,
+        title = "Independance and Decision Making Power (Number of Females)",
+        x = survey,
+        y = [vm_increased,sw_increased, similar], 
+        range_y = [0,28])
+    
+    return fig_KudembeWomenIndependance
+
+def funct_KudembeWomenRespectHOME(df):
+    similar   = df['Remained Similar']
+    sw_increased = df['Somewhat Increased']
+    vm_increased = df['Very Much Increased']
+    survey    = df['Survey']
+
+    fig_KudembeWomenRespectHOME = px.bar(
+        df,
+        title = "Respect Within the Household (Number of Females)",
+        x = survey,
+        y = [vm_increased,sw_increased, similar], 
+        range_y = [0,28])
+    
+    return fig_KudembeWomenRespectHOME
+
+def funct_KudembeWomenRespectCOMM(df):
+    similar   = df['Remained Similar']
+    sw_increased = df['Somewhat Increased']
+    vm_increased = df['Very Much Increased']   
+    survey    = df['Survey']
+
+    fig_KudembeWomenRespectCOMM = px.bar(
+        df,
+        title = "Respect Within the Community (Number of Females)",
+        x = survey,
+        y = [vm_increased,sw_increased, similar], 
+        range_y = [0,28])
+    
+    return fig_KudembeWomenRespectCOMM
+
+def funct_KudembeHomeSecurity(df):
+    similar   = df['Remained Similar']
+    sw_increased = df['Somewhat Increased']
+    vm_increased = df['Very Much Increased']
+    survey    = df['Survey']
+
+    fig_KudembeHomeSecurity = px.bar(
+        df,
+        title = "Security in the Home (Number of Females)",
+        x = survey,
+        y = [vm_increased,sw_increased, similar], 
+        range_y = [0,28])
+    
+    return fig_KudembeHomeSecurity
 #.......................FIGURES................................................
 # Health and Education #
 fig_StudyingHours = funct_StudyingHours(df_StudyingHours)
@@ -620,6 +956,25 @@ fig_HealthInfo.update_layout(title = "Main Source for Accessing Health Informati
                xaxis_title='Survey',
                yaxis_title='Number of Households') 
 
+fig_KudembeStudyingHours = funct_KudembeStudyingHours(df_KudembeStudyingHours)
+fig_KudembeStudyingHours.update_layout(title = "Average Number of Hours Spent Studying in the Home (Weekly)",
+               xaxis_title='Survey',
+               yaxis_title='Average Number of Hours Studying per Week (Hours)') 
+
+fig_KudembeNoSchool = funct_KudembeNoSchool(df_KudembeNoSchool)
+fig_KudembeNoSchool.update_layout(title = "Number of School Aged Children not in Education",
+               xaxis_title='Survey',
+               yaxis_title='Number of Children') 
+
+fig_KudembeSmartPhoneSatisfaction = funct_KudembeSmartphoneSatisfaction(df_KudembeSmartphoneSatisfaction)
+fig_KudembeSmartPhoneSatisfaction.update_layout(title = "Satisfaction of Access to Smartphones",
+               xaxis_title='Survey',
+               yaxis_title='Number of Households') 
+
+fig_KudembeHealthInfo = funct_KudembeHealthInfo(df_KudembeHealthInfo)
+fig_KudembeHealthInfo.update_layout(title = "Main Source for Accessing Health Information (Number of Households)",
+               xaxis_title='Survey',
+               yaxis_title='Number of Households') 
 # Employment and Finance #
 fig_Finances = funct_Finances(df_Finances)
 fig_Finances.update_layout(title = "Average Monthly Income and Expenditure",
@@ -638,6 +993,26 @@ fig_FinancialSecurity.update_layout(title = "Household Financial Security",
 
 fig_BusinessMonth = funct_Business_Month(df_business_month)
 fig_BusinessMonth.update_layout(title = "Number of Businesses VS. Months After Microgrid Installation",
+               xaxis_title='Month and Year',
+               yaxis_title='Number of Businesses') 
+
+fig_KudembeFinances = funct_KudembeFinances(df_KudembeFinances)
+fig_KudembeFinances.update_layout(title = "Average Monthly Income and Expenditure",
+               xaxis_title='Survey',
+               yaxis_title='Monthly Income and Expenditure (MWK)') 
+
+fig_KudembeIncome = funct_KudembeIncome(df_KudembeIncome)
+fig_KudembeIncome.update_layout(title = "Monthly Income, Highest and Lowest Average (MWK)",
+               xaxis_title = 'Survey',
+               yaxis_title = 'Monthly Income (MWK)')
+
+fig_KudembeFinancialSecurity = funct_KudembeFinancialSecurity(df_KudembeFinancialSecurity)
+fig_KudembeFinancialSecurity.update_layout(title = "Household Financial Security",
+               xaxis_title='Survey',
+               yaxis_title='Number of Households')
+
+fig_KudembeBusinessMonth = funct_KudembeBusiness_Month(df_Kudembebusiness_month)
+fig_KudembeBusinessMonth.update_layout(title = "Number of Businesses VS. Months After Microgrid Installation",
                xaxis_title='Month and Year',
                yaxis_title='Number of Businesses') 
 
@@ -662,6 +1037,26 @@ fig_LightSources.update_layout(title = "Household Light Source",
                xaxis_title='Survey',
                yaxis_title='Light Source') 
 
+
+fig_KudembeEnergySources = funct_KudembeEnergySources(df_KudembeEnergySources)
+fig_KudembeEnergySources.update_layout(title = "Household Source of Electricity Used",
+               xaxis_title='Source',
+               yaxis_title='Number of Households') 
+
+fig_KudembeEnergySatisfaction = funct_KudembeEnergySatisfaction(df_KudembeEnergySatisfaction)
+fig_KudembeEnergySatisfaction.update_layout(title = "Household Energy Access Satisfaction",
+               xaxis_title='Survey',
+               yaxis_title='Number of Households') 
+
+fig_KudembeAppliances = funct_KudembeAppliances(df_KudembeAppliances)
+fig_KudembeAppliances.update_layout(title = "Appliances in the Household",
+               xaxis_title='Survey',
+               yaxis_title='Appliance') 
+
+fig_KudembeLightSources = funct_KudembeLightSource(df_KudembeLightSource)
+fig_KudembeLightSources.update_layout(title = "Household Light Source",
+               xaxis_title='Survey',
+               yaxis_title='Light Source') 
 # Tariff and Services #
 fig_CostSatisfaction = funct_CostSatisfaction(df_CostSatisfaction)
 fig_CostSatisfaction.update_layout(title = "Tariff Pricing Satisfaction",
@@ -675,6 +1070,21 @@ fig_PaymentMethod.update_layout(title = "Payment Method Satisfaction",
 
 fig_Recommendation = funct_Recommendation(df_satisfaction)
 fig_Recommendation.update_layout(title = "Microgrid Recommendation Liklihood",
+               xaxis_title='Survey',
+               yaxis_title='Number of Households') 
+
+fig_KudembeCostSatisfaction = funct_KudembeCostSatisfaction(df_KudembeCostSatisfaction)
+fig_KudembeCostSatisfaction.update_layout(title = "Tariff Pricing Satisfaction",
+               xaxis_title='Survey',
+               yaxis_title='Number of Households') 
+
+fig_KudembePaymentMethod = funct_KudembePaymentMethod(df_KudembePaymentMethod)
+fig_KudembePaymentMethod.update_layout(title = "Payment Method Satisfaction",
+               xaxis_title='Survey',
+               yaxis_title='Number of Households') 
+
+fig_KudembeRecommendation = funct_KudembeRecommendation(df_Kudembesatisfaction)
+fig_KudembeRecommendation.update_layout(title = "Microgrid Recommendation Liklihood",
                xaxis_title='Survey',
                yaxis_title='Number of Households') 
 
@@ -701,6 +1111,31 @@ fig_WomenRespectCOMM.update_layout(title = "Respect within the COMMUNITY",
 
 fig_HomeSecurity = funct_HomeSecurity(df_HomeSecurity)
 fig_HomeSecurity.update_layout(title = "Security in the Home",
+               xaxis_title='Survey',
+               yaxis_title='Number of Females') 
+
+fig_KudembeWomenFreetime = funct_KudembeWomenFreetime(df_KudembeWomenFreetime)
+fig_KudembeWomenFreetime.update_layout(title = "Ammount of Free Time",
+               xaxis_title='Survey',
+               yaxis_title='Number of Females') 
+
+fig_KudembeWomenIndependance = funct_KudembeWomenIndependance(df_KudembeWomenIndependance)
+fig_KudembeWomenIndependance.update_layout(title = "Independance and Decision Making Power",
+               xaxis_title='Survey',
+               yaxis_title='Number of Females') 
+
+fig_KudembeWomenRespectHOME = funct_KudembeWomenRespectHOME(df_KudembeWomenRespectHOME)
+fig_KudembeWomenRespectHOME.update_layout(title = "Respect Within the HOUSEHOLD",
+               xaxis_title='Survey',
+               yaxis_title='Number of Females') 
+
+fig_KudembeWomenRespectCOMM = funct_KudembeWomenRespectCOMM(df_KudembeWomenRespectCOMM)
+fig_KudembeWomenRespectCOMM.update_layout(title = "Respect within the COMMUNITY",
+               xaxis_title='Survey',
+               yaxis_title='Number of Females') 
+
+fig_KudembeHomeSecurity = funct_KudembeHomeSecurity(df_KudembeHomeSecurity)
+fig_KudembeHomeSecurity.update_layout(title = "Security in the Home",
                xaxis_title='Survey',
                yaxis_title='Number of Females') 
 #==============================================================================
@@ -945,29 +1380,28 @@ def render_page_content(pathname):
                 ],),
                 html.Div(id='technical_tabs_1_content'),
                 ]
-    elif pathname == "/social":
+elif pathname == "/social":
         return [
                 html.Div(
                 children = html.H1("Social and Environmental Impact Data"),style={'backgroundColor': '#f2f2f2', 'textAlign': 'center'}),
                 html.Hr(),
-                html.P("NOTE: Kudembe has only had a baseline completed, thus there is no Kudembe Social data live on the platform just yet."),
-                html.Hr(),
+            
                 html.P("Social Impact data is the measure of how a product or service changes the lives of the people and community that uses it. The social impact data of the microgrid has been broken down into five categories shown by the tabs below. "),
-                html.P("As of February 2022, three Social Impact surveys have been conducted. "),
-                html.Li("Baseline: August 2019"),
-                html.Strong("Microgrid Installed: July 2020"),
-                html.Li("Survey 1: May 2021"),
-                html.Li("Survey 2: February 2022"),
-                html.Li("Survey 3: (planned) July 2022"),
-                       
+                html.P("As of February 2025, six Social Impact surveys have been conducted, three in Mthembanji and another three in Kudembe"),
+                html.Li("Mthembanji Baseline: August 2019"),
+                html.Strong("Mthembanji Microgrid Installed: July 2020"),
+                html.Li("Mthembanji Survey 1: May 2021"),
+                html.Li("Mthembanji Survey 2: January 2022"),
+                html.Li("Mthembanji Survey 3: September 2024"),
+                html.Br(),
+                html.Li("Kudembe Baseline: April 2020"),
+                html.Strong("Kudembe Microgrid Installed: September 2022"),
+                html.Li("Kudembe Survey 1: September 2024"),
                 html.Br(),
                 html.Hr(),
                 dcc.Tabs(id='social_tabs', value='tab-1', children=[
-                dcc.Tab(label='Energy Access', value='tab-1'), 
-                dcc.Tab(label='Tariff and Service', value='tab-2'),                    
-                dcc.Tab(label='Health, Education and Communication', value='tab-3'),
-                dcc.Tab(label='Employment and Finance', value='tab-4'),
-                dcc.Tab(label='Women Empowerment', value='tab-5'),
+                dcc.Tab(label='Mthembanji', value='tab-1'), 
+                dcc.Tab(label='Kudembe', value='tab-2'),                    
                 ],),              
                 html.Div(id='social_tabs_content'),
                 ]
@@ -1893,47 +2327,43 @@ def render_social_tabs(tab):
                 html.Br(),
                 html.Hr(),
                 html.H2("Energy Access Data"),
-            
                 html.Br(),
                 html.Div(         
                     html.Dialog("Tracking the community's Access to Energy, is the most important Social Impact indicator to track. This data allows microgrid developers to understand the true impact energy access has on developing communities."),
                     style={'fontSize':16}),
-               
-                dcc.Graph(id='Energy_Access_Graph_1', figure=fig_EnergySatisfaction),
-                html.Div(         
-                    html.Dialog("Q: Overall, on a scale of 1-5, how happy are you with your household's current level of access to energy?"),
-                    style={'fontSize':14}),
-                html.P("This chart displays how satified the users are with their level of access to electricity."),
-                html.P(" Tracking this indicator is key to project success, grasping if the community is happy or not with the microgrid."),           
-                html.Hr(),
                 html.Br(),
-                dcc.Graph(id='Energy_Access_Graph_2', figure=fig_EnergySources),
-                html.Div(         
-                    html.Dialog("Q: What source of electricity does your home use?"),
-                    style={'fontSize':14}),
-                html.P("This chart displays what enegy sources are being used to power the community."),
-                html.P(" Tracking this indicator shows us if the community who use the microgrid still require alternative sources to meet their energy needs."),   
-                html.Hr(),
-                html.Br(),
-                dcc.Graph(id='Energy_Access_Graph_3', figure=fig_Appliances),
-                html.Div(         
-                    html.Dialog("Q: What appliances are owned by your household?"),
-                    style={'fontSize':14}),
-                html.P("This chart displays the household appliances used by the community."),
-                html.P(" Energy access makes it possible for the community to use modern household luxuries such as TVs and even modern necessities like refrigerators."),   
-                html.Hr(),
-                html.Br(),
-                dcc.Graph(id='Energy_Access_Graph_4', figure=fig_LightSources ),
-                html.Div(         
-                    html.Dialog("Q: What lighting source does your household use?"),
-                    style={'fontSize':14}),
-                html.P("This chart displays what sources are being used to power lighting in homes."),
-                html.P(" This provides more insight into how the community is using the microgrid energy or if they are still reliant on other sources."),   
-                html.Hr(),
-                ])   
-    elif tab == 'tab-2':
-       return html.Div([
-               html.Br(),
+                    dcc.Graph(id='Energy_Access_Graph_1', figure=fig_EnergySatisfaction),
+                    html.Div(         
+                        html.Dialog("Q: Overall, on a scale of 1-5, how happy are you with your household's current level of access to energy?"),
+                        style={'fontSize':14}),
+                    html.P("This chart displays how satified the users are with their level of access to electricity."),
+                    html.P(" Tracking this indicator is key to project success, grasping if the community is happy or not with the microgrid. It also allows us to see our progress with the solar microgrids and enables us to be able to see an improvement across the surveys. We would also be able to see a trend of any negative changes and allow us to notice these and be able to act upon them so there isn't a total negative reception towards it."),           
+                    html.Hr(),
+                    html.Br(),
+                    dcc.Graph(id='Energy_Access_Graph_2', figure=fig_EnergySources),
+                    html.Div(         
+                        html.Dialog("Q: What source of electricity does your home use?"),
+                        style={'fontSize':14}),
+                    html.P("This chart displays what enegy sources are being used to power the community."),
+                    html.P(" Tracking this indicator shows us if the community who use the microgrid still require alternative sources to meet their energy needs."),   
+                    html.Hr(),
+                    html.Br(),
+                    dcc.Graph(id='Energy_Access_Graph_3', figure=fig_Appliances),
+                    html.Div(         
+                        html.Dialog("Q: What appliances are owned by your household?"),
+                        style={'fontSize':14}),
+                    html.P("This chart displays the household appliances used by the community."),
+                    html.P(" Energy access makes it possible for the community to use modern household luxuries such as TVs and even modern necessities like refrigerators."),   
+                    html.Hr(),
+                    html.Br(),
+                    dcc.Graph(id='Energy_Access_Graph_4', figure=fig_LightSources ),
+                    html.Div(         
+                        html.Dialog("Q: What lighting source does your household use?"),
+                        style={'fontSize':14}),
+                    html.P("This chart displays what sources are being used to power lighting in homes."),
+                    html.P(" This provides more insight into how the community is using the microgrid energy or if they are still reliant on other sources."),   
+                    html.Hr(),
+                     html.Br(),
                html.Hr(),
                html.H2("Tariff and Service Data"),
                 
@@ -1944,7 +2374,7 @@ def render_social_tabs(tab):
                html.Div(         
                    html.Dialog("QUESTIONS: since the installation of the microgrid..."),
                    style={'fontSize':14}),
-              
+
                dcc.Graph(id='Tariff_Graph_1', figure=fig_CostSatisfaction),
                html.Div(         
                     html.Dialog("Q: On a scale of 1-5, how happy are you with how much you pay for your tariff??"),
@@ -1968,10 +2398,7 @@ def render_social_tabs(tab):
                html.P("This chart displays how likely the current microgrid users are to reccomend the service to a neighbour or friend."),
                html.P(" Tracking this indicator is another way of grasping the communities opinion and satisfaction with the microgrid and service."),   
                html.Hr(),
-               ])
-    elif tab == 'tab-3':
-        return html.Div([
-                html.Br(),
+               html.Br(),
                 html.Hr(),
                 html.H2("Health, Education and Communitcation Data"),
                
@@ -1979,36 +2406,28 @@ def render_social_tabs(tab):
                 html.Div(         
                     html.Dialog("Access to adequate energy can impact health and education by either directly powering medical equipment and devices used in the classroom or simple poweeing lights for nightimes study, or allowing people to charge their phones for medical information."),
                     style={'fontSize':16}),
-               
+
                 dcc.Graph(id='H&E_graph_1', figure=fig_StudyingHours),
                 html.Div(         
                     html.Dialog("Q: How many hours do children do school work in the home per WEEK?"),
                     style={'fontSize':14}),
+                html.P("This chart displays how many hours school children do work at home within a week."),
                 html.Hr(),
                
                 dcc.Graph(id='H&E_graph_2', figure=fig_SmartPhoneSatisfaction),
                 html.Div(         
                     html.Dialog("Q: Overall, on a scale of 1 - 5, how happy are you with your current level of access to mobile phones and their performance?"),
                     style={'fontSize':14}),
+                html.P("This chart displays how satisfied the poeple of Malawi are with their access and performance of mobile phones"),
                 html.Hr(),
 
                 dcc.Graph(id='H&E_graph_4', figure=fig_HealthInfo),
                 html.Div(         
                     html.Dialog("Q: Where do you get your healthcare information from? "),
                     style={'fontSize':14}),
+                html.P("This chart displays how likely the current microgrid users are to reccomend the service to a neighbour or friend."),
                 html.Hr(),
-               
-            #    """
-            #     dcc.Graph(id='H&E_graph_3', figure=fig_NoSchool),
-            #     html.Div(         
-            #         html.Dialog("Q: How many school aged children in your household do not go to school??"),
-            #         style={'fontSize':14}),
-            #     html.Hr(),
-            #    """          
-                ])
-    elif tab == 'tab-4':
-        return html.Div([
-                html.Br(),
+                  html.Br(),
                 html.Hr(),
                 html.H2("Employment and Finance Data"),
                 
@@ -2016,7 +2435,17 @@ def render_social_tabs(tab):
                 html.Div(         
                     html.Dialog("Monitoring the Microgrid's social impact on finance and employment allows us to see if any economic development is happening."),
                     style={'fontSize':16}),
-                
+                html.Br(),
+                html.H6("Please Select Microgrid Site:"),
+                dcc.RadioItems(id = 'slct_grid_1_1',
+                    options=[
+                        {'label': 'Mthembanji', 'value': 2},
+                        {'label': 'Kudembe', 'value': 3},
+                    ],
+                    value = 2,
+                    inputStyle={"margin-left": "15px", "margin-right":"5px"}
+                ),
+                html.Br(),
                 dcc.Graph(id='E&P_graph_1', figure=fig_BusinessMonth),
                 html.P("This chart track how many businesses there are in Mthembanji, each month since the installation of the Solar Microgrid"),
                 html.P(" Energy access can cause economic development and open doors to new business opportunities. This indicator tracks this each month to see the effect a modern energy supply has."),   
@@ -2036,11 +2465,7 @@ def render_social_tabs(tab):
                 dcc.Graph(id='E&F_graph_4', figure=fig_Income),
                 html.Hr(),
                 html.Br(),
-
-                ])
-    elif tab == 'tab-5':
-        return html.Div([
-                html.Br(),
+ html.Br(),
                 html.Hr(),
                 html.H2("Women Empowerment Data"),
                 
@@ -2048,11 +2473,7 @@ def render_social_tabs(tab):
                 html.Div(         
                     html.Dialog("The Social Impact of the microgrid in terms of Women Empowerment is how the Solar Microgrid has changed the women, who use its, lives. The 28 women in Mthembanji who are connected to the Microgrid were asked a series of questions to see if their situation has changed since its installation."),
                     style={'fontSize':16}),
-                html.Br(),
-                html.Div(         
-                    html.Dialog("QUESTIONS: since the installation of the microgrid..."),
-                    style={'fontSize':14}),
-                
+
                 dcc.Graph(id='Women_Power_Graph_1', figure=fig_WomenFreetime),
                     html.Div(         
                     html.Dialog("Q: how has the ammount of freetime you have changed?"),
@@ -2087,8 +2508,196 @@ def render_social_tabs(tab):
                     style={'fontSize':14}),
                 html.P("This chart displays how the women of the town feel the microgrid has changed how secure they feel in their home."),
                 html.Hr(),
-                ])
-    
+               ])
+    elif tab == 'tab-2':
+       return html.Div([
+                html.Br(),
+                html.Hr(),
+                html.H2("Energy Access Data"),
+                html.Br(),
+                html.Div(         
+                    html.Dialog("Tracking the community's Access to Energy, is the most important Social Impact indicator to track. This data allows microgrid developers to understand the true impact energy access has on developing communities."),
+                    style={'fontSize':16}),
+                html.Br(),
+                    dcc.Graph(id='Energy_Access_Graph_1', figure=fig_KudembeEnergySatisfaction),
+                    html.Div(         
+                        html.Dialog("Q: Overall, on a scale of 1-5, how happy are you with your household's current level of access to energy?"),
+                        style={'fontSize':14}),
+                    html.P("This chart displays how satified the users are with their level of access to electricity."),
+                    html.P(" Tracking this indicator is key to project success, grasping if the community is happy or not with the microgrid. It also allows us to see our progress with the solar microgrids and enables us to be able to see an improvement across the surveys. We would also be able to see a trend of any negative changes and allow us to notice these and be able to act upon them so there isn't a total negative reception towards it."),           
+                    html.Hr(),
+                    html.Br(),
+                    dcc.Graph(id='Energy_Access_Graph_2', figure=fig_KudembeEnergySources),
+                    html.Div(         
+                        html.Dialog("Q: What source of electricity does your home use?"),
+                        style={'fontSize':14}),
+                    html.P("This chart displays what enegy sources are being used to power the community."),
+                    html.P(" Tracking this indicator shows us if the community who use the microgrid still require alternative sources to meet their energy needs."),   
+                    html.Hr(),
+                    html.Br(),
+                    dcc.Graph(id='Energy_Access_Graph_3', figure=fig_KudembeAppliances),
+                    html.Div(         
+                        html.Dialog("Q: What appliances are owned by your household?"),
+                        style={'fontSize':14}),
+                    html.P("This chart displays the household appliances used by the community."),
+                    html.P(" Energy access makes it possible for the community to use modern household luxuries such as TVs and even modern necessities like refrigerators."),   
+                    html.Hr(),
+                    html.Br(),
+                    dcc.Graph(id='Energy_Access_Graph_4', figure=fig_KudembeLightSources ),
+                    html.Div(         
+                        html.Dialog("Q: What lighting source does your household use?"),
+                        style={'fontSize':14}),
+                    html.P("This chart displays what sources are being used to power lighting in homes."),
+                    html.P(" This provides more insight into how the community is using the microgrid energy or if they are still reliant on other sources."),   
+                    html.Hr(),
+                     html.Br(),
+               html.Hr(),
+               html.H2("Tariff and Service Data"),
+                
+               html.Br(),
+               html.Div(         
+                   html.Dialog("Tariff and Service satisfaction is an important indicator to track to ensure the continued success of the project. This data allows the Microgrid team to make informed decisions regarding the pricing and service offered to the community. These questions were asked to the 55 houshlods connected to the Microgrid."),
+                   style={'fontSize':16}),
+               html.Div(         
+                   html.Dialog("QUESTIONS: since the installation of the microgrid..."),
+                   style={'fontSize':14}),
+
+               dcc.Graph(id='Tariff_Graph_1', figure=fig_KudembeCostSatisfaction ),
+               html.Div(         
+                    html.Dialog("Q: On a scale of 1-5, how happy are you with how much you pay for your tariff??"),
+                    style={'fontSize':14}),
+               html.P("This chart displays how satified the users are with how much they are paying for their electricity."),
+               html.P(" Tracking this indicator may highlight any potential problems with pricing, a key indicator of SDG7 is 'affordability' which directly impacts the success of the project."),   
+               html.Hr(),
+               html.Br(),
+               dcc.Graph(id='Tariff_Graph_2', figure=fig_KudembePaymentMethod ),
+               html.Div(         
+                    html.Dialog("Q: On a scale of 1-5, how happy are you with the method of paying for your tariff??"),
+                    style={'fontSize':14}),
+               html.P("This chart displays how satified the users are with HOW they pay for their energy."),
+               html.P(" Tracking this indicator helps inform the business model and the service provided. Paying for energy should not be confusing and this indicator helps us make sure it is not."),   
+               html.Hr(),
+               html.Br(),
+               dcc.Graph(id='Tariff_Graph_3', figure=fig_KudembeRecommendation ),
+               html.Div(         
+                    html.Dialog("Q: On a scale of 1 - 5, how likely would you be to recommend the minigrid to a friend? ?"),
+                    style={'fontSize':14}),
+               html.P("This chart displays how likely the current microgrid users are to reccomend the service to a neighbour or friend."),
+               html.P(" Tracking this indicator is another way of grasping the communities opinion and satisfaction with the microgrid and service."),   
+               html.Hr(),
+               html.Br(),
+                html.Hr(),
+                html.H2("Health, Education and Communitcation Data"),
+               
+                html.Br(),
+                html.Div(         
+                    html.Dialog("Access to adequate energy can impact health and education by either directly powering medical equipment and devices used in the classroom or simple poweeing lights for nightimes study, or allowing people to charge their phones for medical information."),
+                    style={'fontSize':16}),
+
+                dcc.Graph(id='H&E_graph_1', figure=fig_KudembeStudyingHours),
+                html.Div(         
+                    html.Dialog("Q: How many hours do children do school work in the home per WEEK?"),
+                    style={'fontSize':14}),
+                html.P("This chart displays how many hours school children do work at home within a week."),
+                html.Hr(),
+               
+                dcc.Graph(id='H&E_graph_2', figure=fig_KudembeSmartPhoneSatisfaction),
+                html.Div(         
+                    html.Dialog("Q: Overall, on a scale of 1 - 5, how happy are you with your current level of access to mobile phones and their performance?"),
+                    style={'fontSize':14}),
+                html.P("This chart displays how satisfied the poeple of Malawi are with their access and performance of mobile phones"),
+                html.Hr(),
+
+                dcc.Graph(id='H&E_graph_4', figure=fig_KudembeHealthInfo),
+                html.Div(         
+                    html.Dialog("Q: Where do you get your healthcare information from? "),
+                    style={'fontSize':14}),
+                html.P("This chart displays how likely the current microgrid users are to reccomend the service to a neighbour or friend."),
+                html.Hr(),
+                  html.Br(),
+                html.Hr(),
+                html.H2("Employment and Finance Data"),
+                
+                html.Br(),
+                html.Div(         
+                    html.Dialog("Monitoring the Microgrid's social impact on finance and employment allows us to see if any economic development is happening."),
+                    style={'fontSize':16}),
+                
+                dcc.Graph(id='E&P_graph_1', figure=fig_KudembeBusinessMonth),
+                html.P("This chart track how many businesses there are in Mthembanji, each month since the installation of the Solar Microgrid"),
+                html.P(" Energy access can cause economic development and open doors to new business opportunities. This indicator tracks this each month to see the effect a modern energy supply has."),   
+                html.Hr(),
+                dcc.Graph(id='E&P_graph_2', figure=fig_KudembeFinances),
+                html.Div(         
+                    html.Dialog("Q: Overall, on a scale of 1 - 5, how secure do you feel your household's finances are??"),
+                    style={'fontSize':14}),
+                html.P("This chart displays the average monthly incomes and expenditures of microgrid users."),
+                html.P("Tracking this indicator allows us to monitor is energy access is leading to any economic development in the town. However, income and expenditure levels are impacted by several wider factors, so the data cannot be directly linked to the microgrid. "),   
+                html.Hr(),
+                html.Br(),
+                dcc.Graph(id='E&P_graph_3', figure=fig_KudembeFinancialSecurity),
+                html.P("This chart displays how financially secure microgrid users feel their household is."),
+                html.P(" Tracking this indicator provides insight both into economic development and into the affordability of the project from the community's perspective. However, income and expenditure levels are impacted by several wider factors, so the data cannot be directly linked to the microgrid. "),    
+                html.Hr(),
+                dcc.Graph(id='E&F_graph_4', figure=fig_KudembeIncome),
+                html.Hr(),
+                html.Br(),
+                html.Br(),
+                html.Hr(),
+                html.H2("Women Empowerment Data"),
+                
+                html.Br(),
+                html.Div(         
+                    html.Dialog("The Social Impact of the microgrid in terms of Women Empowerment is how the Solar Microgrid has changed the women, who use its, lives. The 28 women in Mthembanji who are connected to the Microgrid were asked a series of questions to see if their situation has changed since its installation."),
+                    style={'fontSize':16}),
+                html.Br(),
+                html.Div(         
+                    html.Dialog("QUESTIONS: since the installation of the microgrid..."),
+                    style={'fontSize':14}),
+
+                dcc.Graph(id='Women_Power_Graph_1', figure=fig_KudembeWomenFreetime),
+                    html.Div(         
+                    html.Dialog("Q: how has the ammount of freetime you have changed?"),
+                    style={'fontSize':14}),
+                html.P("This chart displays how the women of the town feel the microgrid has changed the ammount of freetime they have."),
+                html.Hr(),
+                html.Br(),
+                dcc.Graph(id='Women_Power_Graph_2', figure=fig_KudembeWomenIndependance),
+                    html.Div(         
+                    html.Dialog("Q: how has your of independance and decision-making power changed?"),
+                    style={'fontSize':14}),
+                html.P("This chart displays how the women of the town feel the microgrid has changed the ammount of independance and decision making power they have in the household."),
+                html.Hr(),
+                html.Br(),
+                dcc.Graph(id='Women_Power_Graph_3', figure=fig_KudembeWomenRespectHOME),
+                    html.Div(         
+                    html.Dialog("Q: how has the ammount of respect you get in the household changed?"),
+                    style={'fontSize':14}),
+                html.P("This chart displays how the women of the town feel the microgrid has changed the ammount of respect they recieve in the HOUSEHOLD."),
+                html.Hr(),
+                html.Br(),
+                dcc.Graph(id='Women_Power_Graph_4', figure=fig_KudembeWomenRespectCOMM),
+                html.Div(         
+                    html.Dialog("Q: how has the ammount of respect you get in the community changed?"),
+                    style={'fontSize':14}),
+                html.P("This chart displays how the women of the town feel the microgrid has changed the ammount of respect they recieve in the COMMUNITY"),
+                html.Hr(),
+                html.Br(),
+                dcc.Graph(id='Women_Power_Graph_5', figure=fig_KudembeHomeSecurity),
+                html.Div(         
+                    html.Dialog("Q: how has your security in the home changed?"),
+                    style={'fontSize':14}),
+                html.P("This chart displays how the women of the town feel the microgrid has changed how secure they feel in their home."),
+                html.Hr(),
+              ])
+
+            #    """
+            #     dcc.Graph(id='H&E_graph_3', figure=fig_NoSchool),
+            #     html.Div(         
+            #         html.Dialog("Q: How many school aged children in your household do not go to school??"),
+            #         style={'fontSize':14}),
+            #     html.Hr(),
+            #    """          
 #==============================================================================
         
 # @app.callback(
