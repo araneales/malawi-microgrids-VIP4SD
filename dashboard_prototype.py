@@ -1380,7 +1380,7 @@ def render_page_content(pathname):
                 ],),
                 html.Div(id='technical_tabs_1_content'),
                 ]
-elif pathname == "/social":
+    elif pathname == "/social":
         return [
                 html.Div(
                 children = html.H1("Social and Environmental Impact Data"),style={'backgroundColor': '#f2f2f2', 'textAlign': 'center'}),
