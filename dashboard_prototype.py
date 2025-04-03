@@ -293,6 +293,7 @@ df_KudembeWomenIndependance = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_Wom
 df_KudembeWomenRespectHOME = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_Respect_Household.xlsx'))
 df_KudembeWomenRespectCOMM = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_Respect_Community.xlsx'))
 df_KudembeHomeSecurity = pd.read_excel(os.path.join(APP_ROOT, r'Kudembe_HouseholdSecurity.xlsx'))
+df_businesslist = pd.read_excel("Businesslist1.xlsx",converters={'customer_id':str})
 #......................FUNCTIONS...............................................
 # Health and Education #
 def funct_StudyingHours(df):
@@ -1513,7 +1514,12 @@ def render_business_tabs(tab):
     
     if tab == 'tab-1':
         return html.Div([
-    
+       html.Br(),
+       html.Br(),
+       html.H3("Data Source Explanation", style={'textAlign': 'center'}),
+       html.P("The data for these graphs were gathered from a anonymsed spreadsheet which listed customers and the amount of businesses they had. Each of these businesses were then grouped by type and an average was determined.", style={'textAlign': 'center'}),
+       html.Button('Download Anonymised List', id='download-excel-button', n_clicks=0),
+       dcc.Download(id="download-excel"),
 
             # Define the layout
        html.Br(),
@@ -3635,11 +3641,15 @@ def update_graph(value, start_date, end_date):
                     'x': 0.5
                 },
                 'xaxis': {
-                    'title': {'text': 'Time', 'font': {'size': 18, 'family': 'Arial', 'color': 'rgb(33, 37, 41)'}},
+                    'title': {'text': 'Hour of Day', 'font': {'size': 18, 'family': 'Arial', 'color': 'rgb(33, 37, 41)'}},
+                    'tickmode': 'array',
+                    'tickvals': list(range(0, 24, 3)),  # [0, 3, 6, ..., 21]
+                    'ticktext': [f"{h}:00" for h in range(0, 24, 3)],
                     'showgrid': True,
                     'gridcolor': 'rgba(0, 0, 0, 0.1)',
-                    'tickangle': 45
+                    'tickangle': 0
                 },
+
                 'yaxis': {
                     'title': {'text': 'Average Energy Usage (kWh)', 'font': {'size': 18, 'family': 'Arial', 'color': 'rgb(33, 37, 41)'}},
                     'showgrid': True,
@@ -8709,6 +8719,27 @@ def downloadfile1(n_clicks):
 def downloadfile1(n_clicks):
     print(APP_ROOT, r'Carbon_Savings.xlsx')
     return file.send_file(os.path.join(APP_ROOT, r'Carbon_Savings.xlsx'))
+
+
+
+@app.callback(
+    Output("download-excel", "data"),
+    Input("download-excel-button", "n_clicks"),
+    prevent_initial_call=True
+)
+def download_excel(n_clicks):
+
+    print(APP_ROOT, r'AnonymisedList.xlsx')
+    return file.send_file(os.path.join(APP_ROOT, r'AnonymisedList.xlsx'))
+
+
+
+
+
+
+
+
+
 
 
 
