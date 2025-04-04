@@ -21,6 +21,7 @@ from timeit import default_timer as timer
 
 import os 
 import datetime as datetime
+from datetime import timedelta
 import dash
 from dash import dcc as file 
 from dash import State
@@ -1646,7 +1647,7 @@ html.Div(
 ),
          dcc.DatePickerRange(
              id='date-picker-range_2',
-             min_date_allowed=datetime.datetime(2021, 1, 1),
+             min_date_allowed=datetime.datetime.today() - timedelta(days=365),
              max_date_allowed=datetime.datetime.today(),
              initial_visible_month=datetime.datetime.today(),
              end_date=datetime.datetime.today(),
@@ -3556,7 +3557,7 @@ def update_graph(value, start_date, end_date):
             'data': [],
             'layout': {
                 'title': {
-                    'text': 'Please select a date range',
+                    'text': 'Please select a date range and business type',
                     'font': {'size': 18, 'color': 'rgb(33, 37, 41)'},
                     'x': 0.5,
                     'y': 0.5,
@@ -3641,15 +3642,11 @@ def update_graph(value, start_date, end_date):
                     'x': 0.5
                 },
                 'xaxis': {
-                    'title': {'text': 'Hour of Day', 'font': {'size': 18, 'family': 'Arial', 'color': 'rgb(33, 37, 41)'}},
-                    'tickmode': 'array',
-                    'tickvals': list(range(0, 24, 3)),  # [0, 3, 6, ..., 21]
-                    'ticktext': [f"{h}:00" for h in range(0, 24, 3)],
+                    'title': {'text': 'Time', 'font': {'size': 18, 'family': 'Arial', 'color': 'rgb(33, 37, 41)'}},
                     'showgrid': True,
                     'gridcolor': 'rgba(0, 0, 0, 0.1)',
-                    'tickangle': 0
+                    'tickangle': 45
                 },
-
                 'yaxis': {
                     'title': {'text': 'Average Energy Usage (kWh)', 'font': {'size': 18, 'family': 'Arial', 'color': 'rgb(33, 37, 41)'}},
                     'showgrid': True,
@@ -3728,9 +3725,40 @@ def update_yearly_graph(value, selected_year, chart_type):
     api_df = pd.DataFrame()
 
     # Retrieve data for each customer and each month within the selected year
-    for month in range(1, 13):  # January to December
-        month_start = f"{selected_year}-{month:02d}-01"
-        month_end = f"{selected_year}-{month:02d}-{pd.Period(month_start).days_in_month}"
+    from datetime import datetime
+
+    today = datetime.now()
+    selected_year = int(selected_year)
+    current_year = today.year
+    
+    # Determine date range
+    if selected_year == current_year:
+        # From January 1 to today
+        start_date = datetime(selected_year, 1, 1)
+        end_date = today
+    elif selected_year < current_year:
+        # From one year ago today (but within selected_year) to December 31
+        one_year_ago = today.replace(year=today.year - 1)
+        start_date = max(datetime(selected_year, 1, 1), one_year_ago)
+        end_date = datetime(selected_year, 12, 31)
+    else:
+        # Future years shouldn't happen, but just in case
+        start_date = datetime(selected_year, 1, 1)
+        end_date = datetime(selected_year, 12, 31)
+    
+    # Generate monthly intervals
+    for month in range(start_date.month, end_date.month + 1):
+        month_start = datetime(selected_year, month, 1)
+        last_day = pd.Period(month_start.strftime("%Y-%m")).days_in_month
+        month_end = datetime(selected_year, month, last_day)
+    
+        # Clip to the actual start_date and end_date
+        if month == start_date.month:
+            month_start = start_date
+        if month == end_date.month:
+            month_end = end_date
+
+
 
         for customer_id in subset_df['customer_id']:
             if str(customer_id).lower() != 'nan':
